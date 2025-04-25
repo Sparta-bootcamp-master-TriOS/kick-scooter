@@ -1,6 +1,6 @@
 import UIKit
 
-class SignInViewController: UIViewController {
+class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
