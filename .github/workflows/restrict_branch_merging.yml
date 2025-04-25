@@ -1,0 +1,24 @@
+name: Restrict Branch Merging
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  restrict-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Source and Target Branch
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD: ${{ github.event.pull_request.head.ref }}
+        run: |
+          if [[ "$PR_BASE" == "main" && "$PR_HEAD" != "develop" ]]; then
+            echo "❌ PR to `main` is only allowed from `develop`."
+            exit 1
+          fi
+          if [[ "$PR_BASE" == "develop" && ! "$PR_HEAD" =~ ^feature/.+ ]]; then
+            echo "❌ PR to `develop` is only allowed from `feature/*` branches."
+            exit 1
+          fi
+          echo "✅ PR is valid."
