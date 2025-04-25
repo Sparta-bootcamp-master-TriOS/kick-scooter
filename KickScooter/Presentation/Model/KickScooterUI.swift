@@ -1,4 +1,5 @@
 struct KickScooterUI: CoordinatesableUI {
+    let id: Int
     let model: String
     let battery: String
     let price: String
