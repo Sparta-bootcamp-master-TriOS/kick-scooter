@@ -5,6 +5,8 @@ import UIKit
 final class MainViewController: UIViewController {
     private let mainViewModel: MainViewModel
 
+    weak var delegate: MainViewControllerDelegate?
+
     private let riveViewModel = RiveViewModel(fileName: "SignIn", stateMachineName: "Login Machine")
     private var riveView = RiveView()
 
@@ -31,6 +33,7 @@ final class MainViewController: UIViewController {
         configureUI()
         configureConstraints()
         configureBindings()
+        configureBackButton()
     }
 
     private func configureUI() {
@@ -103,6 +106,10 @@ final class MainViewController: UIViewController {
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
         }
 
+        signUpButton.onButtonTapped = { [weak self] in
+            self?.delegate?.pushSignUp()
+        }
+
         idTextField.onEditingBegan = { [weak self] in
             self?.riveViewModel.setInput("isHandsUp", value: false)
             self?.riveViewModel.setInput("isChecking", value: true)
@@ -128,6 +135,10 @@ final class MainViewController: UIViewController {
         passwordTextField.onVisibilityEnabled = { [weak self] in
             self?.riveViewModel.setInput("isPicking", value: false)
         }
+    }
+
+    private func configureBackButton() {
+        navigationItem.backButtonTitle = "Sign In"
     }
 
     private func authorize() -> Bool {
