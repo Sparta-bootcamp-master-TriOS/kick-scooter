@@ -15,7 +15,7 @@ final class MainViewController: UIViewController {
     private let orLabel = UILabel()
     private let passwordTextField = PasswordTextField()
     private let idTextField = IDTextField()
-    private let invalidLabel = UILabel()
+    private let invalidLabel = InvalidLabel()
 
     init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
@@ -48,9 +48,6 @@ final class MainViewController: UIViewController {
         orLabel.textColor = .triOSText
         orLabel.font = .systemFont(ofSize: 16)
 
-        invalidLabel.textColor = .triOSLowBattery
-        invalidLabel.font = .systemFont(ofSize: 16)
-        invalidLabel.isHidden = true
         invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
 
         [riveView, signUpButton, signInButton, orLabel, passwordTextField, idTextField, invalidLabel]
@@ -158,7 +155,7 @@ final class MainViewController: UIViewController {
             return false
         }
 
-        let isAuthorized = mainViewModel.authorize(id: id, password: password)
+        let isAuthorized = mainViewModel.authorize(user: UserSignInUI(id: id, password: password))
         invalidLabel.isHidden = isAuthorized
 
         return isAuthorized

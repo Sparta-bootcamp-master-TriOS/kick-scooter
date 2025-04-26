@@ -7,8 +7,8 @@ final class MainViewModel {
         self.authorizeUserUseCase = authorizeUserUseCase
     }
 
-    func authorize(id: String, password: String) -> Bool {
-        let user = mapper.map(id: id, password: password)
+    func authorize(user userUI: UserSignInUI) -> Bool {
+        let user = mapper.map(user: userUI)
 
         switch authorizeUserUseCase.execute(user: user) {
         case .success:

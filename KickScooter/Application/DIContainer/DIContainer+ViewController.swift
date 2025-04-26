@@ -4,6 +4,6 @@ extension DIContainer {
     }
 
     func makeSignUpViewController() -> SignUpViewController {
-        SignUpViewController()
+        SignUpViewController(signUpViewModel: makeSignUpViewModel())
     }
 }
