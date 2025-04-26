@@ -3,17 +3,27 @@ import SnapKit
 import UIKit
 
 final class MainViewController: UIViewController {
+    private let mainViewModel: MainViewModel
+
     private let riveViewModel = RiveViewModel(fileName: "SignIn", stateMachineName: "Login Machine")
-
-    private let mainViewModel = MainViewModel()
-
     private var riveView = RiveView()
+
     private let signUpButton = SignButton()
     private let signInButton = SignButton()
     private let orLabel = UILabel()
     private let passwordTextField = PasswordTextField()
     private let idTextField = IDTextField()
     private let invalidLabel = UILabel()
+
+    init(mainViewModel: MainViewModel) {
+        self.mainViewModel = mainViewModel
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder _: NSCoder) {
+        nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +46,6 @@ final class MainViewController: UIViewController {
         orLabel.textColor = .triOSText
         orLabel.font = .systemFont(ofSize: 16)
 
-        invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
         invalidLabel.textColor = .triOSLowBattery
         invalidLabel.font = .systemFont(ofSize: 16)
         invalidLabel.isHidden = true
@@ -88,12 +97,10 @@ final class MainViewController: UIViewController {
         signInButton.onButtonTapped = { [weak self] in
             guard let self else { return }
 
-            let isAuthorized = self.mainViewModel.authorizeSignIn()
+            let isAuthorized = self.authorize()
 
             self.riveViewModel.setInput("isChecking", value: false)
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
-
-            self.invalidLabel.isHidden = isAuthorized
         }
 
         idTextField.onEditingBegan = { [weak self] in
@@ -121,5 +128,27 @@ final class MainViewController: UIViewController {
         passwordTextField.onVisibilityEnabled = { [weak self] in
             self?.riveViewModel.setInput("isPicking", value: false)
         }
+    }
+
+    private func authorize() -> Bool {
+        guard let id = idTextField.text, !id.isEmpty else {
+            invalidLabel.isHidden = false
+            invalidLabel.text = "아이디를 입력하세요."
+
+            return false
+        }
+
+        guard let password = passwordTextField.text, !password.isEmpty else {
+            invalidLabel.isHidden = false
+            invalidLabel.text = "비밀번호를 입력하세요."
+
+            return false
+        }
+
+        let isAuthorized = mainViewModel.authorize(id: id, password: password)
+        invalidLabel.isHidden = isAuthorized
+        invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
+
+        return isAuthorized
     }
 }
