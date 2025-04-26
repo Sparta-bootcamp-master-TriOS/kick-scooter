@@ -1,12 +1,9 @@
 import UIKit
 
-final class PasswordTextField: UITextField {
-    var onEditingBegan: (() -> Void)?
-    var onVisibilityDisabled: (() -> Void)?
-    var onVisibilityEnabled: (() -> Void)?
+final class SignUpTextField: UITextField {
+    var onTextChanged: (() -> Void)?
 
     private let underline = CALayer()
-    let eyeButton = UIButton(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,8 +41,6 @@ final class PasswordTextField: UITextField {
     override func becomeFirstResponder() -> Bool {
         underline.backgroundColor = UIColor.triOSMain.cgColor
 
-        onEditingBegan?()
-
         return super.becomeFirstResponder()
     }
 
@@ -56,30 +51,22 @@ final class PasswordTextField: UITextField {
     }
 
     private func configureUI() {
+        addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+
         underline.backgroundColor = UIColor.triOSMainBlack.cgColor
 
-        eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
-        eyeButton.tintColor = .triOSText
-        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-
         textColor = .triOSText
-        rightView = eyeButton
-        rightViewMode = .always
-        placeholder = "비밀번호를 입력하세요."
-        isSecureTextEntry = true
+        autocapitalizationType = .none
+        autocorrectionType = .no
+    }
+
+    func updateUI(placeholder: String, isSecureTextEntry: Bool = false) {
+        self.placeholder = placeholder
+        self.isSecureTextEntry = isSecureTextEntry
     }
 
     @objc
-    private func togglePasswordVisibility() {
-        isSecureTextEntry.toggle()
-
-        if isSecureTextEntry {
-            onVisibilityEnabled?()
-        } else {
-            onVisibilityDisabled?()
-        }
-
-        let eyeImageName = isSecureTextEntry ? "eye" : "eye.slash"
-        eyeButton.setImage(UIImage(systemName: eyeImageName), for: .normal)
+    private func textFieldDidChange() {
+        onTextChanged?()
     }
 }

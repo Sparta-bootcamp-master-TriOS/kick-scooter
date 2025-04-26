@@ -40,7 +40,6 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .triOSTertiaryBackground
 
         riveView = riveViewModel.createRiveView()
-        riveView.frame = view.bounds
 
         signUpButton.updateUI(backgroundColor: .triOSBackground, titleColor: .triOSText, title: "Sign Up")
         signInButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign In")
@@ -52,6 +51,7 @@ final class MainViewController: UIViewController {
         invalidLabel.textColor = .triOSLowBattery
         invalidLabel.font = .systemFont(ofSize: 16)
         invalidLabel.isHidden = true
+        invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
 
         [riveView, signUpButton, signInButton, orLabel, passwordTextField, idTextField, invalidLabel]
             .forEach { view.addSubview($0) }
@@ -81,7 +81,7 @@ final class MainViewController: UIViewController {
         }
 
         invalidLabel.snp.makeConstraints {
-            $0.bottom.equalTo(signInButton.snp.top).offset(-20)
+            $0.bottom.equalTo(signInButton.snp.top).offset(-30)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
         }
 
@@ -101,6 +101,8 @@ final class MainViewController: UIViewController {
             guard let self else { return }
 
             let isAuthorized = self.authorize()
+
+            self.validateTextFields()
 
             self.riveViewModel.setInput("isChecking", value: false)
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
@@ -124,10 +126,6 @@ final class MainViewController: UIViewController {
             self?.riveViewModel.setInput("isChecking", value: false)
         }
 
-        passwordTextField.onTextChanged = { [weak self] text in
-            self?.riveViewModel.setInput("numLook", value: Double(text.count * 3))
-        }
-
         passwordTextField.onVisibilityDisabled = { [weak self] in
             self?.riveViewModel.setInput("isPicking", value: true)
         }
@@ -141,24 +139,27 @@ final class MainViewController: UIViewController {
         navigationItem.backButtonTitle = "Sign In"
     }
 
-    private func authorize() -> Bool {
-        guard let id = idTextField.text, !id.isEmpty else {
-            invalidLabel.isHidden = false
-            invalidLabel.text = "아이디를 입력하세요."
+    private func validateTextFields() {
+        let textFields: [UITextField] = [
+            idTextField,
+            passwordTextField,
+        ]
 
-            return false
+        if let emptyField = textFields.first(where: { $0.text?.isEmpty == true }) {
+            _ = emptyField.becomeFirstResponder()
+            emptyField.shake()
         }
+    }
 
-        guard let password = passwordTextField.text, !password.isEmpty else {
-            invalidLabel.isHidden = false
-            invalidLabel.text = "비밀번호를 입력하세요."
-
+    private func authorize() -> Bool {
+        guard let id = idTextField.text, !id.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty
+        else {
             return false
         }
 
         let isAuthorized = mainViewModel.authorize(id: id, password: password)
         invalidLabel.isHidden = isAuthorized
-        invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
 
         return isAuthorized
     }
