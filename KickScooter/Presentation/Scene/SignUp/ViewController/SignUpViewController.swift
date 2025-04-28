@@ -63,6 +63,8 @@ final class SignUpViewController: UIViewController {
 
         riveView = riveViewModel.createRiveView()
 
+        emailTextField.keyboardType = .emailAddress
+
         configureTextFields()
         configureInvalidLabels()
 
