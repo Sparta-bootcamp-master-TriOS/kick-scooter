@@ -1,52 +1,109 @@
 import CoreData
 
 extension PersistenceController {
+    
     /// Mock 객체 생성 메서드
     static func makeInMemory() -> PersistenceController {
         let controller = PersistenceController(inMemory: true)
-
+        
+        injectMockMyPageData(into: controller.context)
+        
         return controller
+    }
+    
+    /// Mock 데이터 삽입 메서드
+    ///
+    /// Mock 데이터 `ReservationMetaEntity`를 생성한다.
+    static func injectMockReservationData(
+        into context: NSManagedObjectContext,
+        forUser user: UserMetaEntity,
+        date: Date,
+        status: Bool
+    ) -> ReservationMetaEntity {
+        let reservationMeta = ReservationMetaEntity(context: context)
+        reservationMeta.date = date
+        reservationMeta.status = status
+        reservationMeta.userMeta = user
+        return reservationMeta
+    }
+    
+    /// Mock 데이터 삽입 메서드
+    ///
+    /// Mock 데이터 `KickScooterMetaEntity`를 생성한다.
+    static func injectMockKickScooterData(
+        into context: NSManagedObjectContext,
+        with response: KickScooterResponse,
+        forReservation reservation: ReservationMetaEntity
+    ) -> KickScooterMetaEntity {
+        let kickScooterMeta = KickScooterMetaEntity(context: context)
+        kickScooterMeta.id = Int64(response.id)
+        kickScooterMeta.model = response.model
+        kickScooterMeta.battery = response.battery
+        kickScooterMeta.price = Int64(response.price)
+        kickScooterMeta.lon = response.lon
+        kickScooterMeta.lat = response.lat
+        kickScooterMeta.image = response.image
+        kickScooterMeta.isAvailable = response.isAvailable
+        kickScooterMeta.reservationMeta = reservation
+        return kickScooterMeta
+    }
+    
+    /// Mock 데이터 삽입 메서드
+    ///
+    /// Mock 데이터 `UserMetaEntity`를 생성한다.
+    static func injectMockUserData(into context: NSManagedObjectContext) -> UserMetaEntity {
+        let userMeta = UserMetaEntity(context: context)
+        let userResponse = getUserResponseMockData()
+        userMeta.name = userResponse.name
+        userMeta.email = userResponse.email
+        userMeta.id = userResponse.id
+        userMeta.password = userResponse.password
+        return userMeta
     }
 
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserMetaEntity`를 생성한다.
-    static func injectMockMyPageUserData(into context: NSManagedObjectContext) {
-        let userMeta = UserMetaEntity(context: context)
-        userMeta.id = "testuser"
-        userMeta.email = "testuser@example.com"
-        userMeta.name = "테스트 사용자"
-        userMeta.password = "mockpassword123"
+    static func injectMockMyPageData(into context: NSManagedObjectContext) {
+        let userMeta = injectMockUserData(into: context)
 
         let kickScooters: [KickScooterResponse] = getKickScooterResponseMockData()
 
-        for (index, kickScooter) in kickScooters.enumerated() {
-            let reservationsMeta = ReservationMetaEntity(context: context)
-            reservationsMeta.date = Date().addingTimeInterval(-86400 * Double(index))
-            reservationsMeta.status = (index == 0)
-            reservationsMeta.userMeta = userMeta
-
-            let kickScooterMeta = KickScooterMetaEntity(context: context)
-            kickScooterMeta.id = Int64(kickScooter.id)
-            kickScooterMeta.model = kickScooter.model
-            kickScooterMeta.battery = kickScooter.battery
-            kickScooterMeta.price = Int64(kickScooter.price)
-            kickScooterMeta.lon = kickScooter.lon
-            kickScooterMeta.lat = kickScooter.lat
-            kickScooterMeta.image = kickScooter.image
-            kickScooterMeta.isAvailable = kickScooter.isAvailable
-
-            reservationsMeta.kickScooterMeta = kickScooterMeta
-            kickScooterMeta.reservationMeta = reservationsMeta
-
-            userMeta.addToReservationsMeta(reservationsMeta)
+        for (index, kickScooterResponse) in kickScooters.enumerated() {
+            let reservationMeta = injectMockReservationData(
+                into: context,
+                forUser: userMeta,
+                date: Date().addingTimeInterval(-86400 * Double(index)),
+                status: (index == 0)
+            )
+            
+            let kickScooterMeta = injectMockKickScooterData(
+                into: context,
+                with: kickScooterResponse,
+                forReservation: reservationMeta
+            )
+            
+            reservationMeta.kickScooterMeta = kickScooterMeta
+            userMeta.addToReservationsMeta(reservationMeta)
         }
 
         try? context.save()
     }
 
+    /// `KickScooterResponse` Mock 데이터 생성 메서드
+    static func getUserResponseMockData() -> UserResponse {
+        UserResponse(
+            name: "테스트 사용자",
+            email: "testuser@example.com",
+            id: "testuser",
+            password: "mockpassword123",
+            reservations: []
+        )
+    }
+    
+    /// `KickScooterResponse` Mock 데이터 생성 메서드
     static func getKickScooterResponseMockData() -> [KickScooterResponse] {
-        let kickScooters: [KickScooterResponse] = [
+        [
             KickScooterResponse(
                 id: 101,
                 model: "Swift R1",
@@ -85,9 +142,7 @@ extension PersistenceController {
                 lon: "127.0276",
                 lat: "37.4979",
                 image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
-                isAvailable: false
-            ),
+                isAvailable: false),
         ]
-        return kickScooters
     }
 }
