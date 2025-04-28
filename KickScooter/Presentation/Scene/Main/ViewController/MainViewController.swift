@@ -244,6 +244,7 @@ final class MainViewController: UIViewController {
     private func dismissKeyboard() {
         view.endEditing(true)
 
+        riveViewModel.setInput("isChecking", value: false)
         riveViewModel.setInput("isHandsUp", value: false)
     }
 }
