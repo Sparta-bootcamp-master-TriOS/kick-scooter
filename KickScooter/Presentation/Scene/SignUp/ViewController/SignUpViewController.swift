@@ -8,19 +8,21 @@ final class SignUpViewController: UIViewController {
     weak var delegate: SignUpViewControllerDelegate?
 
     private let riveViewModel = RiveViewModel(fileName: "KickScooter", stateMachineName: "State Machine")
-    private var riveView = RiveView()
+    var riveView = RiveView()
 
-    private let nameTextField = SignUpTextField()
-    private let invalidNameLabel = InvalidLabel()
-    private let idTextField = SignUpTextField()
-    private let invalidIDLabel = InvalidLabel()
-    private let passwordTextField = SignUpTextField()
-    private let invalidPasswordLabel = InvalidLabel()
-    private let confirmPasswordTextField = SignUpTextField()
-    private let invalidConfirmPasswordLabel = InvalidLabel()
-    private let emailTextField = SignUpTextField()
-    private let invalidEmailLabel = InvalidLabel()
-    private let signUpButton = SignButton()
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    let nameTextField = SignUpTextField()
+    let invalidNameLabel = InvalidLabel()
+    let idTextField = SignUpTextField()
+    let invalidIDLabel = InvalidLabel()
+    let passwordTextField = SignUpTextField()
+    let invalidPasswordLabel = InvalidLabel()
+    let confirmPasswordTextField = SignUpTextField()
+    let invalidConfirmPasswordLabel = InvalidLabel()
+    let emailTextField = SignUpTextField()
+    let invalidEmailLabel = InvalidLabel()
+    let signUpButton = SignButton()
 
     init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel
@@ -36,36 +38,39 @@ final class SignUpViewController: UIViewController {
         super.viewDidLoad()
 
         configureUI()
-        configureConstraints()
+        configureScrollViewConstraints()
+        configureRiveViewConstraints()
+        configureTextFieldConstraints()
+        configureInvalidLabelConstraints()
+        configureSignUpButtonConstraints()
         configureBindings()
+        configureKeyboardNotifications()
     }
 
     private func configureUI() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+
+        nameTextField.delegate = self
+        idTextField.delegate = self
+        passwordTextField.delegate = self
+        confirmPasswordTextField.delegate = self
+        emailTextField.delegate = self
+
         view.backgroundColor = .triOSTertiaryBackground
+
+        scrollView.showsVerticalScrollIndicator = false
 
         riveView = riveViewModel.createRiveView()
 
-        nameTextField.updateUI(placeholder: "이름")
-        invalidNameLabel.emptyText = "이름을 입력해주세요."
-        invalidNameLabel.invalidText = "한글만 입력할 수 있습니다."
-
-        idTextField.updateUI(placeholder: "아이디")
-        invalidIDLabel.emptyText = "아이디를 입력해주세요."
-        invalidIDLabel.invalidText = "아이디는 영문과 숫자만 사용할 수 있습니다."
-
-        passwordTextField.updateUI(placeholder: "비밀번호", isSecureTextEntry: true)
-        invalidPasswordLabel.emptyText = "비밀번호를 입력해주세요."
-        invalidPasswordLabel.invalidText = "비밀번호는 최소 8자 이상이어야 합니다."
-
-        confirmPasswordTextField.updateUI(placeholder: "비밀번호 확인", isSecureTextEntry: true)
-        invalidConfirmPasswordLabel.emptyText = "비밀번호 확인을 입력해주세요."
-        invalidConfirmPasswordLabel.invalidText = "비밀번호가 일치하지 않습니다."
-
-        emailTextField.updateUI(placeholder: "이메일")
-        invalidEmailLabel.emptyText = "이메일을 입력해주세요."
-        invalidEmailLabel.invalidText = "유효하지 않은 이메일 주소입니다."
+        configureTextFields()
+        configureInvalidLabels()
 
         signUpButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign Up")
+
+        view.addSubview(scrollView)
+
+        scrollView.addSubview(contentView)
 
         [
             riveView,
@@ -76,71 +81,32 @@ final class SignUpViewController: UIViewController {
             emailTextField, invalidEmailLabel,
             signUpButton,
         ]
-        .forEach { view.addSubview($0) }
+        .forEach { contentView.addSubview($0) }
     }
 
-    private func configureConstraints() {
-        riveView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalTo(nameTextField.snp.top).offset(-10)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-        }
+    private func configureTextFields() {
+        nameTextField.updateUI(placeholder: "이름")
+        idTextField.updateUI(placeholder: "아이디")
+        passwordTextField.updateUI(placeholder: "비밀번호", isSecureTextEntry: true)
+        confirmPasswordTextField.updateUI(placeholder: "비밀번호 확인", isSecureTextEntry: true)
+        emailTextField.updateUI(placeholder: "이메일")
+    }
 
-        nameTextField.snp.makeConstraints {
-            $0.bottom.equalTo(invalidNameLabel.snp.top).offset(-3)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
+    private func configureInvalidLabels() {
+        invalidNameLabel.emptyText = "이름을 입력해주세요."
+        invalidNameLabel.invalidText = "한글만 입력할 수 있습니다."
 
-        invalidNameLabel.snp.makeConstraints {
-            $0.bottom.equalTo(idTextField.snp.top).offset(-10)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
+        invalidIDLabel.emptyText = "아이디를 입력해주세요."
+        invalidIDLabel.invalidText = "아이디는 영문과 숫자만 사용할 수 있습니다."
 
-        idTextField.snp.makeConstraints {
-            $0.bottom.equalTo(invalidIDLabel.snp.top).offset(-3)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
+        invalidPasswordLabel.emptyText = "비밀번호를 입력해주세요."
+        invalidPasswordLabel.invalidText = "비밀번호는 최소 8자 이상이어야 합니다."
 
-        invalidIDLabel.snp.makeConstraints {
-            $0.bottom.equalTo(passwordTextField.snp.top).offset(-10)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
+        invalidConfirmPasswordLabel.emptyText = "비밀번호 확인을 입력해주세요."
+        invalidConfirmPasswordLabel.invalidText = "비밀번호가 일치하지 않습니다."
 
-        passwordTextField.snp.makeConstraints {
-            $0.bottom.equalTo(invalidPasswordLabel.snp.top).offset(-3)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        invalidPasswordLabel.snp.makeConstraints {
-            $0.bottom.equalTo(confirmPasswordTextField.snp.top).offset(-10)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        confirmPasswordTextField.snp.makeConstraints {
-            $0.bottom.equalTo(invalidConfirmPasswordLabel.snp.top).offset(-3)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        invalidConfirmPasswordLabel.snp.makeConstraints {
-            $0.bottom.equalTo(emailTextField.snp.top).offset(-10)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        emailTextField.snp.makeConstraints {
-            $0.bottom.equalTo(invalidEmailLabel.snp.top).offset(-3)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        invalidEmailLabel.snp.makeConstraints {
-            $0.bottom.equalTo(signUpButton.snp.top).offset(-20)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(40)
-        }
-
-        signUpButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(60)
-            $0.height.equalTo(46)
-        }
+        invalidEmailLabel.emptyText = "이메일을 입력해주세요."
+        invalidEmailLabel.invalidText = "유효하지 않은 이메일 주소입니다."
     }
 
     private func configureBindings() {
@@ -200,6 +166,22 @@ final class SignUpViewController: UIViewController {
                 self.delegate?.pop()
             }
         }
+    }
+
+    private func configureKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
 
     private func bindValidation(
@@ -287,5 +269,30 @@ final class SignUpViewController: UIViewController {
             id: id,
             password: password
         )
+    }
+
+    @objc
+    private func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+
+        let keyboardHeight = keyboardFrame.height
+
+        scrollView.isScrollEnabled = true
+        scrollView.contentInset.bottom = keyboardHeight
+        scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+    }
+
+    @objc
+    private func keyboardWillHide(notification _: Notification) {
+        scrollView.isScrollEnabled = false
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets.bottom = 0
+    }
+
+    @objc
+    private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
