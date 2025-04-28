@@ -1,3 +1,4 @@
 protocol MainViewControllerDelegate: AnyObject {
-    func push()
+    func pushSignUp()
+    func toMap()
 }
