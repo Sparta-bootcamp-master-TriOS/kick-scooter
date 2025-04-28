@@ -1,6 +1,9 @@
 import UIKit
 
 final class InvalidLabel: UILabel {
+    var emptyText: String?
+    var invalidText: String?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -12,8 +15,19 @@ final class InvalidLabel: UILabel {
     }
 
     private func configureUI() {
+        text = " "
         textColor = .triOSLowBattery
         font = .systemFont(ofSize: 16)
         isHidden = true
+    }
+
+    func showEmptyMessage() {
+        text = emptyText
+        isHidden = false
+    }
+
+    func showInvalidMessage() {
+        text = invalidText
+        isHidden = false
     }
 }

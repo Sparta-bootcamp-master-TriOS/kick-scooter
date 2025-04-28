@@ -8,7 +8,7 @@ final class DefaultAuthorizeUserRepository: AuthorizeUserRepository {
     }
 
     func authorize(user: UserSignIn) -> Result<User, Error> {
-        switch authorizeUserDataSource.execute(user: user) {
+        switch authorizeUserDataSource.execute(id: user.id, password: user.password) {
         case let .success(userResponse):
             let user = mapper.map(from: userResponse)
 

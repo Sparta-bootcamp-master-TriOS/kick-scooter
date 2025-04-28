@@ -3,6 +3,14 @@ import UIKit
 final class SignButton: UIButton {
     var onButtonTapped: (() -> Void)?
 
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted
+                ? backgroundColor?.withAlphaComponent(0.7)
+                : backgroundColor?.withAlphaComponent(1)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 

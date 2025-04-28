@@ -106,7 +106,7 @@ final class MainViewController: UIViewController {
         }
 
         signUpButton.onButtonTapped = { [weak self] in
-            self?.delegate?.pushSignUp()
+            self?.delegate?.push()
         }
 
         idTextField.onEditingBegan = { [weak self] in

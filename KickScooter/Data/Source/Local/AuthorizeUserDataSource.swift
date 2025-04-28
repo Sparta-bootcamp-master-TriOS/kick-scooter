@@ -8,11 +8,11 @@ final class AuthorizeUserDataSource {
         self.persistenceController = persistenceController
     }
 
-    func execute(user: UserSignIn) -> Result<UserResponse, Error> {
+    func execute(id: String, password: String) -> Result<UserResponse, Error> {
         let context = persistenceController.context
 
         let request = UserEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@ AND password == %@", user.id, user.password)
+        request.predicate = NSPredicate(format: "id == %@ AND password == %@", id, password)
         request.fetchLimit = 1
 
         do {

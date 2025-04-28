@@ -1,6 +1,16 @@
 import Foundation
 
 final class SignUpViewModel {
+    private let signUpUseCase: SignUpUseCase
+    private let verifyIDAvailabilityUseCase: VerifyIDAvailabilityUseCase
+
+    private let mapper = UserUIMapper()
+
+    init(signUpUseCase: SignUpUseCase, verifyIDAvailabilityUseCase: VerifyIDAvailabilityUseCase) {
+        self.signUpUseCase = signUpUseCase
+        self.verifyIDAvailabilityUseCase = verifyIDAvailabilityUseCase
+    }
+
     func verifyKoreanName(_ name: String) -> Bool {
         let regex = "^[가-힣]+$"
 
@@ -32,9 +42,11 @@ final class SignUpViewModel {
         return predicate.evaluate(with: email)
     }
 
-    func verifyIDAvailability() -> Bool {
-        false
+    func verifyIDAvailability(_ id: String) -> Bool {
+        verifyIDAvailabilityUseCase.execute(id)
     }
 
-    func signUp(user _: UserSignUpUI) {}
+    func signUp(user: UserSignUpUI) {
+        signUpUseCase.execute(user: mapper.map(user: user))
+    }
 }

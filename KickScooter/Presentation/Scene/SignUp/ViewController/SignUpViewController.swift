@@ -5,6 +5,8 @@ import UIKit
 final class SignUpViewController: UIViewController {
     private let signUpViewModel: SignUpViewModel
 
+    weak var delegate: SignUpViewControllerDelegate?
+
     private let riveViewModel = RiveViewModel(fileName: "KickScooter", stateMachineName: "State Machine")
     private var riveView = RiveView()
 
@@ -44,19 +46,24 @@ final class SignUpViewController: UIViewController {
         riveView = riveViewModel.createRiveView()
 
         nameTextField.updateUI(placeholder: "이름")
-        invalidNameLabel.text = "한글만 입력할 수 있습니다."
+        invalidNameLabel.emptyText = "이름을 입력해주세요."
+        invalidNameLabel.invalidText = "한글만 입력할 수 있습니다."
 
         idTextField.updateUI(placeholder: "아이디")
-        invalidIDLabel.text = "아이디는 영문과 숫자만 사용할 수 있습니다."
+        invalidIDLabel.emptyText = "아이디를 입력해주세요."
+        invalidIDLabel.invalidText = "아이디는 영문과 숫자만 사용할 수 있습니다."
 
         passwordTextField.updateUI(placeholder: "비밀번호", isSecureTextEntry: true)
-        invalidPasswordLabel.text = "비밀번호는 최소 8자 이상이어야 합니다."
+        invalidPasswordLabel.emptyText = "비밀번호를 입력해주세요."
+        invalidPasswordLabel.invalidText = "비밀번호는 최소 8자 이상이어야 합니다."
 
         confirmPasswordTextField.updateUI(placeholder: "비밀번호 확인", isSecureTextEntry: true)
-        invalidConfirmPasswordLabel.text = "비밀번호가 일치하지 않습니다."
+        invalidConfirmPasswordLabel.emptyText = "비밀번호 확인을 입력해주세요."
+        invalidConfirmPasswordLabel.invalidText = "비밀번호가 일치하지 않습니다."
 
         emailTextField.updateUI(placeholder: "이메일")
-        invalidEmailLabel.text = "유효하지 않은 이메일 주소입니다."
+        invalidEmailLabel.emptyText = "이메일을 입력해주세요."
+        invalidEmailLabel.invalidText = "유효하지 않은 이메일 주소입니다."
 
         signUpButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign Up")
 
@@ -137,35 +144,23 @@ final class SignUpViewController: UIViewController {
     }
 
     private func configureBindings() {
-        nameTextField.onTextChanged = { [weak self] in
-            guard let self,
-                  let name = self.nameTextField.text else { return }
+        bindValidation(
+            textField: nameTextField,
+            label: invalidNameLabel,
+            validation: signUpViewModel.verifyKoreanName
+        )
 
-            let isVerified = self.signUpViewModel.verifyKoreanName(name)
-            invalidNameLabel.isHidden = isVerified
-        }
+        bindValidation(
+            textField: idTextField,
+            label: invalidIDLabel,
+            validation: signUpViewModel.verifyID
+        )
 
-        idTextField.onTextChanged = { [weak self] in
-            guard let self,
-                  let id = self.idTextField.text
-            else {
-                return
-            }
-
-            let isVerified = self.signUpViewModel.verifyID(id)
-            invalidIDLabel.isHidden = isVerified
-        }
-
-        passwordTextField.onTextChanged = { [weak self] in
-            guard let self,
-                  let password = self.passwordTextField.text
-            else {
-                return
-            }
-
-            let isVerified = self.signUpViewModel.verifyPassword(password)
-            invalidPasswordLabel.isHidden = isVerified
-        }
+        bindValidation(
+            textField: passwordTextField,
+            label: invalidPasswordLabel,
+            validation: signUpViewModel.verifyPassword
+        )
 
         confirmPasswordTextField.onTextChanged = { [weak self] in
             guard let self,
@@ -176,48 +171,102 @@ final class SignUpViewController: UIViewController {
             }
 
             let isVerified = self.signUpViewModel.verifyPasswordsMatch(password, confirmPassword)
-            invalidConfirmPasswordLabel.isHidden = isVerified
-        }
+            self.invalidConfirmPasswordLabel.isHidden = isVerified
 
-        emailTextField.onTextChanged = { [weak self] in
-            guard let self,
-                  let email = self.emailTextField.text
-            else {
-                return
+            if !isVerified {
+                self.invalidConfirmPasswordLabel.showInvalidMessage()
             }
-
-            let isVerified = self.signUpViewModel.verifyEmail(email)
-            invalidEmailLabel.isHidden = isVerified
         }
+
+        bindValidation(
+            textField: emailTextField,
+            label: invalidEmailLabel,
+            validation: signUpViewModel.verifyEmail
+        )
 
         signUpButton.onButtonTapped = { [weak self] in
             guard let self else { return }
 
             let isValidated = self.validateTextFields()
-            let isAvialable = self.signUpViewModel.verifyIDAvailability()
+
+            guard let id = self.idTextField.text else { return }
+            let isAvialable = self.signUpViewModel.verifyIDAvailability(id)
 
             if isValidated, isAvialable {
                 guard let user = self.user() else { return }
 
-                signUpViewModel.signUp(user: user)
+                self.signUpViewModel.signUp(user: user)
+
+                self.delegate?.pop()
+            }
+        }
+    }
+
+    private func bindValidation(
+        textField: SignUpTextField,
+        label: InvalidLabel,
+        validation: @escaping (String) -> Bool
+    ) {
+        textField.onTextChanged = {
+            guard let text = textField.text else { return }
+
+            let isVerified = validation(text)
+            label.isHidden = isVerified
+
+            if !isVerified {
+                label.showInvalidMessage()
             }
         }
     }
 
     private func validateTextFields() -> Bool {
-        let textFields: [UITextField] = [
-            nameTextField,
-            emailTextField,
-            idTextField,
-            passwordTextField,
-            confirmPasswordTextField,
+        let validations: [ValidationItem] = [
+            ValidationItem(
+                textField: nameTextField,
+                label: invalidNameLabel,
+                validation: signUpViewModel.verifyKoreanName
+            ),
+            ValidationItem(
+                textField: idTextField,
+                label: invalidIDLabel,
+                validation: signUpViewModel.verifyID
+            ),
+            ValidationItem(
+                textField: passwordTextField,
+                label: invalidPasswordLabel,
+                validation: signUpViewModel.verifyPassword
+            ),
+            ValidationItem(
+                textField: confirmPasswordTextField,
+                label: invalidConfirmPasswordLabel,
+                validation: { [weak self] text in
+                    guard let self else { return false }
+                    return self.signUpViewModel.verifyPasswordsMatch(self.passwordTextField.text ?? "", text)
+                }
+            ),
+            ValidationItem(
+                textField: emailTextField,
+                label: invalidEmailLabel,
+                validation: signUpViewModel.verifyEmail
+            ),
         ]
 
-        if let emptyField = textFields.first(where: { $0.text?.isEmpty == true }) {
-            _ = emptyField.becomeFirstResponder()
-            emptyField.shake()
+        for item in validations {
+            guard let text = item.textField.text, !text.isEmpty else {
+                item.label.showEmptyMessage()
+                _ = item.textField.becomeFirstResponder()
+                item.textField.shake()
 
-            return false
+                return false
+            }
+
+            if !item.validation(text) {
+                item.label.showInvalidMessage()
+                _ = item.textField.becomeFirstResponder()
+                item.textField.shake()
+
+                return false
+            }
         }
 
         return true

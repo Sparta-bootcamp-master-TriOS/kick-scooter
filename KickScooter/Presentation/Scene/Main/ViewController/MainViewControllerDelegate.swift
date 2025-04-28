@@ -1,3 +1,3 @@
 protocol MainViewControllerDelegate: AnyObject {
-    func pushSignUp()
+    func push()
 }

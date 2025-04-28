@@ -4,6 +4,9 @@ extension DIContainer {
     }
 
     func makeSignUpViewModel() -> SignUpViewModel {
-        SignUpViewModel()
+        SignUpViewModel(
+            signUpUseCase: makeSignUpUseCase(),
+            verifyIDAvailabilityUseCase: makeVerifyIDAvailabilityUseCase()
+        )
     }
 }
