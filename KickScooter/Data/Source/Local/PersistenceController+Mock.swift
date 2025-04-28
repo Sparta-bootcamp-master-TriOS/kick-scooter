@@ -13,8 +13,37 @@ extension PersistenceController {
     
     /// Mock 데이터 삽입 메서드
     ///
+    /// Mock 데이터 `UserMetaEntity`를 생성한다.
+    static func injectMockMyPageData(into context: NSManagedObjectContext) {
+        let userMeta = makeUserMetaEntity(into: context)
+
+        let kickScooters: [KickScooterResponse] = getKickScooterResponseMockData()
+
+        for (index, kickScooterResponse) in kickScooters.enumerated() {
+            let reservationMeta = makeReservationMetaEntity(
+                into: context,
+                forUser: userMeta,
+                date: Date().addingTimeInterval(-86400 * Double(index)),
+                status: (index == 0)
+            )
+            
+            let kickScooterMeta = makeKickScooterMetaEntity(
+                into: context,
+                with: kickScooterResponse,
+                forReservation: reservationMeta
+            )
+            
+            reservationMeta.kickScooterMeta = kickScooterMeta
+            userMeta.addToReservationsMeta(reservationMeta)
+        }
+
+        try? context.save()
+    }
+
+    /// Mock 데이터 삽입 메서드
+    ///
     /// Mock 데이터 `ReservationMetaEntity`를 생성한다.
-    static func injectMockReservationData(
+    static func makeReservationMetaEntity(
         into context: NSManagedObjectContext,
         forUser user: UserMetaEntity,
         date: Date,
@@ -30,7 +59,7 @@ extension PersistenceController {
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `KickScooterMetaEntity`를 생성한다.
-    static func injectMockKickScooterData(
+    static func makeKickScooterMetaEntity(
         into context: NSManagedObjectContext,
         with response: KickScooterResponse,
         forReservation reservation: ReservationMetaEntity
@@ -51,7 +80,7 @@ extension PersistenceController {
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserMetaEntity`를 생성한다.
-    static func injectMockUserData(into context: NSManagedObjectContext) -> UserMetaEntity {
+    static func makeUserMetaEntity(into context: NSManagedObjectContext) -> UserMetaEntity {
         let userMeta = UserMetaEntity(context: context)
         let userResponse = getUserResponseMockData()
         userMeta.name = userResponse.name
@@ -59,35 +88,6 @@ extension PersistenceController {
         userMeta.id = userResponse.id
         userMeta.password = userResponse.password
         return userMeta
-    }
-
-    /// Mock 데이터 삽입 메서드
-    ///
-    /// Mock 데이터 `UserMetaEntity`를 생성한다.
-    static func injectMockMyPageData(into context: NSManagedObjectContext) {
-        let userMeta = injectMockUserData(into: context)
-
-        let kickScooters: [KickScooterResponse] = getKickScooterResponseMockData()
-
-        for (index, kickScooterResponse) in kickScooters.enumerated() {
-            let reservationMeta = injectMockReservationData(
-                into: context,
-                forUser: userMeta,
-                date: Date().addingTimeInterval(-86400 * Double(index)),
-                status: (index == 0)
-            )
-            
-            let kickScooterMeta = injectMockKickScooterData(
-                into: context,
-                with: kickScooterResponse,
-                forReservation: reservationMeta
-            )
-            
-            reservationMeta.kickScooterMeta = kickScooterMeta
-            userMeta.addToReservationsMeta(reservationMeta)
-        }
-
-        try? context.save()
     }
 
     /// `KickScooterResponse` Mock 데이터 생성 메서드
