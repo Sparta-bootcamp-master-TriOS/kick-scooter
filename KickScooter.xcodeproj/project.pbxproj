@@ -11,6 +11,7 @@
 		BF3379B22DBB08D70008ED43 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = BF3379B12DBB08D30008ED43 /* .gitignore */; };
 		BFDD17C62DBB902800A91A55 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BFDD17C52DBB902800A91A55 /* SnapKit */; };
 		BFDD17C92DBB903A00A91A55 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BFDD17C82DBB903A00A91A55 /* Alamofire */; };
+		BFDD17E12DBBBF3400A91A55 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = BFDD17E02DBBBF3400A91A55 /* RiveRuntime */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 			files = (
 				BFDD17C62DBB902800A91A55 /* SnapKit in Frameworks */,
 				BFDD17C92DBB903A00A91A55 /* Alamofire in Frameworks */,
+				BFDD17E12DBBBF3400A91A55 /* RiveRuntime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +97,7 @@
 			packageProductDependencies = (
 				BFDD17C52DBB902800A91A55 /* SnapKit */,
 				BFDD17C82DBB903A00A91A55 /* Alamofire */,
+				BFDD17E02DBBBF3400A91A55 /* RiveRuntime */,
 			);
 			productName = KickScooter;
 			productReference = BF3379912DBB06120008ED43 /* KickScooter.app */;
@@ -127,6 +130,7 @@
 			packageReferences = (
 				BFDD17C42DBB902800A91A55 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BFDD17C72DBB903A00A91A55 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				BFDD17DF2DBBBF3400A91A55 /* XCRemoteSwiftPackageReference "rive-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BF3379922DBB06120008ED43 /* Products */;
@@ -216,8 +220,8 @@
 				INFOPLIST_FILE = KickScooter/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -248,8 +252,8 @@
 				INFOPLIST_FILE = KickScooter/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -427,6 +431,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		BFDD17DF2DBBBF3400A91A55 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -439,6 +451,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BFDD17C72DBB903A00A91A55 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		BFDD17E02DBBBF3400A91A55 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BFDD17DF2DBBBF3400A91A55 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
