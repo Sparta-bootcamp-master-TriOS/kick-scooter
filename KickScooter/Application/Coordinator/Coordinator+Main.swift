@@ -19,7 +19,7 @@ extension Coordinator: MainViewControllerDelegate {
             .first?.windows
             .first else { return }
 
-        let viewController = AddKickScooterViewController()
+        let viewController = diContainer.makeAddKickScooterViewController()
 
         UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: {
             window.rootViewController = viewController
