@@ -23,4 +23,14 @@ struct UserResponseMapper {
             reservations: response.reservations.map { reservationMapper.map(from: $0) }
         )
     }
+
+    func map(from user: UserSignUp) -> UserResponse {
+        UserResponse(
+            name: user.name,
+            email: user.email,
+            id: user.id,
+            password: user.password,
+            reservations: []
+        )
+    }
 }

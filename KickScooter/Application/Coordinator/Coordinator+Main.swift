@@ -6,8 +6,8 @@ extension Coordinator: MainViewControllerDelegate {
         return viewController
     }
 
-    func pushSignUp() {
-        let viewController = diContainer.makeSignUpViewController()
+    func push() {
+        let viewController = makeSignUpViewController()
         navigationController.pushViewController(viewController, animated: true)
     }
 }
