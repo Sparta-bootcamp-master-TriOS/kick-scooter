@@ -2,6 +2,6 @@ import Foundation
 
 struct ReservationResponse {
     let date: Date
-    let status: Bool = true
+    let status: Bool
     let kickScooter: KickScooterResponse
 }
