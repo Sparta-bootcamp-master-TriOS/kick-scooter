@@ -76,7 +76,6 @@ extension SignUpViewController {
         signUpButton.snp.makeConstraints {
             $0.top.equalTo(invalidEmailLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
-            $0.height.equalTo(46)
         }
     }
 }

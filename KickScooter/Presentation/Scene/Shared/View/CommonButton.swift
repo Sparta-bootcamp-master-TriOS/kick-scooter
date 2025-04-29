@@ -1,6 +1,7 @@
+import SnapKit
 import UIKit
 
-final class SignButton: UIButton {
+final class CommonButton: UIButton {
     var onButtonTapped: (() -> Void)?
 
     override var isHighlighted: Bool {
@@ -26,6 +27,10 @@ final class SignButton: UIButton {
         layer.cornerRadius = 23
 
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+
+        snp.makeConstraints {
+            $0.height.equalTo(46)
+        }
     }
 
     func updateUI(backgroundColor: UIColor, titleColor: UIColor, title: String) {

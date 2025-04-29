@@ -9,4 +9,8 @@ extension DIContainer {
             verifyIDAvailabilityUseCase: makeVerifyIDAvailabilityUseCase()
         )
     }
+
+    func makeAddKickScooterViewModel() -> AddKickScooterViewModel {
+        AddKickScooterViewModel(userNameUseCase: makeUserNameUseCase())
+    }
 }
