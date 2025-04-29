@@ -26,9 +26,9 @@ struct UserUIMapper {
             )
         }
         return UserProfileUI(
-            name: user.name,
+            name: "Hey, \(user.name)!",
             email: user.email,
-            id: user.id,
+            id: "@\(user.id)",
             reservations: reservationMapper.map(reservations: user.reservations)
         )
     }
