@@ -14,4 +14,11 @@ extension DIContainer {
     func makeVerifyIDAvailabilityRepository() -> VerifyIDAvailabilityRepository {
         DefaultVerifyIDAvailabilityRepository(verifyIDAvailabilityDataSource: makeVerifyIDAvailabilityDataSource())
     }
+    
+    func makeMyPageRepository() -> MyPageRepository {
+        DefaultMyPageRepository(
+            userProfileDataSource: makeUserProfileDataSource(),
+            rideHistoryDataSource: makeRideHistoryDataSource()
+        )
+    }
 }
