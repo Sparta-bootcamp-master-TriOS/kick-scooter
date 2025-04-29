@@ -1,4 +1,4 @@
 protocol MainViewControllerDelegate: AnyObject {
     func pushSignUp()
-    func toMap()
+    func successSignIn()
 }

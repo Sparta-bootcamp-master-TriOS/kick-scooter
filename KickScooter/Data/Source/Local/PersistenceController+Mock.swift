@@ -1,16 +1,15 @@
 import CoreData
 
 extension PersistenceController {
-    
     /// Mock 객체 생성 메서드
     static func makeInMemory() -> PersistenceController {
         let controller = PersistenceController(inMemory: true)
-        
+
         injectMockMyPageData(into: controller.context)
-        
+
         return controller
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserEntity`를 생성한다.
@@ -24,15 +23,15 @@ extension PersistenceController {
                 into: context,
                 forUser: user,
                 date: Date().addingTimeInterval(-86400 * Double(index)),
-                status: (index == 0)
+                status: index == 0
             )
-            
+
             let kickScooter = makeKickScooterEntity(
                 into: context,
                 with: kickScooterResponse,
                 forReservation: reservation
             )
-            
+
             reservation.kickScooter = kickScooter
             user.addToReservations(reservation)
         }
@@ -55,7 +54,7 @@ extension PersistenceController {
         reservation.user = user
         return reservation
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `KickScooterEntity`를 생성한다.
@@ -65,7 +64,7 @@ extension PersistenceController {
         forReservation reservation: ReservationEntity
     ) -> KickScooterEntity {
         let kickScooter = KickScooterEntity(context: context)
-        kickScooter.id = Int(response.id)
+        kickScooter.id = response.id
         kickScooter.model = response.model
         kickScooter.battery = response.battery
         kickScooter.price = Int64(response.price)
@@ -76,7 +75,7 @@ extension PersistenceController {
         kickScooter.reservation = reservation
         return kickScooter
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserEntity`를 생성한다.
@@ -100,12 +99,12 @@ extension PersistenceController {
             reservations: []
         )
     }
-    
+
     /// `KickScooterResponse` Mock 데이터 생성 메서드
     static func getKickScooterResponseMockData() -> [KickScooterResponse] {
         [
             KickScooterResponse(
-                id: 101,
+                id: UUID(),
                 model: "Swift R1",
                 battery: 95.0,
                 price: 1200,
@@ -115,7 +114,7 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 102,
+                id: UUID(),
                 model: "Swift T5",
                 battery: 60.0,
                 price: 1200,
@@ -125,7 +124,7 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 103,
+                id: UUID(),
                 model: "Swift R1",
                 battery: 25.0,
                 price: 1200,
@@ -135,14 +134,15 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 104,
+                id: UUID(),
                 model: "Swift T5",
                 battery: 75.0,
                 price: 1200,
                 lon: "127.0276",
                 lat: "37.4979",
                 image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
-                isAvailable: false),
+                isAvailable: false
+            ),
         ]
     }
 }

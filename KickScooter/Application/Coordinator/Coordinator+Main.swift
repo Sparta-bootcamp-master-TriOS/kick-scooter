@@ -13,17 +13,21 @@ extension Coordinator: MainViewControllerDelegate {
         navigationController.pushViewController(viewController, animated: true)
     }
 
-    func toMap() {
+    func successSignIn() {
         guard let window = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
             .first?.windows
             .first else { return }
 
-        let viewController = diContainer.makeAddKickScooterViewController()
+        let tabBarController = diContainer.makeTabBarController()
 
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: {
-            window.rootViewController = viewController
-        }, completion: nil)
+        UIView.transition(
+            with: window,
+            duration: 0.3,
+            options: .transitionFlipFromRight,
+            animations: { window.rootViewController = tabBarController },
+            completion: nil
+        )
 
         window.makeKeyAndVisible()
     }

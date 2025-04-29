@@ -1,5 +1,7 @@
+import Foundation
+
 struct KickScooterUI: CoordinatesableUI {
-    let id: Int
+    let id: UUID
     let model: String
     let battery: String
     let price: String

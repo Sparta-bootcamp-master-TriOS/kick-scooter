@@ -56,6 +56,8 @@ final class PasswordTextField: UITextField {
     }
 
     private func configureUI() {
+        keyboardType = .asciiCapable
+
         underline.backgroundColor = UIColor.triOSMainBlack.cgColor
 
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)

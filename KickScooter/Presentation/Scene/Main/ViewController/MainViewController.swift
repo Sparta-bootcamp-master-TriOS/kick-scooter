@@ -141,7 +141,7 @@ final class MainViewController: UIViewController {
 
             if isAuthorized {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                    self.delegate?.toMap()
+                    self.delegate?.successSignIn()
                 }
             }
         }

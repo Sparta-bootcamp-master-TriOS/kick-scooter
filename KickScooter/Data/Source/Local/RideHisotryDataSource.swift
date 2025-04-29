@@ -2,11 +2,11 @@ import Foundation
 
 final class RideHistoryDataSource {
     private let persisrenceController: PersistenceController
-    
+
     init(persisrenceController: PersistenceController) {
         self.persisrenceController = persisrenceController
     }
-    
+
     /// CoreData에서 UserEntity 에서 유저의 예약 히스토리를 가져오는 메서드
     ///
     /// - Returns:User의 예약 히스토리
@@ -16,7 +16,7 @@ final class RideHistoryDataSource {
         }
         return reservations
     }
-    
+
     /// CoreData에서 ReservationEntity 데이터를 가져오는 메서드
     ///
     /// - Returns:userId 로 검색한 ReservationEntity 결과 데이터
