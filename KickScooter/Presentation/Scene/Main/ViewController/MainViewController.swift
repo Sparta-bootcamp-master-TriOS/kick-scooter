@@ -39,6 +39,19 @@ final class MainViewController: UIViewController {
         configureBackButton()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        idTextField.text = ""
+        passwordTextField.text = ""
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        view.endEditing(true)
+    }
+
     private func configureUI() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -126,12 +139,17 @@ final class MainViewController: UIViewController {
 
             self.validateTextFields()
 
-            self.riveViewModel.setInput("isChecking", value: false)
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
+
+            if isAuthorized {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                    self.delegate?.toMap()
+                }
+            }
         }
 
         signUpButton.onButtonTapped = { [weak self] in
-            self?.delegate?.push()
+            self?.delegate?.pushSignUp()
         }
 
         idTextField.onEditingBegan = { [weak self] in
@@ -225,5 +243,8 @@ final class MainViewController: UIViewController {
     @objc
     private func dismissKeyboard() {
         view.endEditing(true)
+
+        riveViewModel.setInput("isChecking", value: false)
+        riveViewModel.setInput("isHandsUp", value: false)
     }
 }
