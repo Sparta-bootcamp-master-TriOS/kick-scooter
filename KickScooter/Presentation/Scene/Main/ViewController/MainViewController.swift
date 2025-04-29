@@ -15,6 +15,9 @@ final class MainViewController: UIViewController {
     let idTextField = IDTextField()
     let passwordTextField = PasswordTextField()
     private let invalidLabel = InvalidLabel()
+    private let checkBoxStackView = UIStackView()
+    private let rememberCheckBox = SignInCheckBox()
+    private let autoCheckBox = SignInCheckBox()
     let signInButton = CommonButton()
     private let orLabel = UILabel()
     private let signUpButton = CommonButton()
@@ -65,6 +68,13 @@ final class MainViewController: UIViewController {
 
         riveView = riveViewModel.createRiveView()
 
+        checkBoxStackView.axis = .horizontal
+        checkBoxStackView.alignment = .center
+        checkBoxStackView.distribution = .fillEqually
+
+        rememberCheckBox.setTitle("계정 기억하기", for: .normal)
+        autoCheckBox.setTitle("자동 로그인", for: .normal)
+
         signUpButton.updateUI(backgroundColor: .triOSBackground, titleColor: .triOSText, title: "Sign Up")
         signInButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign In")
 
@@ -76,10 +86,22 @@ final class MainViewController: UIViewController {
 
         view.addSubview(scrollView)
 
+        [rememberCheckBox, autoCheckBox]
+            .forEach { checkBoxStackView.addArrangedSubview($0) }
+
         scrollView.addSubview(contentView)
 
-        [riveView, idTextField, passwordTextField, invalidLabel, signInButton, orLabel, signUpButton]
-            .forEach { contentView.addSubview($0) }
+        [
+            riveView,
+            idTextField,
+            passwordTextField,
+            invalidLabel,
+            checkBoxStackView,
+            signInButton,
+            orLabel,
+            signUpButton,
+        ]
+        .forEach { contentView.addSubview($0) }
     }
 
     private func configureConstraints() {
@@ -113,8 +135,13 @@ final class MainViewController: UIViewController {
             $0.horizontalEdges.equalToSuperview().inset(40)
         }
 
+        checkBoxStackView.snp.makeConstraints {
+            $0.top.equalTo(invalidLabel.snp.bottom).offset(10)
+            $0.horizontalEdges.equalToSuperview().inset(40)
+        }
+
         signInButton.snp.makeConstraints {
-            $0.top.equalTo(invalidLabel.snp.bottom).offset(20)
+            $0.top.equalTo(checkBoxStackView.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
         }
 
