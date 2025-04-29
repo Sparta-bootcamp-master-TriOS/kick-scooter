@@ -37,6 +37,10 @@ final class AddKickScooterViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
+    override func loadView() {
+        view = AddKickScooterBackgroundView(frame: UIScreen.main.bounds)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,8 +56,6 @@ final class AddKickScooterViewController: UIViewController {
     }
 
     private func configureUI() {
-        view.backgroundColor = .purple
-
         if let userName = addKickScooterViewModel.user() {
             userProfileView.updateUI(wellcom: addKickScooterViewModel.greeting(), name: userName)
         }
