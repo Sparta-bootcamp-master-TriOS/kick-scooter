@@ -11,28 +11,11 @@
         <attribute name="price" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="reservation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReservationEntity" inverseName="kickScooter" inverseEntity="ReservationEntity"/>
     </entity>
-    <entity name="KickScooterMetaEntity" representedClassName="KickScooterMetaEntity" syncable="YES">
-        <attribute name="battery" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="image" attributeType="String"/>
-        <attribute name="isAvailable" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="lat" attributeType="String"/>
-        <attribute name="lon" attributeType="String"/>
-        <attribute name="model" attributeType="String"/>
-        <attribute name="price" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="reservationMeta" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReservationMetaEntity" inverseName="kickScooterMeta" inverseEntity="ReservationMetaEntity"/>
-    </entity>
     <entity name="ReservationEntity" representedClassName="ReservationEntity" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="status" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="kickScooter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KickScooterEntity" inverseName="reservation" inverseEntity="KickScooterEntity"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="reservations" inverseEntity="UserEntity"/>
-    </entity>
-    <entity name="ReservationMetaEntity" representedClassName="ReservationMetaEntity" syncable="YES">
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="status" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="kickScooterMeta" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KickScooterMetaEntity" inverseName="reservationMeta" inverseEntity="KickScooterMetaEntity"/>
-        <relationship name="userMeta" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserMetaEntity" inverseName="reservationsMeta" inverseEntity="UserMetaEntity"/>
     </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
         <attribute name="email" attributeType="String"/>
@@ -40,12 +23,5 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="password" attributeType="String"/>
         <relationship name="reservations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReservationEntity" inverseName="user" inverseEntity="ReservationEntity"/>
-    </entity>
-    <entity name="UserMetaEntity" representedClassName="UserMetaEntity" syncable="YES">
-        <attribute name="email" attributeType="String"/>
-        <attribute name="id" attributeType="String"/>
-        <attribute name="name" attributeType="String"/>
-        <attribute name="password" attributeType="String"/>
-        <relationship name="reservationsMeta" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReservationMetaEntity" inverseName="userMeta" inverseEntity="ReservationMetaEntity"/>
     </entity>
 </model>

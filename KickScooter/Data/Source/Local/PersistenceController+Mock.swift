@@ -13,28 +13,28 @@ extension PersistenceController {
     
     /// Mock 데이터 삽입 메서드
     ///
-    /// Mock 데이터 `UserMetaEntity`를 생성한다.
+    /// Mock 데이터 `UserEntity`를 생성한다.
     static func injectMockMyPageData(into context: NSManagedObjectContext) {
-        let userMeta = makeUserMetaEntity(into: context)
+        let user = makeUserEntity(into: context)
 
         let kickScooters: [KickScooterResponse] = getKickScooterResponseMockData()
 
         for (index, kickScooterResponse) in kickScooters.enumerated() {
-            let reservationMeta = makeReservationMetaEntity(
+            let reservation = makeReservationEntity(
                 into: context,
-                forUser: userMeta,
+                forUser: user,
                 date: Date().addingTimeInterval(-86400 * Double(index)),
                 status: (index == 0)
             )
             
-            let kickScooterMeta = makeKickScooterMetaEntity(
+            let kickScooter = makeKickScooterEntity(
                 into: context,
                 with: kickScooterResponse,
-                forReservation: reservationMeta
+                forReservation: reservation
             )
             
-            reservationMeta.kickScooterMeta = kickScooterMeta
-            userMeta.addToReservationsMeta(reservationMeta)
+            reservation.kickScooter = kickScooter
+            user.addToReservations(reservation)
         }
 
         try? context.save()
@@ -42,52 +42,52 @@ extension PersistenceController {
 
     /// Mock 데이터 삽입 메서드
     ///
-    /// Mock 데이터 `ReservationMetaEntity`를 생성한다.
-    static func makeReservationMetaEntity(
+    /// Mock 데이터 `ReservationEntity`를 생성한다.
+    static func makeReservationEntity(
         into context: NSManagedObjectContext,
-        forUser user: UserMetaEntity,
+        forUser user: UserEntity,
         date: Date,
         status: Bool
-    ) -> ReservationMetaEntity {
-        let reservationMeta = ReservationMetaEntity(context: context)
-        reservationMeta.date = date
-        reservationMeta.status = status
-        reservationMeta.userMeta = user
-        return reservationMeta
+    ) -> ReservationEntity {
+        let reservation = ReservationEntity(context: context)
+        reservation.date = date
+        reservation.status = status
+        reservation.user = user
+        return reservation
     }
     
     /// Mock 데이터 삽입 메서드
     ///
-    /// Mock 데이터 `KickScooterMetaEntity`를 생성한다.
-    static func makeKickScooterMetaEntity(
+    /// Mock 데이터 `KickScooterEntity`를 생성한다.
+    static func makeKickScooterEntity(
         into context: NSManagedObjectContext,
         with response: KickScooterResponse,
-        forReservation reservation: ReservationMetaEntity
-    ) -> KickScooterMetaEntity {
-        let kickScooterMeta = KickScooterMetaEntity(context: context)
-        kickScooterMeta.id = Int64(response.id)
-        kickScooterMeta.model = response.model
-        kickScooterMeta.battery = response.battery
-        kickScooterMeta.price = Int64(response.price)
-        kickScooterMeta.lon = response.lon
-        kickScooterMeta.lat = response.lat
-        kickScooterMeta.image = response.image
-        kickScooterMeta.isAvailable = response.isAvailable
-        kickScooterMeta.reservationMeta = reservation
-        return kickScooterMeta
+        forReservation reservation: ReservationEntity
+    ) -> KickScooterEntity {
+        let kickScooter = KickScooterEntity(context: context)
+        kickScooter.id = Int(response.id)
+        kickScooter.model = response.model
+        kickScooter.battery = response.battery
+        kickScooter.price = Int64(response.price)
+        kickScooter.lon = response.lon
+        kickScooter.lat = response.lat
+        kickScooter.image = response.image
+        kickScooter.isAvailable = response.isAvailable
+        kickScooter.reservation = reservation
+        return kickScooter
     }
     
     /// Mock 데이터 삽입 메서드
     ///
-    /// Mock 데이터 `UserMetaEntity`를 생성한다.
-    static func makeUserMetaEntity(into context: NSManagedObjectContext) -> UserMetaEntity {
-        let userMeta = UserMetaEntity(context: context)
+    /// Mock 데이터 `UserEntity`를 생성한다.
+    static func makeUserEntity(into context: NSManagedObjectContext) -> UserEntity {
+        let user = UserEntity(context: context)
         let userResponse = getUserResponseMockData()
-        userMeta.name = userResponse.name
-        userMeta.email = userResponse.email
-        userMeta.id = userResponse.id
-        userMeta.password = userResponse.password
-        return userMeta
+        user.name = userResponse.name
+        user.email = userResponse.email
+        user.id = userResponse.id
+        user.password = userResponse.password
+        return user
     }
 
     /// `KickScooterResponse` Mock 데이터 생성 메서드
