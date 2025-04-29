@@ -56,6 +56,8 @@ final class IDTextField: UITextField {
     private func configureUI() {
         addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
 
+        keyboardType = .asciiCapable
+
         underline.backgroundColor = UIColor.triOSMainBlack.cgColor
 
         textColor = .triOSText
