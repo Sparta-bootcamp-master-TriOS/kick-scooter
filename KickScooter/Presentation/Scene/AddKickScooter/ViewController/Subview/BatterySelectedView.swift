@@ -59,18 +59,6 @@ final class BatterySelectedView: UIView {
         [batteryStackView]
             .forEach { addSubview($0) }
 
-        highBatteryIconView.snp.makeConstraints {
-            $0.height.equalTo(48)
-        }
-
-        midBatteryIconView.snp.makeConstraints {
-            $0.height.equalTo(48)
-        }
-
-        lowBatteryIconView.snp.makeConstraints {
-            $0.height.equalTo(48)
-        }
-
         batteryStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

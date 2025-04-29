@@ -8,6 +8,6 @@ extension DIContainer {
     }
 
     func makeAddKickScooterViewController() -> AddKickScooterViewController {
-        AddKickScooterViewController(addScooterViewModel: makeAddKickScooterViewModel())
+        AddKickScooterViewController(addKickScooterViewModel: makeAddKickScooterViewModel())
     }
 }

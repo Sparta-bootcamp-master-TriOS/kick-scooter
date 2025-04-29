@@ -61,6 +61,10 @@ final class BatteryView: UIView {
             $0.right.equalToSuperview()
         }
 
+        snp.makeConstraints {
+            $0.height.equalTo(48)
+        }
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
         addGestureRecognizer(tapGesture)
         isUserInteractionEnabled = true
