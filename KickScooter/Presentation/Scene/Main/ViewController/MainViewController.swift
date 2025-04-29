@@ -44,6 +44,7 @@ final class MainViewController: UIViewController {
 
         idTextField.text = ""
         passwordTextField.text = ""
+        invalidLabel.isHidden = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
