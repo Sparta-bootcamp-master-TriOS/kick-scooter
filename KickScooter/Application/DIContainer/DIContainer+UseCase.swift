@@ -21,4 +21,8 @@ extension DIContainer {
     func makeMyPageUseCase() -> MyPageUseCase {
         DefaultMyPageUseCase(myPageRepository: makeMyPageRepository())
     }
+
+    func makeMapUseCase() -> MapUseCase {
+        DefaultMapUseCase(mapRepository: makeMapRepository())
+    }
 }

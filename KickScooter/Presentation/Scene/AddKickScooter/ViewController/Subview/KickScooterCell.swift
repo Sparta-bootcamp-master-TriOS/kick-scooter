@@ -22,7 +22,7 @@ final class KickScooterCell: UICollectionViewCell {
 
         imageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.width.height.equalTo(250)
+            make.size.equalTo(250)
         }
     }
 

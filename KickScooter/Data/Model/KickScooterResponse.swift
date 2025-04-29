@@ -1,5 +1,7 @@
+import Foundation
+
 struct KickScooterResponse {
-    let id: Int
+    let id: UUID
     let model: String
     let battery: Double
     let price: Int

@@ -6,7 +6,7 @@ public extension KickScooterEntity {
         NSFetchRequest<KickScooterEntity>(entityName: "KickScooterEntity")
     }
 
-    @NSManaged var id: Int
+    @NSManaged var id: UUID
     @NSManaged var model: String
     @NSManaged var battery: Double
     @NSManaged var price: Int64

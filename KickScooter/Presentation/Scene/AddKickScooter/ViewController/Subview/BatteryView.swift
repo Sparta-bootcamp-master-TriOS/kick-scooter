@@ -47,12 +47,12 @@ final class BatteryView: UIView {
         batterIconView.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(48)
+            $0.size.equalTo(48)
         }
 
         batteryIcon.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.height.equalTo(30)
+            $0.size.equalTo(30)
         }
 
         labelStackView.snp.makeConstraints {

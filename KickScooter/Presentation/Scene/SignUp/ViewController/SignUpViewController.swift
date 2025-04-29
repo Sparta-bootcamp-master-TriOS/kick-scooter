@@ -63,6 +63,9 @@ final class SignUpViewController: UIViewController {
 
         riveView = riveViewModel.createRiveView()
 
+        idTextField.keyboardType = .asciiCapable
+        passwordTextField.keyboardType = .asciiCapable
+        confirmPasswordTextField.keyboardType = .asciiCapable
         emailTextField.keyboardType = .emailAddress
 
         configureTextFields()
