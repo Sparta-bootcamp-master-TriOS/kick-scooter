@@ -117,7 +117,7 @@ final class AddKickScooterViewController: UIViewController {
         }
 
         batterySelectedView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(30)
+            $0.top.equalToSuperview().offset(20)
             $0.horizontalEdges.equalToSuperview().inset(6)
             $0.height.equalTo(48)
         }
@@ -143,7 +143,7 @@ final class AddKickScooterViewController: UIViewController {
         addButton.snp.makeConstraints {
             $0.top.equalTo(kickScooterDetailView.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().inset(30)
+            $0.bottom.equalToSuperview().inset(20)
         }
     }
 

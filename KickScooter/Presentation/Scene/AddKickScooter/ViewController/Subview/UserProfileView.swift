@@ -41,7 +41,7 @@ final class UserProfileView: UIView {
         addSubview(mainStackView)
 
         profileImage.snp.makeConstraints {
-            $0.width.height.equalTo(64)
+            $0.size.equalTo(64)
         }
 
         mainStackView.snp.makeConstraints {

@@ -33,7 +33,7 @@ struct UserResponseMapper {
             reservations: []
         )
     }
-    
+
     func map(from userEntity: UserEntity, with reservationEntity: [ReservationEntity]) -> UserProfile? {
         let reservations = reservationEntity.map {
             let kickScooter = KickScooter(
@@ -46,14 +46,14 @@ struct UserResponseMapper {
                 image: $0.kickScooter.image,
                 isAvailable: $0.kickScooter.isAvailable
             )
-            
+
             return Reservation(
                 date: $0.date,
                 status: $0.status,
                 kickScooter: kickScooter
             )
         }
-        
+
         return UserProfile(
             name: userEntity.name,
             email: userEntity.email,

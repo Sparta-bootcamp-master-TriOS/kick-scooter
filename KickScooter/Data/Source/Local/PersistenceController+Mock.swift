@@ -1,16 +1,15 @@
 import CoreData
 
 extension PersistenceController {
-    
     /// Mock 객체 생성 메서드
     static func makeInMemory() -> PersistenceController {
         let controller = PersistenceController(inMemory: true)
-        
+
         injectMockMyPageData(into: controller.context)
-        
+
         return controller
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserEntity`를 생성한다.
@@ -24,15 +23,15 @@ extension PersistenceController {
                 into: context,
                 forUser: user,
                 date: Date().addingTimeInterval(-86400 * Double(index)),
-                status: (index == 0)
+                status: index == 0
             )
-            
+
             let kickScooter = makeKickScooterEntity(
                 into: context,
                 with: kickScooterResponse,
                 forReservation: reservation
             )
-            
+
             reservation.kickScooter = kickScooter
             user.addToReservations(reservation)
         }
@@ -55,7 +54,7 @@ extension PersistenceController {
         reservation.user = user
         return reservation
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `KickScooterEntity`를 생성한다.
@@ -76,7 +75,7 @@ extension PersistenceController {
         kickScooter.reservation = reservation
         return kickScooter
     }
-    
+
     /// Mock 데이터 삽입 메서드
     ///
     /// Mock 데이터 `UserEntity`를 생성한다.
@@ -100,7 +99,7 @@ extension PersistenceController {
             reservations: []
         )
     }
-    
+
     /// `KickScooterResponse` Mock 데이터 생성 메서드
     static func getKickScooterResponseMockData() -> [KickScooterResponse] {
         [
@@ -142,7 +141,8 @@ extension PersistenceController {
                 lon: "127.0276",
                 lat: "37.4979",
                 image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
-                isAvailable: false),
+                isAvailable: false
+            ),
         ]
     }
 }
