@@ -15,9 +15,9 @@ final class MainViewController: UIViewController {
     let idTextField = IDTextField()
     let passwordTextField = PasswordTextField()
     private let invalidLabel = InvalidLabel()
-    let signInButton = SignButton()
+    let signInButton = CommonButton()
     private let orLabel = UILabel()
-    private let signUpButton = SignButton()
+    private let signUpButton = CommonButton()
 
     init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
@@ -116,7 +116,6 @@ final class MainViewController: UIViewController {
         signInButton.snp.makeConstraints {
             $0.top.equalTo(invalidLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
-            $0.height.equalTo(46)
         }
 
         orLabel.snp.makeConstraints {
@@ -127,7 +126,6 @@ final class MainViewController: UIViewController {
         signUpButton.snp.makeConstraints {
             $0.top.equalTo(orLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
-            $0.height.equalTo(46)
         }
     }
 
