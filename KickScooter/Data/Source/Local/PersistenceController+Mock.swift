@@ -64,7 +64,7 @@ extension PersistenceController {
         forReservation reservation: ReservationEntity
     ) -> KickScooterEntity {
         let kickScooter = KickScooterEntity(context: context)
-        kickScooter.id = Int(response.id)
+        kickScooter.id = response.id
         kickScooter.model = response.model
         kickScooter.battery = response.battery
         kickScooter.price = Int64(response.price)
@@ -104,7 +104,7 @@ extension PersistenceController {
     static func getKickScooterResponseMockData() -> [KickScooterResponse] {
         [
             KickScooterResponse(
-                id: 101,
+                id: UUID(),
                 model: "Swift R1",
                 battery: 95.0,
                 price: 1200,
@@ -114,7 +114,7 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 102,
+                id: UUID(),
                 model: "Swift T5",
                 battery: 60.0,
                 price: 1200,
@@ -124,7 +124,7 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 103,
+                id: UUID(),
                 model: "Swift R1",
                 battery: 25.0,
                 price: 1200,
@@ -134,7 +134,7 @@ extension PersistenceController {
                 isAvailable: true
             ),
             KickScooterResponse(
-                id: 104,
+                id: UUID(),
                 model: "Swift T5",
                 battery: 75.0,
                 price: 1200,

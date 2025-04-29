@@ -37,7 +37,7 @@ struct UserResponseMapper {
     func map(from userEntity: UserEntity, with reservationEntity: [ReservationEntity]) -> UserProfile? {
         let reservations = reservationEntity.map {
             let kickScooter = KickScooter(
-                id: Int($0.kickScooter.id),
+                id: $0.kickScooter.id,
                 model: $0.kickScooter.model,
                 battery: $0.kickScooter.battery,
                 price: Int($0.kickScooter.price),
