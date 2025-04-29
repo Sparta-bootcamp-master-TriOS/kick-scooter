@@ -1,11 +1,11 @@
 import Alamofire
 
 class MapDataSource {
-    static let shared = MapDataSource()
+    private let apiKey: String
     
-    private init() {}
-    
-    private let apiKey = "Kakao REST API Key"
+    init(apiKey: String) {
+        self.apiKey = apiKey
+    }
     
     func searchAddress(query: String, completion: @escaping (Result<[MapResponse], Error>) -> Void) {
         let url = "https://dapi.kakao.com/v2/local/search/address.json"

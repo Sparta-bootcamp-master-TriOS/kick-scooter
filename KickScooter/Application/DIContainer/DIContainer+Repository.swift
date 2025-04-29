@@ -21,4 +21,8 @@ extension DIContainer {
             rideHistoryDataSource: makeRideHistoryDataSource()
         )
     }
+
+    func makeMapRepository() -> MapRepository {
+        DefaultMapRepository(mapDataSource: makeMapDataSource())
+    }
 }
