@@ -24,6 +24,8 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setValue(TabBar(), forKey: "tabBar")
+
         delegate = self
 
         configureTabs()
