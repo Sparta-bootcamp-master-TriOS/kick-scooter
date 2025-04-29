@@ -22,7 +22,7 @@ final class SignUpViewController: UIViewController {
     let invalidConfirmPasswordLabel = InvalidLabel()
     let emailTextField = SignUpTextField()
     let invalidEmailLabel = InvalidLabel()
-    let signUpButton = SignButton()
+    let signUpButton = CommonButton()
 
     init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel

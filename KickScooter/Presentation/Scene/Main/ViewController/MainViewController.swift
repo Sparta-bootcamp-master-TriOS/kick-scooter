@@ -15,9 +15,9 @@ final class MainViewController: UIViewController {
     let idTextField = IDTextField()
     let passwordTextField = PasswordTextField()
     private let invalidLabel = InvalidLabel()
-    let signInButton = SignButton()
+    let signInButton = CommonButton()
     private let orLabel = UILabel()
-    private let signUpButton = SignButton()
+    private let signUpButton = CommonButton()
 
     init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
@@ -37,6 +37,19 @@ final class MainViewController: UIViewController {
         configureBindings()
         configureKeyboardNotifications()
         configureBackButton()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        idTextField.text = ""
+        passwordTextField.text = ""
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        view.endEditing(true)
     }
 
     private func configureUI() {
@@ -103,7 +116,6 @@ final class MainViewController: UIViewController {
         signInButton.snp.makeConstraints {
             $0.top.equalTo(invalidLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
-            $0.height.equalTo(46)
         }
 
         orLabel.snp.makeConstraints {
@@ -114,7 +126,6 @@ final class MainViewController: UIViewController {
         signUpButton.snp.makeConstraints {
             $0.top.equalTo(orLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
-            $0.height.equalTo(46)
         }
     }
 
@@ -126,12 +137,17 @@ final class MainViewController: UIViewController {
 
             self.validateTextFields()
 
-            self.riveViewModel.setInput("isChecking", value: false)
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
+
+            if isAuthorized {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                    self.delegate?.toMap()
+                }
+            }
         }
 
         signUpButton.onButtonTapped = { [weak self] in
-            self?.delegate?.push()
+            self?.delegate?.pushSignUp()
         }
 
         idTextField.onEditingBegan = { [weak self] in
@@ -225,5 +241,8 @@ final class MainViewController: UIViewController {
     @objc
     private func dismissKeyboard() {
         view.endEditing(true)
+
+        riveViewModel.setInput("isChecking", value: false)
+        riveViewModel.setInput("isHandsUp", value: false)
     }
 }

@@ -7,6 +7,10 @@ extension DIContainer {
         SignUpViewController(signUpViewModel: makeSignUpViewModel())
     }
 
+    func makeAddKickScooterViewController() -> AddKickScooterViewController {
+        AddKickScooterViewController(addKickScooterViewModel: makeAddKickScooterViewModel())
+    }
+
     func makeMyPageViewController() -> MyPageViewController {
         MyPageViewController(myPageViewModel: makeMyPageViewModel())
     }
