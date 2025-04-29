@@ -13,7 +13,7 @@ extension DIContainer {
     func makeVerifyIDAvailabilityUseCase() -> VerifyIDAvailabilityUseCase {
         DefaultVerifyIDAvailabilityUseCase(verifyIDAvailabilityRepository: makeVerifyIDAvailabilityRepository())
     }
-    
+
     func makeMyPageUseCase() -> MyPageUseCase {
         DefaultMyPageUseCase(myPageRepository: makeMyPageRepository())
     }
