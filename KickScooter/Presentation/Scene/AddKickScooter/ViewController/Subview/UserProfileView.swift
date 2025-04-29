@@ -17,12 +17,6 @@ final class UserProfileView: UIView {
     }
 
     private func configureUI() {
-        //
-        profileImage.image = .defaultProfile
-        wellcomLabel.text = "Good Morning 👋🏻"
-        nameLabel.text = "Alina Joe"
-        //
-
         wellcomLabel.font = .systemFont(ofSize: 14)
         wellcomLabel.textColor = .triOSTertiaryBackground
 
@@ -53,5 +47,11 @@ final class UserProfileView: UIView {
         mainStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    func updateUI(wellcom: String, name: String, image: UIImage = UIImage.defaultProfile) {
+        wellcomLabel.text = wellcom
+        nameLabel.text = name
+        profileImage.image = image
     }
 }

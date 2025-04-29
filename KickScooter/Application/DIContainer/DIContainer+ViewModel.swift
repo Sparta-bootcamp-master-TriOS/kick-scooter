@@ -11,6 +11,6 @@ extension DIContainer {
     }
 
     func makeAddKickScooterViewModel() -> AddKickScooterViewModel {
-        AddKickScooterViewModel()
+        AddKickScooterViewModel(userNameUseCase: makeUserNameUseCase())
     }
 }

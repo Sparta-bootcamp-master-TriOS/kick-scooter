@@ -54,6 +54,10 @@ final class AddKickScooterViewController: UIViewController {
     private func configureUI() {
         view.backgroundColor = .purple
 
+        if let userName = addKickScooterViewModel.user() {
+            userProfileView.updateUI(wellcom: addKickScooterViewModel.greeting(), name: userName)
+        }
+
         contentView.backgroundColor = .triOSBackground
         contentView.layer.cornerRadius = 20
 

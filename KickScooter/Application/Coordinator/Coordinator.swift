@@ -10,9 +10,7 @@ final class Coordinator {
     }
 
     func start() {
-        // TODO: 삭제
-//        let mainViewController = makeMainViewController()
-        let mainViewController = diContainer.makeAddKickScooterViewController()
+        let mainViewController = makeMainViewController()
 
         navigationController.viewControllers = [mainViewController]
     }
