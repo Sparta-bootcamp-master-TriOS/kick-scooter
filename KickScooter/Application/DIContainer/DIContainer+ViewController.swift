@@ -6,4 +6,8 @@ extension DIContainer {
     func makeSignUpViewController() -> SignUpViewController {
         SignUpViewController(signUpViewModel: makeSignUpViewModel())
     }
+
+    func makeMyPageViewController() -> MyPageViewController {
+        MyPageViewController(myPageViewModel: makeMyPageViewModel())
+    }
 }

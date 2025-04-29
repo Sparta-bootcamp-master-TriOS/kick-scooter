@@ -9,4 +9,10 @@ extension DIContainer {
             verifyIDAvailabilityUseCase: makeVerifyIDAvailabilityUseCase()
         )
     }
+
+    func makeMyPageViewModel() -> MyPageViewModel {
+        MyPageViewModel(
+            myPageUseCase: makeMyPageUseCase()
+        )
+    }
 }
