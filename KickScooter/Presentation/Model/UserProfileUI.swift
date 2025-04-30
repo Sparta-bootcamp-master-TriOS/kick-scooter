@@ -1,4 +1,4 @@
-struct UserProfileUI: NameableUI, EmailableUI, IdableUI {
+struct UserProfileUI: Hashable, NameableUI, EmailableUI, IdableUI {
     let name: String
     let email: String
     let id: String

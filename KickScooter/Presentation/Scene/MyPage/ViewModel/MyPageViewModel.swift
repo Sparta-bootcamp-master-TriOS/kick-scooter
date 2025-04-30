@@ -36,7 +36,7 @@ final class MyPageViewModel: MyPageViewModelDelegate {
 
     func fetchUserProfile() -> UserProfileUI {
         mapper.map(
-            user: myPageUseCase.fetchUserProfile("amazingDove")
+            user: myPageUseCase.fetchUserProfile("joyalina25")
         )
     }
 }

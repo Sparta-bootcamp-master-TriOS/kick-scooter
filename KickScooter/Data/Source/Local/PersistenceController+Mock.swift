@@ -92,9 +92,9 @@ extension PersistenceController {
     /// `KickScooterResponse` Mock 데이터 생성 메서드
     static func getUserResponseMockData() -> UserResponse {
         UserResponse(
-            name: "손하경",
-            email: "amazingDove@example.com",
-            id: "amazingDove",
+            name: "Alina",
+            email: "alinajoe@gmail.com",
+            id: "joyalina25",
             password: "mockpassword123",
             reservations: []
         )
@@ -110,7 +110,7 @@ extension PersistenceController {
                 price: 1200,
                 lon: "127.0276",
                 lat: "37.4979",
-                image: "https://gyroorboard.com/cdn/shop/files/C1Proelectricscooter.jpg?v=1697686628",
+                image: "KickScooter1",
                 isAvailable: true
             ),
             KickScooterResponse(
@@ -120,7 +120,7 @@ extension PersistenceController {
                 price: 1200,
                 lon: "126.9780",
                 lat: "37.5665",
-                image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
+                image: "KickScooter2",
                 isAvailable: true
             ),
             KickScooterResponse(
@@ -130,7 +130,7 @@ extension PersistenceController {
                 price: 1200,
                 lon: "127.1025",
                 lat: "37.5130",
-                image: "https://gyroorboard.com/cdn/shop/files/C1Proelectricscooter.jpg?v=1697686628",
+                image: "KickScooter1",
                 isAvailable: true
             ),
             KickScooterResponse(
@@ -140,7 +140,7 @@ extension PersistenceController {
                 price: 1200,
                 lon: "127.0276",
                 lat: "37.4979",
-                image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
+                image: "KickScooter3",
                 isAvailable: false
             ),
         ]
