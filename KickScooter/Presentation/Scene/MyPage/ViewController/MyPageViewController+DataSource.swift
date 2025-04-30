@@ -58,6 +58,10 @@ extension MyPageViewController {
             cell.layer.shadowOffset = CGSize(width: 0, height: 0)
             cell.clipsToBounds = false
             cell.layer.masksToBounds = false
+            cell.layer.shadowPath = UIBezierPath(
+                roundedRect: cell.bounds,
+                cornerRadius: cell.contentView.layer.cornerRadius
+            ).cgPath
 
             return cell
         }
