@@ -117,7 +117,7 @@ final class MainViewController: UIViewController {
 
     private func configureConstraints() {
         scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview()
         }
 
         contentView.snp.makeConstraints {
@@ -127,7 +127,8 @@ final class MainViewController: UIViewController {
         }
 
         riveView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalToSuperview()
+            $0.top.equalToSuperview().offset(100)
+            $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(300)
         }
 
