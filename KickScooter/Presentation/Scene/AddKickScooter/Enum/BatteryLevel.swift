@@ -3,11 +3,11 @@ enum BatteryLevel: Int {
          mid,
          low
 
-    var desc: Int {
+    var desc: Double {
         switch self {
-        case .high: 100
-        case .mid: 50
-        case .low: 25
+        case .high: 100.0
+        case .mid: 50.0
+        case .low: 25.0
         }
     }
 }

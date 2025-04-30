@@ -4,12 +4,10 @@ struct KickScooterResponseMapper {
     func map(from entity: KickScooterEntity) -> KickScooterResponse {
         KickScooterResponse(
             id: entity.id,
-            model: entity.model,
             battery: entity.battery,
-            price: Int(entity.price),
+            type: Int(entity.type),
             lon: entity.lon,
             lat: entity.lat,
-            image: entity.image,
             isAvailable: entity.isAvailable
         )
     }
@@ -17,13 +15,22 @@ struct KickScooterResponseMapper {
     func map(from response: KickScooterResponse) -> KickScooter {
         KickScooter(
             id: response.id,
-            model: response.model,
             battery: response.battery,
-            price: response.price,
+            type: response.type,
             lon: response.lon,
             lat: response.lat,
-            image: response.image,
             isAvailable: response.isAvailable
+        )
+    }
+
+    func map(from kickScooter: KickScooter) -> KickScooterResponse {
+        KickScooterResponse(
+            id: kickScooter.id,
+            battery: kickScooter.battery,
+            type: kickScooter.type,
+            lon: kickScooter.lon,
+            lat: kickScooter.lat,
+            isAvailable: kickScooter.isAvailable
         )
     }
 }

@@ -1,6 +1,14 @@
 extension DIContainer {
     func makeMainViewModel() -> MainViewModel {
-        MainViewModel(authorizeUserUseCase: makeAuthorizeUserUseCase())
+        MainViewModel(
+            authorizeUserUseCase: makeAuthorizeUserUseCase(),
+            saveCredentialsUseCase: makeSaveCredentialsUseCase(),
+            fetchCredentialsUseCase: makeFetchCredentialsUseCase(),
+            saveRememberSignInStatusUseCase: makeSaveRememberSignInStatusUseCase(),
+            fetchRememberSignInStatusUseCase: makeFetchRememberSignInStatusUseCase(),
+            saveAutoSignInStatusUseCase: makeSaveAutoSignInStatusUseCase(),
+            fetchAutoSignInStatusUseCase: makeFetchAutoSignInStatusUseCase()
+        )
     }
 
     func makeSignUpViewModel() -> SignUpViewModel {
@@ -11,7 +19,10 @@ extension DIContainer {
     }
 
     func makeAddKickScooterViewModel() -> AddKickScooterViewModel {
-        AddKickScooterViewModel(userNameUseCase: makeUserNameUseCase())
+        AddKickScooterViewModel(
+            fetchUserNameUseCase: makeUserNameUseCase(),
+            saveKickScooterUseCase: makeSaveKickScooterUseCase()
+        )
     }
 
     func makeMyPageViewModel() -> MyPageViewModel {

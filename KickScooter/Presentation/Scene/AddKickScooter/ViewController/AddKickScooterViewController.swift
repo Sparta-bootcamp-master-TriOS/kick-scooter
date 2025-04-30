@@ -161,6 +161,10 @@ final class AddKickScooterViewController: UIViewController {
             self?.kickScooterDetailView.updateUI(with: kickScooter.model, kickScooter.price)
         }
 
+        addButton.onButtonTapped = { [weak self] in
+            self?.addKickScooterViewModel.saveKickScooter()
+        }
+
         pageControl.numberOfPages = KickScooterType.allCases.count
     }
 }
