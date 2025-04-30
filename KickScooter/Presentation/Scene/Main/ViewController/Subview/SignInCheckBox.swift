@@ -2,6 +2,8 @@ import SnapKit
 import UIKit
 
 final class SignInCheckBox: UIButton {
+    var onToggle: ((Bool) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -37,5 +39,6 @@ final class SignInCheckBox: UIButton {
     @objc
     private func toggle() {
         isSelected.toggle()
+        onToggle?(isSelected)
     }
 }

@@ -4,8 +4,4 @@ final class DefaultUserSessionRepository: UserSessionRepository {
     func cache(user: User) {
         self.user = user
     }
-
-    func save() {}
-
-    func clear() {}
 }
