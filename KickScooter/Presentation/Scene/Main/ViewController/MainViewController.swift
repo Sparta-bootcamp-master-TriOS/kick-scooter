@@ -194,7 +194,7 @@ final class MainViewController: UIViewController {
             self.riveViewModel.triggerInput(isAuthorized ? "trigSuccess" : "trigFail")
 
             if isAuthorized {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                     self.delegate?.successSignIn()
                 }
             }
