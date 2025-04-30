@@ -12,6 +12,7 @@ final class MainViewController: UIViewController {
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let titleLabel = UILabel()
     let idTextField = IDTextField()
     let passwordTextField = PasswordTextField()
     private let invalidLabel = InvalidLabel()
@@ -53,7 +54,11 @@ final class MainViewController: UIViewController {
         } else {
             idTextField.text = ""
             passwordTextField.text = ""
+
             invalidLabel.isHidden = true
+
+            rememberCheckBox.isSelected = false
+            autoCheckBox.isSelected = false
         }
     }
 
@@ -74,24 +79,29 @@ final class MainViewController: UIViewController {
 
         scrollView.showsVerticalScrollIndicator = false
 
+        titleLabel.text = "SHOONG"
+        titleLabel.textColor = .triOSText
+        titleLabel.font = .jalnan(ofSize: 52)
+        titleLabel.textAlignment = .center
+
         riveView = riveViewModel.createRiveView()
 
         checkBoxStackView.axis = .horizontal
         checkBoxStackView.alignment = .center
         checkBoxStackView.distribution = .fillEqually
 
-        rememberCheckBox.setTitle("계정 기억하기", for: .normal)
+        rememberCheckBox.updateTitle("계정 기억하기")
         rememberCheckBox.isSelected = mainViewModel.rememberSignInStatus
 
-        autoCheckBox.setTitle("자동 로그인", for: .normal)
+        autoCheckBox.updateTitle("자동 로그인")
         autoCheckBox.isSelected = mainViewModel.autoSignInStatus
 
-        signUpButton.updateUI(backgroundColor: .triOSBackground, titleColor: .triOSText, title: "Sign Up")
-        signInButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign In")
+        signUpButton.updateUI(backgroundColor: .triOSBackground, titleColor: .triOSText, title: "회원가입")
+        signInButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "로그인")
 
-        orLabel.text = "or"
+        orLabel.text = "또는"
         orLabel.textColor = .triOSText
-        orLabel.font = .systemFont(ofSize: 16)
+        orLabel.font = .jalnan(ofSize: 16)
 
         invalidLabel.text = "아이디 또는 비밀번호가 잘못되었습니다."
 
@@ -103,6 +113,7 @@ final class MainViewController: UIViewController {
         scrollView.addSubview(contentView)
 
         [
+            titleLabel,
             riveView,
             idTextField,
             passwordTextField,
@@ -126,8 +137,12 @@ final class MainViewController: UIViewController {
             $0.bottom.equalTo(signUpButton)
         }
 
+        titleLabel.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+        }
+
         riveView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(100)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(-30)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(300)
         }
