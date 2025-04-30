@@ -38,12 +38,10 @@ struct UserResponseMapper {
         let reservations = reservationEntity.map {
             let kickScooter = KickScooter(
                 id: $0.kickScooter.id,
-                model: $0.kickScooter.model,
                 battery: $0.kickScooter.battery,
-                price: Int($0.kickScooter.price),
+                type: Int($0.kickScooter.type),
                 lon: $0.kickScooter.lon,
                 lat: $0.kickScooter.lat,
-                image: $0.kickScooter.image,
                 isAvailable: $0.kickScooter.isAvailable
             )
 

@@ -26,6 +26,10 @@ extension DIContainer {
         DefaultMapRepository(mapDataSource: makeMapDataSource())
     }
 
+    func makeKickScooterRepository() -> KickScooterRepository {
+        DefaultKickScooterRepository(saveKickScooterDataSource: makeSaveKickScooterDataSource())
+    }
+
     func makeCredentialsRepository() -> CredentialsRepository {
         DefaultCredentialsRepository(
             saveCredentialsDataSource: makeSaveCredentialsDataSource(),

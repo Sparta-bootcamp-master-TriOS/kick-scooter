@@ -1,4 +1,4 @@
-final class DefaultUserNameUseCase: UserNameUseCase {
+final class DefaultFetchUserNameUseCase: FetchUserNameUseCase {
     private let userSessionRepository: UserSessionRepository
 
     init(userSessionRepository: UserSessionRepository) {

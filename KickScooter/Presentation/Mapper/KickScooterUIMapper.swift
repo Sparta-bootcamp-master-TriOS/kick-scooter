@@ -4,12 +4,10 @@ struct KickScooterUIMapper {
     func map(kickScooter: KickScooter) -> KickScooterUI {
         KickScooterUI(
             id: kickScooter.id,
-            model: kickScooter.model,
             battery: "\(kickScooter.battery)",
-            price: "\(kickScooter.price)",
+            type: kickScooter.type,
             lon: kickScooter.lon,
             lat: kickScooter.lat,
-            image: kickScooter.image,
             isAvailable: kickScooter.isAvailable
         )
     }

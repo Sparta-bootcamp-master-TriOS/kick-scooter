@@ -65,12 +65,10 @@ extension PersistenceController {
     ) -> KickScooterEntity {
         let kickScooter = KickScooterEntity(context: context)
         kickScooter.id = response.id
-        kickScooter.model = response.model
         kickScooter.battery = response.battery
-        kickScooter.price = Int64(response.price)
+        kickScooter.type = Int64(response.type)
         kickScooter.lon = response.lon
         kickScooter.lat = response.lat
-        kickScooter.image = response.image
         kickScooter.isAvailable = response.isAvailable
         kickScooter.reservation = reservation
         return kickScooter
@@ -105,42 +103,34 @@ extension PersistenceController {
         [
             KickScooterResponse(
                 id: UUID(),
-                model: "Swift R1",
                 battery: 95.0,
-                price: 1200,
+                type: 0,
                 lon: "127.0276",
                 lat: "37.4979",
-                image: "https://gyroorboard.com/cdn/shop/files/C1Proelectricscooter.jpg?v=1697686628",
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
-                model: "Swift T5",
                 battery: 60.0,
-                price: 1200,
+                type: 1,
                 lon: "126.9780",
                 lat: "37.5665",
-                image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
-                model: "Swift R1",
                 battery: 25.0,
-                price: 1200,
+                type: 1,
                 lon: "127.1025",
                 lat: "37.5130",
-                image: "https://gyroorboard.com/cdn/shop/files/C1Proelectricscooter.jpg?v=1697686628",
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
-                model: "Swift T5",
                 battery: 75.0,
-                price: 1200,
+                type: 2,
                 lon: "127.0276",
                 lat: "37.4979",
-                image: "https://boldcube.co.uk/cdn/shop/files/Purple_8216b295-a458-4d6e-a386-2a49deb448e3.jpg?v=1697373846",
                 isAvailable: false
             ),
         ]
