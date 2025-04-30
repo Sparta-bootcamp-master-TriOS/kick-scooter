@@ -1,5 +1,11 @@
+import Foundation
+
 final class AddKickScooterViewModel {
     private let userNameUseCase: UserNameUseCase
+    private let saveKickScooterUseCase: SaveKickScooterUseCase
+
+    private let locationManager = LocationManager.shared
+    private let mapper = KickScooterUIMapper.shared
 
     private var selectedBatteryLevel: BatteryLevel = .high
     private var selectedKickScooterType: KickScooterType = .expensive
@@ -7,8 +13,9 @@ final class AddKickScooterViewModel {
     var onBatteryChanged: ((Int) -> Void)?
     var onKickScooterTypeChanged: ((Int) -> Void)?
 
-    init(userNameUseCase: UserNameUseCase) {
+    init(userNameUseCase: UserNameUseCase, saveKickScooterUseCase: SaveKickScooterUseCase) {
         self.userNameUseCase = userNameUseCase
+        self.saveKickScooterUseCase = saveKickScooterUseCase
     }
 
     func greeting() -> String {
@@ -39,5 +46,22 @@ final class AddKickScooterViewModel {
         selectedKickScooterType = kickScooterType
 
         onKickScooterTypeChanged?(selectedKickScooterType.rawValue)
+    }
+
+    func saveKickScooter() {
+        locationManager.requestCurrentLocation { [weak self] coordinate in
+            guard let self else { return }
+
+            let kickScooter = KickScooter(
+                id: UUID(),
+                battery: self.selectedBatteryLevel.desc,
+                type: self.selectedKickScooterType.rawValue,
+                lon: "\(coordinate.longitude)",
+                lat: "\(coordinate.latitude)",
+                isAvailable: true
+            )
+
+            self.saveKickScooterUseCase.execute(kickScooter: kickScooter)
+        }
     }
 }

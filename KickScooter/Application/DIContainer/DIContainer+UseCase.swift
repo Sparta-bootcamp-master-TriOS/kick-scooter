@@ -25,4 +25,8 @@ extension DIContainer {
     func makeMapUseCase() -> MapUseCase {
         DefaultMapUseCase(mapRepository: makeMapRepository())
     }
+
+    func makeSaveKickScooterUseCase() -> SaveKickScooterUseCase {
+        DefaultSaveKickScooterUseCase(kickScooterRepository: makeKickScooterRepository())
+    }
 }
