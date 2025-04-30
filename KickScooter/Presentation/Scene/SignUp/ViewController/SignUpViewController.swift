@@ -174,7 +174,7 @@ final class SignUpViewController: UIViewController {
                 self.delegate?.pop()
             } else {
                 invalidIDLabel.showduplicatedIDMessage()
-                
+
                 _ = idTextField.becomeFirstResponder()
                 idTextField.shake()
             }
