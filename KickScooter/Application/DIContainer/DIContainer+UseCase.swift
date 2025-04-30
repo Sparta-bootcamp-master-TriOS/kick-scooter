@@ -14,8 +14,8 @@ extension DIContainer {
         DefaultVerifyIDAvailabilityUseCase(verifyIDAvailabilityRepository: makeVerifyIDAvailabilityRepository())
     }
 
-    func makeUserNameUseCase() -> UserNameUseCase {
-        DefaultUserNameUseCase(userSessionRepository: userSessionRepository)
+    func makeUserNameUseCase() -> FetchUserNameUseCase {
+        DefaultFetchUserNameUseCase(userSessionRepository: userSessionRepository)
     }
 
     func makeMyPageUseCase() -> MyPageUseCase {

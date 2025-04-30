@@ -1,7 +1,7 @@
 import Foundation
 
 final class AddKickScooterViewModel {
-    private let userNameUseCase: UserNameUseCase
+    private let fetchUserNameUseCase: FetchUserNameUseCase
     private let saveKickScooterUseCase: SaveKickScooterUseCase
 
     private let locationManager = LocationManager.shared
@@ -13,8 +13,8 @@ final class AddKickScooterViewModel {
     var onBatteryChanged: ((Int) -> Void)?
     var onKickScooterTypeChanged: ((Int) -> Void)?
 
-    init(userNameUseCase: UserNameUseCase, saveKickScooterUseCase: SaveKickScooterUseCase) {
-        self.userNameUseCase = userNameUseCase
+    init(fetchUserNameUseCase: FetchUserNameUseCase, saveKickScooterUseCase: SaveKickScooterUseCase) {
+        self.fetchUserNameUseCase = fetchUserNameUseCase
         self.saveKickScooterUseCase = saveKickScooterUseCase
     }
 
@@ -23,7 +23,7 @@ final class AddKickScooterViewModel {
     }
 
     func user() -> String? {
-        guard let user = userNameUseCase.execute() else { return nil }
+        guard let user = fetchUserNameUseCase.execute() else { return nil }
 
         return user.name
     }
