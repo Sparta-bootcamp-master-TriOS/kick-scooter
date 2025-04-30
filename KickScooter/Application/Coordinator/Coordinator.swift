@@ -10,7 +10,8 @@ final class Coordinator {
     }
 
     func start() {
-        let mainViewController = makeMainViewController()
+//        let mainViewController = makeMainViewController()
+        let mainViewController = diContainer.makeMapViewController()
 
         navigationController.viewControllers = [mainViewController]
     }
