@@ -61,9 +61,17 @@ final class IDTextField: UITextField {
         underline.backgroundColor = UIColor.triOSMainBlack.cgColor
 
         textColor = .triOSText
-        placeholder = "아이디를 입력하세요."
+        font = .jalnan(ofSize: 16)
         autocapitalizationType = .none
         autocorrectionType = .no
+
+        attributedPlaceholder = NSAttributedString(
+            string: "아이디를 입력하세요.",
+            attributes: [
+                .font: UIFont.jalnan(ofSize: 16),
+                .foregroundColor: UIColor.triOSSecondaryText,
+            ]
+        )
     }
 
     @objc

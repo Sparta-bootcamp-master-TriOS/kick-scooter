@@ -17,10 +17,10 @@ final class UserProfileView: UIView {
     }
 
     private func configureUI() {
-        wellcomLabel.font = .systemFont(ofSize: 14)
+        wellcomLabel.font = .jalnan(ofSize: 14)
         wellcomLabel.textColor = .triOSTertiaryBackground
 
-        nameLabel.font = .systemFont(ofSize: 22)
+        nameLabel.font = .jalnan(ofSize: 22)
         nameLabel.textColor = .triOSTertiaryBackground
 
         let labelStackView = UIStackView()

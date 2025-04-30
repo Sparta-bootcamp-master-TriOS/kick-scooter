@@ -63,14 +63,14 @@ final class AddKickScooterViewController: UIViewController {
         contentView.backgroundColor = .triOSBackground
         contentView.layer.cornerRadius = 20
 
-        let fullText = "Selected Kick Scooter"
+        let fullText = "킥보드 추가하기"
         let attributedString = NSMutableAttributedString(string: fullText)
-        if let range = fullText.range(of: "Kick Scooter") {
+        if let range = fullText.range(of: "킥보드") {
             let nsRange = NSRange(range, in: fullText)
             attributedString.addAttribute(.foregroundColor, value: UIColor.triOSMain, range: nsRange)
         }
         selectedLabel.attributedText = attributedString
-        selectedLabel.font = .systemFont(ofSize: 18)
+        selectedLabel.font = .jalnan(ofSize: 18)
 
         addKickScooterView.backgroundColor = .triOSTertiaryBackground
         addKickScooterView.layer.cornerRadius = 20
