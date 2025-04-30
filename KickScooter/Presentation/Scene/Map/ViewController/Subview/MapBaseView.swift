@@ -18,6 +18,7 @@ final class MapBaseView: UIView {
     private func configureUI() {
         addSubview(mapView)
 
+        mapView.isZoomEnabled = true
         mapView.showsUserLocation = true
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()

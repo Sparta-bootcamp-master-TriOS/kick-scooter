@@ -17,13 +17,21 @@ final class MapSearchBarView: UIView {
     private func configureUI() {
         addSubview(searchBar)
 
-        backgroundColor = .triOSBackground
         layer.cornerRadius = 12
         clipsToBounds = true
 
         searchBar.placeholder = "Search Maps"
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .triOSBackground
+
+        if let glassIcon = searchBar.searchTextField.leftView as? UIImageView {
+            glassIcon.tintColor = .triOSMain
+        }
+
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField {
+            textField.backgroundColor = .triOSBackground
+            textField.borderStyle = .none
+        }
 
         searchBar.snp.makeConstraints {
             $0.edges.equalToSuperview()

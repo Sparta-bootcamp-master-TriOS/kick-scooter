@@ -6,7 +6,9 @@ final class MapViewController: UIViewController {
 
     private let mapBaseView = MapBaseView()
     private let mapSearchBarView = MapSearchBarView()
-    private let currentLocationButtonView = CurrentLocationButtonView()
+    private let mapActionButtonPanel = MapActionButtonPanel()
+
+    private var isScooterVisible = false
 
     init(mapViewModel: MapViewModel) {
         self.mapViewModel = mapViewModel
@@ -26,7 +28,9 @@ final class MapViewController: UIViewController {
     }
 
     private func configureUI() {
-        [mapBaseView, mapSearchBarView, currentLocationButtonView]
+        view.bringSubviewToFront(mapSearchBarView)
+
+        [mapBaseView, mapActionButtonPanel, mapSearchBarView]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
@@ -36,14 +40,15 @@ final class MapViewController: UIViewController {
         mapSearchBarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(currentLocationButtonView.snp.leading).offset(-10)
+            $0.trailing.equalTo(mapActionButtonPanel.snp.leading).offset(-10)
             $0.height.equalTo(44)
         }
 
-        currentLocationButtonView.snp.makeConstraints {
+        mapActionButtonPanel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.trailing.equalToSuperview().inset(20)
-            $0.width.height.equalTo(44)
+            $0.width.equalTo(44)
+            $0.height.equalTo(92)
         }
     }
 
@@ -51,5 +56,15 @@ final class MapViewController: UIViewController {
 
     private func configureDelegates() {
         mapSearchBarView.searchBar.delegate = self
+        mapActionButtonPanel.toggleButton.addTarget(
+            self,
+            action: #selector(toggleScooterVisibility),
+            for: .touchUpInside
+        )
+    }
+
+    @objc private func toggleScooterVisibility() {
+        isScooterVisible.toggle()
+        mapActionButtonPanel.toggleState(isOn: isScooterVisible)
     }
 }
