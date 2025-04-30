@@ -103,6 +103,7 @@ final class SignUpViewController: UIViewController {
 
         invalidIDLabel.emptyText = "아이디를 입력해주세요."
         invalidIDLabel.invalidText = "아이디는 영문과 숫자만 사용할 수 있습니다."
+        invalidIDLabel.duplicatedIDText = "이미 사용중인 아이디입니다."
 
         invalidPasswordLabel.emptyText = "비밀번호를 입력해주세요."
         invalidPasswordLabel.invalidText = "비밀번호는 최소 8자 이상이어야 합니다."
@@ -160,15 +161,22 @@ final class SignUpViewController: UIViewController {
 
             let isValidated = self.validateTextFields()
 
+            if !isValidated { return }
+
             guard let id = self.idTextField.text else { return }
             let isAvialable = self.signUpViewModel.verifyIDAvailability(id)
 
-            if isValidated, isAvialable {
+            if isAvialable {
                 guard let user = self.user() else { return }
 
                 self.signUpViewModel.signUp(user: user)
 
                 self.delegate?.pop()
+            } else {
+                invalidIDLabel.showduplicatedIDMessage()
+                
+                _ = idTextField.becomeFirstResponder()
+                idTextField.shake()
             }
         }
     }
