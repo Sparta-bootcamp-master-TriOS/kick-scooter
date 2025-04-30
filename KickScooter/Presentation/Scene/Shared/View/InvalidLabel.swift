@@ -3,6 +3,7 @@ import UIKit
 final class InvalidLabel: UILabel {
     var emptyText: String?
     var invalidText: String?
+    var duplicatedIDText: String?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +29,11 @@ final class InvalidLabel: UILabel {
 
     func showInvalidMessage() {
         text = invalidText
+        isHidden = false
+    }
+
+    func showduplicatedIDMessage() {
+        text = duplicatedIDText
         isHidden = false
     }
 }

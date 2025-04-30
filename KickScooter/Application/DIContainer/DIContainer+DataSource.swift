@@ -18,4 +18,32 @@ extension DIContainer {
     func makeRideHistoryDataSource() -> RideHistoryDataSource {
         RideHistoryDataSource(persisrenceController: persistenceController)
     }
+
+    func makeSaveKickScooterDataSource() -> SaveKickScooterDataSource {
+        SaveKickScooterDataSource(persistenceController: persistenceController)
+    }
+
+    func makeSaveCredentialsDataSource() -> SaveCredentialsDataSource {
+        SaveCredentialsDataSource()
+    }
+
+    func makeFetchCredentialsDataSource() -> FetchCredentialsDataSource {
+        FetchCredentialsDataSource()
+    }
+
+    func makeSaveRememberSignInStatusDataSource() -> SaveRememberSignInStatusDataSource {
+        SaveRememberSignInStatusDataSource()
+    }
+
+    func makeFetchRememberSignInStatusDataSource() -> FetchRememberSignInStatusDataSource {
+        FetchRememberSignInStatusDataSource()
+    }
+
+    func makeSaveAutoSignInStatusDataSource() -> SaveAutoSignInStatusDataSource {
+        SaveAutoSignInStatusDataSource()
+    }
+
+    func makeFetchAutoSignInStatusDataSource() -> FetchAutoSignInStatusDataSource {
+        FetchAutoSignInStatusDataSource()
+    }
 }

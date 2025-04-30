@@ -25,4 +25,29 @@ extension DIContainer {
     func makeMapRepository() -> MapRepository {
         DefaultMapRepository(mapDataSource: makeMapDataSource())
     }
+
+    func makeKickScooterRepository() -> KickScooterRepository {
+        DefaultKickScooterRepository(saveKickScooterDataSource: makeSaveKickScooterDataSource())
+    }
+
+    func makeCredentialsRepository() -> CredentialsRepository {
+        DefaultCredentialsRepository(
+            saveCredentialsDataSource: makeSaveCredentialsDataSource(),
+            fetchCredentialsDataSource: makeFetchCredentialsDataSource()
+        )
+    }
+
+    func makeRememberSignInStatusRepository() -> RememberSignInStatusRepository {
+        DefaultRememberSignInStatusRepository(
+            saveRememberSignInStatusDataSource: makeSaveRememberSignInStatusDataSource(),
+            fetchRememberSignInStatusDataSource: makeFetchRememberSignInStatusDataSource()
+        )
+    }
+
+    func makeAutoSignInStatusRepository() -> AutoSignInStatusRepository {
+        DefaultAutoSignInStatusRepository(
+            saveAutoSignInStatusDataSource: makeSaveAutoSignInStatusDataSource(),
+            fetchAutoSignInStatusDataSource: makeFetchAutoSignInStatusDataSource()
+        )
+    }
 }
