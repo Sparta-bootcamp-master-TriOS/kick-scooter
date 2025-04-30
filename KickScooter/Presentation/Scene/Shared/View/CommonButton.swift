@@ -23,7 +23,7 @@ final class CommonButton: UIButton {
     }
 
     private func configureUI() {
-        titleLabel?.font = .systemFont(ofSize: 18)
+        titleLabel?.font = .jalnan(ofSize: 18)
         layer.cornerRadius = 23
 
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)

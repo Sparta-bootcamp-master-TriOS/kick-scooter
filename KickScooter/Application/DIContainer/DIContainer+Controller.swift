@@ -3,7 +3,7 @@ extension DIContainer {
         TabBarController(
             addKickScooterViewController: makeAddKickScooterViewController(),
             testMapVC: TestMapVC(),
-            testMyPageVC: TestMyPageVC()
+            myPageViewController: makeMyPageViewController()
         )
     }
 }

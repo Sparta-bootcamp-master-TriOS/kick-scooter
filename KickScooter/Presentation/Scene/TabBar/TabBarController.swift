@@ -3,16 +3,16 @@ import UIKit
 final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private let addKickScooterViewController: AddKickScooterViewController
     private let testMapVC: TestMapVC
-    private let testMyPageVC: TestMyPageVC
+    private let myPageViewController: MyPageViewController
 
     init(
         addKickScooterViewController: AddKickScooterViewController,
         testMapVC: TestMapVC,
-        testMyPageVC: TestMyPageVC
+        myPageViewController: MyPageViewController
     ) {
         self.addKickScooterViewController = addKickScooterViewController
         self.testMapVC = testMapVC
-        self.testMyPageVC = testMyPageVC
+        self.myPageViewController = myPageViewController
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -40,9 +40,11 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
 
         testMapVC.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
 
-        testMyPageVC.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
+        myPageViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
 
-        viewControllers = [addKickScooterViewController, testMapVC, testMyPageVC]
+        viewControllers = [addKickScooterViewController, testMapVC, myPageViewController]
+
+        selectedIndex = 1
     }
 
     private func configureTabBarItems() {

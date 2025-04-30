@@ -29,13 +29,13 @@ final class Profile: UIView {
     private func configureUI() {
         backgroundColor = .triOSBackground
 
-        titleLabel.font = .boldSystemFont(ofSize: 22)
+        titleLabel.font = .jalnan(ofSize: 22)
         titleLabel.textColor = .triOSText
 
-        idLabel.font = .boldSystemFont(ofSize: 11)
+        idLabel.font = .jalnan(ofSize: 11)
         idLabel.textColor = .triOSSecondaryText
 
-        emailLabel.font = .boldSystemFont(ofSize: 11)
+        emailLabel.font = .jalnan(ofSize: 11)
         emailLabel.textColor = .triOSSecondaryText
 
         vStackView.axis = .vertical

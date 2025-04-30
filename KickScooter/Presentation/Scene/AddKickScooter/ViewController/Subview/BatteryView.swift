@@ -26,10 +26,10 @@ final class BatteryView: UIView {
 
         let batteryLabel = UILabel()
         batteryLabel.text = "Battery"
-        batteryLabel.font = .systemFont(ofSize: 14)
+        batteryLabel.font = .jalnan(ofSize: 12)
         batteryLabel.textColor = .triOSSecondaryText
 
-        batteryRateLabel.font = .systemFont(ofSize: 16)
+        batteryRateLabel.font = .jalnan(ofSize: 14)
         batteryRateLabel.textColor = .triOSText
 
         let labelStackView = UIStackView()

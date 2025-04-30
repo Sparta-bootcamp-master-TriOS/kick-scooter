@@ -56,4 +56,6 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
 
         onLocationUpdate?(coordinate)
     }
+
+    func locationManager(_: CLLocationManager, didFailWithError _: Error) {}
 }
