@@ -53,6 +53,7 @@ final class MainViewController: UIViewController {
         } else {
             idTextField.text = ""
             passwordTextField.text = ""
+            invalidLabel.isHidden = true
         }
     }
 
