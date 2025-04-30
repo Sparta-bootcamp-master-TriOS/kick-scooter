@@ -15,14 +15,11 @@ final class SignInCheckBox: UIButton {
     }
 
     private func configureUI() {
-        tintColor = .triOSMain
-
-        setTitleColor(.triOSText, for: .normal)
-        setTitleColor(.triOSText, for: .selected)
-
         var config = UIButton.Configuration.plain()
         config.imagePadding = 8
         config.background.backgroundColor = .clear
+        config.baseForegroundColor = .triOSText
+        config.imageColorTransformer = UIConfigurationColorTransformer { _ in .triOSMain }
 
         configuration = config
 
@@ -34,6 +31,14 @@ final class SignInCheckBox: UIButton {
         }
 
         addTarget(self, action: #selector(toggle), for: .touchUpInside)
+    }
+
+    func updateTitle(_ title: String) {
+        let config = AttributedString(
+            title,
+            attributes: AttributeContainer([.font: UIFont.jalnan(ofSize: 16)])
+        )
+        configuration?.attributedTitle = config
     }
 
     @objc

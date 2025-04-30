@@ -67,8 +67,16 @@ final class PasswordTextField: UITextField {
         textColor = .triOSText
         rightView = eyeButton
         rightViewMode = .always
-        placeholder = "비밀번호를 입력하세요."
+        font = .jalnan(ofSize: 16)
         isSecureTextEntry = true
+
+        attributedPlaceholder = NSAttributedString(
+            string: "비밀번호를 입력하세요.",
+            attributes: [
+                .font: UIFont.jalnan(ofSize: 16),
+                .foregroundColor: UIColor.triOSSecondaryText,
+            ]
+        )
     }
 
     @objc

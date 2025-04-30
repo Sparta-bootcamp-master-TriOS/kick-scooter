@@ -31,13 +31,13 @@ final class UserProfileCell: UICollectionViewCell {
     private func configureUI() {
         backgroundColor = .triOSBackground
 
-        titleLabel.font = .boldSystemFont(ofSize: 22)
+        titleLabel.font = .jalnan(ofSize: 22)
         titleLabel.textColor = .triOSText
 
-        idLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        idLabel.font = .jalnan(ofSize: 12)
         idLabel.textColor = .triOSText.withAlphaComponent(0.7)
 
-        emailLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        emailLabel.font = .jalnan(ofSize: 12)
         emailLabel.textColor = .triOSText.withAlphaComponent(0.7)
 
         vStackView.axis = .vertical

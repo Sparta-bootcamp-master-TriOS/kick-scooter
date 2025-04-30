@@ -56,12 +56,20 @@ final class SignUpTextField: UITextField {
         underline.backgroundColor = UIColor.triOSMainBlack.cgColor
 
         textColor = .triOSText
+        font = .jalnan(ofSize: 16)
         autocapitalizationType = .none
         autocorrectionType = .no
     }
 
     func updateUI(placeholder: String, isSecureTextEntry: Bool = false) {
-        self.placeholder = placeholder
+        attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [
+                .font: UIFont.jalnan(ofSize: 16),
+                .foregroundColor: UIColor.triOSSecondaryText,
+            ]
+        )
+
         self.isSecureTextEntry = isSecureTextEntry
     }
 
