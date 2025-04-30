@@ -25,4 +25,28 @@ extension DIContainer {
     func makeMapUseCase() -> MapUseCase {
         DefaultMapUseCase(mapRepository: makeMapRepository())
     }
+
+    func makeSaveCredentialsUseCase() -> SaveCredentialsUseCase {
+        DefaultSaveCredentialsUseCase(credentialsRepository: makeCredentialsRepository())
+    }
+
+    func makeFetchCredentialsUseCase() -> FetchCredentialsUseCase {
+        DefaultFetchCredentialsUseCase(credentialsRepository: makeCredentialsRepository())
+    }
+
+    func makeSaveRememberSignInStatusUseCase() -> SaveRememberSignInStatusUseCase {
+        DefaultSaveRememberSignInStatusUseCase(rememberSignInStatusRepository: makeRememberSignInStatusRepository())
+    }
+
+    func makeFetchRememberSignInStatusUseCase() -> FetchRememberSignInStatusUseCase {
+        DefaultFetchRememberSignInStatusUseCase(rememberSignInStatusRepository: makeRememberSignInStatusRepository())
+    }
+
+    func makeSaveAutoSignInStatusUseCase() -> SaveAutoSignInStatusUseCase {
+        DefaultSaveAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
+    }
+
+    func makeFetchAutoSignInStatusUseCase() -> FetchAutoSignInStatusUseCase {
+        DefaultFetchAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
+    }
 }

@@ -15,6 +15,9 @@ final class MainViewController: UIViewController {
     let idTextField = IDTextField()
     let passwordTextField = PasswordTextField()
     private let invalidLabel = InvalidLabel()
+    private let checkBoxStackView = UIStackView()
+    private let rememberCheckBox = SignInCheckBox()
+    private let autoCheckBox = SignInCheckBox()
     let signInButton = CommonButton()
     private let orLabel = UILabel()
     private let signUpButton = CommonButton()
@@ -32,6 +35,8 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mainViewModel.savedCredentials()
+
         configureUI()
         configureConstraints()
         configureBindings()
@@ -42,9 +47,14 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        idTextField.text = ""
-        passwordTextField.text = ""
-        invalidLabel.isHidden = true
+        if !mainViewModel.didApplyCredentials {
+            applyCredentials()
+            mainViewModel.toggleDidApplyCredentials()
+        } else {
+            idTextField.text = ""
+            passwordTextField.text = ""
+            invalidLabel.isHidden = true
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -66,6 +76,16 @@ final class MainViewController: UIViewController {
 
         riveView = riveViewModel.createRiveView()
 
+        checkBoxStackView.axis = .horizontal
+        checkBoxStackView.alignment = .center
+        checkBoxStackView.distribution = .fillEqually
+
+        rememberCheckBox.setTitle("계정 기억하기", for: .normal)
+        rememberCheckBox.isSelected = mainViewModel.rememberSignInStatus
+
+        autoCheckBox.setTitle("자동 로그인", for: .normal)
+        autoCheckBox.isSelected = mainViewModel.autoSignInStatus
+
         signUpButton.updateUI(backgroundColor: .triOSBackground, titleColor: .triOSText, title: "Sign Up")
         signInButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign In")
 
@@ -77,10 +97,22 @@ final class MainViewController: UIViewController {
 
         view.addSubview(scrollView)
 
+        [rememberCheckBox, autoCheckBox]
+            .forEach { checkBoxStackView.addArrangedSubview($0) }
+
         scrollView.addSubview(contentView)
 
-        [riveView, idTextField, passwordTextField, invalidLabel, signInButton, orLabel, signUpButton]
-            .forEach { contentView.addSubview($0) }
+        [
+            riveView,
+            idTextField,
+            passwordTextField,
+            invalidLabel,
+            checkBoxStackView,
+            signInButton,
+            orLabel,
+            signUpButton,
+        ]
+        .forEach { contentView.addSubview($0) }
     }
 
     private func configureConstraints() {
@@ -114,8 +146,13 @@ final class MainViewController: UIViewController {
             $0.horizontalEdges.equalToSuperview().inset(40)
         }
 
+        checkBoxStackView.snp.makeConstraints {
+            $0.top.equalTo(invalidLabel.snp.bottom).offset(10)
+            $0.horizontalEdges.equalToSuperview().inset(40)
+        }
+
         signInButton.snp.makeConstraints {
-            $0.top.equalTo(invalidLabel.snp.bottom).offset(20)
+            $0.top.equalTo(checkBoxStackView.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(40)
         }
 
@@ -172,6 +209,14 @@ final class MainViewController: UIViewController {
         passwordTextField.onVisibilityEnabled = { [weak self] in
             self?.riveViewModel.setInput("isPicking", value: false)
         }
+
+        rememberCheckBox.onToggle = { [weak self] isSelected in
+            self?.mainViewModel.toggleRememberSignInStatus(status: isSelected)
+        }
+
+        autoCheckBox.onToggle = { [weak self] isSelected in
+            self?.mainViewModel.toggleAutoSignInStatus(status: isSelected)
+        }
     }
 
     private func configureKeyboardNotifications() {
@@ -217,6 +262,22 @@ final class MainViewController: UIViewController {
         invalidLabel.isHidden = isAuthorized
 
         return isAuthorized
+    }
+
+    private func applyCredentials() {
+        if mainViewModel.rememberSignInStatus {
+            idTextField.text = mainViewModel.credentials?.id
+            passwordTextField.text = mainViewModel.credentials?.password
+            rememberCheckBox.isSelected = true
+        }
+
+        if mainViewModel.autoSignInStatus {
+            autoCheckBox.isSelected = true
+
+            mainViewModel.signIn()
+
+            delegate?.successSignIn()
+        }
     }
 
     @objc
