@@ -28,14 +28,26 @@ final class MapViewModel {
         self.saveReservationUseCase = saveReservationUseCase
     }
 
+    func clearSearchResults() {
+        searchResults = []
+        didUpdateResults?()
+    }
+
     func searchAddress(query: String) {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            clearSearchResults()
+            return
+        }
+
         mapUseCase.excute(query: query) { [weak self] result in
             switch result {
             case let .success(address):
                 self?.searchResults = address
                 self?.didUpdateResults?()
+
             case let .failure(error):
-                print("Address search fail")
+                print("Address search fail", error.localizedDescription)
             }
         }
     }
