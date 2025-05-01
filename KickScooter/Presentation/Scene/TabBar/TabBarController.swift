@@ -2,16 +2,16 @@ import UIKit
 
 final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private let addKickScooterViewController: AddKickScooterViewController
-    private let testMapVC: TestMapVC
+    private let mapViewController: MapViewController
     private let myPageViewController: MyPageViewController
 
     init(
         addKickScooterViewController: AddKickScooterViewController,
-        testMapVC: TestMapVC,
+        mapViewController: MapViewController,
         myPageViewController: MyPageViewController
     ) {
         self.addKickScooterViewController = addKickScooterViewController
-        self.testMapVC = testMapVC
+        self.mapViewController = mapViewController
         self.myPageViewController = myPageViewController
 
         super.init(nibName: nil, bundle: nil)
@@ -38,11 +38,11 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private func configureTabs() {
         addKickScooterViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
 
-        testMapVC.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
+        mapViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
 
         myPageViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
 
-        viewControllers = [addKickScooterViewController, testMapVC, myPageViewController]
+        viewControllers = [addKickScooterViewController, mapViewController, myPageViewController]
 
         selectedIndex = 1
     }
