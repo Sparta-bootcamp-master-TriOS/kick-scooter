@@ -2,7 +2,7 @@ extension DIContainer {
     func makeAuthorizeUserUseCase() -> AuthorizeUserUseCase {
         DefaultAuthorizeUserUseCase(
             authorizeUserRepository: makeAuthorizeUserRepository(),
-            userSessionRepository: userSessionRepository!
+            userSessionRepository: userSessionRepository ?? makeUserSessionRepository()
         )
     }
 
@@ -15,7 +15,7 @@ extension DIContainer {
     }
 
     func makeUserNameUseCase() -> FetchUserNameUseCase {
-        DefaultFetchUserNameUseCase(userSessionRepository: userSessionRepository!)
+        DefaultFetchUserNameUseCase(userSessionRepository: userSessionRepository ?? makeUserSessionRepository())
     }
 
     func makeMyPageUseCase() -> MyPageUseCase {
@@ -64,5 +64,9 @@ extension DIContainer {
 
     func makeClearAutoSignInStatusUseCase() -> ClearAutoSignInStatusUseCase {
         DefaultClearAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
+    }
+
+    func makeFetchUserIDUseCase() -> FetchUserIDUseCase {
+        DefaultFetchUserIDUseCase(userSessionRepository: userSessionRepository ?? makeUserSessionRepository())
     }
 }
