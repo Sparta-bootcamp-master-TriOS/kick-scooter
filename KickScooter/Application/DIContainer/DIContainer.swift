@@ -1,5 +1,8 @@
 final class DIContainer {
     let persistenceController = PersistenceController()
+    var userSessionRepository: UserSessionRepository?
 
-    lazy var userSessionRepository = makeUserSessionRepository()
+    func reset() {
+        userSessionRepository = makeUserSessionRepository()
+    }
 }

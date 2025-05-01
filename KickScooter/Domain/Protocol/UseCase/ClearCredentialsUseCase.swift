@@ -1,0 +1,3 @@
+protocol ClearCredentialsUseCase {
+    func execute()
+}

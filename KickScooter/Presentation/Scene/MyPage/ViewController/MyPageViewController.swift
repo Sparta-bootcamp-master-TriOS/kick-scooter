@@ -7,6 +7,8 @@ final class MyPageViewController: UIViewController {
 
     let myPageViewModel: MyPageViewModel
 
+    weak var delegate: MyPageViewControllerDelegate?
+
     let pastRidesMock: [PastRidesMock] = PastRidesMock.pastRidesMock
 
     init(myPageViewModel: MyPageViewModel) {

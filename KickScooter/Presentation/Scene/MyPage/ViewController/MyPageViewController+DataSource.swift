@@ -64,6 +64,20 @@ extension MyPageViewController {
             ).cgPath
 
             return cell
+        case .signOutButton:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: SignOutButtonCell.identifier,
+                for: indexPath
+            ) as? SignOutButtonCell else {
+                return UICollectionViewCell()
+            }
+
+            cell.onTapped = { [weak self] in
+                self?.myPageViewModel.signOut()
+                self?.delegate?.successSignOut()
+            }
+
+            return cell
         }
     }
 
@@ -116,6 +130,8 @@ extension MyPageViewController {
                 },
             toSection: .pastRides
         )
+        snapshot.appendItems([.signOutButton], toSection: .signOutButton)
+
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
