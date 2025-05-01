@@ -1,7 +1,9 @@
 import SnapKit
 import UIKit
 
-final class Profile: UIView {
+final class UserProfileCell: UICollectionViewCell {
+    static let identifier = "ProfileCell"
+
     private var titleLabel = UILabel()
     private var idLabel = UILabel()
     private var emailLabel = UILabel()
@@ -32,18 +34,18 @@ final class Profile: UIView {
         titleLabel.font = .jalnan(ofSize: 22)
         titleLabel.textColor = .triOSText
 
-        idLabel.font = .jalnan(ofSize: 11)
-        idLabel.textColor = .triOSSecondaryText
+        idLabel.font = .jalnan(ofSize: 12)
+        idLabel.textColor = .triOSText.withAlphaComponent(0.7)
 
-        emailLabel.font = .jalnan(ofSize: 11)
-        emailLabel.textColor = .triOSSecondaryText
+        emailLabel.font = .jalnan(ofSize: 12)
+        emailLabel.textColor = .triOSText.withAlphaComponent(0.7)
 
         vStackView.axis = .vertical
         vStackView.spacing = 5
         vStackView.alignment = .leading
 
         profileImageView.image = UIImage(named: "DefaultProfile")
-        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.contentMode = .scaleAspectFit
         profileImageView.layer.cornerRadius = 10
         profileImageView.backgroundColor = .triOSMidBattery
 

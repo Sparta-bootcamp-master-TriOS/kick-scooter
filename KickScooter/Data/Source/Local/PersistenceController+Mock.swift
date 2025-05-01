@@ -90,9 +90,9 @@ extension PersistenceController {
     /// `KickScooterResponse` Mock 데이터 생성 메서드
     static func getUserResponseMockData() -> UserResponse {
         UserResponse(
-            name: "손하경",
-            email: "amazingDove@example.com",
-            id: "amazingDove",
+            name: "Alina",
+            email: "alinajoe@gmail.com",
+            id: "joyalina25",
             password: "mockpassword123",
             reservations: []
         )

@@ -1,6 +1,6 @@
 import Foundation
 
-struct ReservationUI {
+struct ReservationUI: Hashable {
     let date: String
     let status: Bool
     let kickScooter: KickScooterUI

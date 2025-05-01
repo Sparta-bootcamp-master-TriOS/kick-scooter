@@ -2,8 +2,12 @@ import SnapKit
 import UIKit
 
 final class MyPageViewController: UIViewController {
-    private let profileView = Profile()
-    private let myPageViewModel: MyPageViewModel
+    let collectionView = MyPageCollectionView()
+    var dataSource: UICollectionViewDiffableDataSource<MyPageSection, MyPageItem>!
+
+    let myPageViewModel: MyPageViewModel
+
+    let pastRidesMock: [PastRidesMock] = PastRidesMock.pastRidesMock
 
     init(myPageViewModel: MyPageViewModel) {
         self.myPageViewModel = myPageViewModel
@@ -17,13 +21,9 @@ final class MyPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureProfileView(fetchProfileUser())
+        configureCompositionalLayout()
         configureUI()
         configureAutoLayout()
-    }
-
-    private func configureProfileView(_ userProfile: UserProfileUI) {
-        profileView.configureProperty(userProfile)
     }
 
     private func fetchProfileUser() -> UserProfileUI {
@@ -31,18 +31,19 @@ final class MyPageViewController: UIViewController {
     }
 
     private func configureUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .triOSBackground
 
         [
-            profileView,
+            collectionView,
         ]
         .forEach { view.addSubview($0) }
     }
 
     private func configureAutoLayout() {
-        profileView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.directionalHorizontalEdges.equalToSuperview().inset(31)
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(24)
+            $0.bottom.equalToSuperview()
         }
     }
 }

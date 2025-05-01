@@ -1,6 +1,6 @@
 import Foundation
 
-struct KickScooterUI: CoordinatesableUI {
+struct KickScooterUI: Hashable, CoordinatesableUI {
     let id: UUID
     let battery: String
     let type: Int
