@@ -11,4 +11,15 @@ struct KickScooterUIMapper {
             isAvailable: kickScooter.isAvailable
         )
     }
+
+    func map(kickScooter: KickScooterUI) -> KickScooter {
+        KickScooter(
+            id: kickScooter.id,
+            battery: BatteryLevel(desc: kickScooter.battery)!.desc,
+            type: kickScooter.type,
+            lon: kickScooter.lon,
+            lat: kickScooter.lat,
+            isAvailable: kickScooter.isAvailable
+        )
+    }
 }

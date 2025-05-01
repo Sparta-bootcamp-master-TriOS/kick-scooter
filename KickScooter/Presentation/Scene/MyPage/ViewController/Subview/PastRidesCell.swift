@@ -38,7 +38,7 @@ final class PastRidesCell: UICollectionViewCell {
     private func configureUI() {
         backgroundColor = .triOSTertiaryBackground
 
-        dateLabel.font = .boldSystemFont(ofSize: 16)
+        dateLabel.font = .jalnan(ofSize: 16)
         dateLabel.textColor = .triOSText
 
         totalTimeLabel.text = "총 시간"
@@ -132,17 +132,15 @@ final class PastRidesCell: UICollectionViewCell {
     }
 
     func configureProperty(_ reservation: ReservationUI) {
-        dateLabel.text = reservation.date
-    }
+        dateLabel.text = Formatter.getFormattedDate(from: reservation.date)
+        totalTimeValue.text = reservation.totalTime
+        startValue.text = reservation.startAddress
+        endValue.text = reservation.endAddress
+        priceValue.text = reservation.totalPrice
 
-    func configurePropertyMock(_ pastRide: PastRidesMock) {
-        dateLabel.text = pastRide.date
-        totalTimeValue.text = pastRide.totalTime
-        startValue.text = pastRide.start
-        endValue.text = pastRide.end
-        scooterImageView.image = UIImage(named: pastRide.scooterImg)
-        scooterLabel.text = pastRide.scooterModel
-        priceValue.text = pastRide.priceValue
+        if let image = KickScooterType(rawValue: reservation.kickScooter.type)?.image {
+            scooterImageView.image = UIImage(named: image)
+        }
     }
 
     private func configureAutoLayout() {

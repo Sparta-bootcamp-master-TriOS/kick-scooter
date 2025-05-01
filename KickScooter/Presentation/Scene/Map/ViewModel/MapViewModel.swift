@@ -4,6 +4,8 @@ import CoreLocation
 final class MapViewModel {
     private let mapUseCase: MapUseCase
     private let fetchKickScooterUseCase: FetchKickScooterUseCase
+    private let saveReservationUseCase: SaveReservationUseCase
+
     private let kickScooterUIMapper = KickScooterUIMapper.shared
 
     private(set) var searchResults: [MapResponse] = []
@@ -11,12 +13,19 @@ final class MapViewModel {
     var didUpdateResults: (() -> Void)?
     var didUpdateKickScooter: (([KickScooterUI]) -> Void)?
 
+    var isScooterVisible = true
+
     let locationManager = LocationManager.shared
     var hasRequestedLocation = false
 
-    init(mapUseCase: MapUseCase, fetchKickScooterUseCase: FetchKickScooterUseCase) {
+    init(
+        mapUseCase: MapUseCase,
+        fetchKickScooterUseCase: FetchKickScooterUseCase,
+        saveReservationUseCase: SaveReservationUseCase
+    ) {
         self.mapUseCase = mapUseCase
         self.fetchKickScooterUseCase = fetchKickScooterUseCase
+        self.saveReservationUseCase = saveReservationUseCase
     }
 
     func clearSearchResults() {
@@ -61,5 +70,9 @@ final class MapViewModel {
         }
 
         didUpdateKickScooter?(uiModel)
+    }
+
+    func saveReservation(kickScooter: KickScooterUI) {
+        saveReservationUseCase.execute(kickScooterID: kickScooter.id)
     }
 }
