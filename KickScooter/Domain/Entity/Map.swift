@@ -1,4 +1,4 @@
 struct Map: Coordinatesable {
-    let lon: String
-    let lat: String
+    var lon: Double
+    var lat: Double
 }
