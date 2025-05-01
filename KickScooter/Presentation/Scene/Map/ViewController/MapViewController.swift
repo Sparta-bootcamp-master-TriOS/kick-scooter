@@ -7,8 +7,9 @@ final class MapViewController: UIViewController {
     let mapViewModel: MapViewModel
 
     private let mapBaseView = MapBaseView()
-    private let mapSearchBarView = MapSearchBarView()
+    let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()
+    let mapSearchResultView = MapSearchResultView()
 
     private var isScooterVisible = false
 
@@ -46,7 +47,7 @@ final class MapViewController: UIViewController {
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
 
-        [mapBaseView, mapActionButtonPanel, mapSearchBarView, loadingIndicator]
+        [mapBaseView, mapActionButtonPanel, mapSearchBarView, mapSearchResultView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
@@ -67,6 +68,12 @@ final class MapViewController: UIViewController {
             $0.height.equalTo(92)
         }
 
+        mapSearchResultView.snp.makeConstraints {
+            $0.top.equalTo(mapSearchBarView.snp.bottom)
+            $0.leading.trailing.equalTo(mapSearchBarView)
+        }
+        mapSearchResultView.isHidden = true
+
         loadingIndicator.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
@@ -84,8 +91,20 @@ final class MapViewController: UIViewController {
             self?.mapBaseView.mapView.addAnnotations(annotations)
         }
 
-        mapViewModel.didUpdateSearchCoordinate = { [weak self] coordinate in
+        mapViewModel.didUpdateResults = { [weak self] in
+            guard let self else { return }
+            self.mapSearchResultView.searchResults = self.mapViewModel.searchResults
+            self.mapSearchResultView.isHidden = self.mapViewModel.searchResults.isEmpty
+        }
+
+        mapSearchResultView.onItemSelected = { [weak self] result in
+            guard let lat = Double(result.lat),
+                  let lon = Double(result.lon) else { return }
+
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             self?.mapBaseView.locateCurrentCoordinate(coordinate, zoomLevel: 0.01)
+            self?.mapSearchResultView.isHidden = true
+            self?.mapSearchBarView.searchBar.resignFirstResponder()
         }
     }
 
@@ -122,6 +141,8 @@ final class MapViewController: UIViewController {
             action: #selector(toggleScooterVisibility),
             for: .touchUpInside
         )
+        mapSearchResultView.tableView.dataSource = self
+        mapSearchResultView.tableView.delegate = self
     }
 
     private func locateCurrentCoordinate() {
