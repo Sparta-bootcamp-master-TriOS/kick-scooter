@@ -25,6 +25,8 @@ final class YourRideCell: UICollectionViewCell {
 
     private let returnButton = UIButton()
 
+    var onButtonTapped: ((ReservationUI) -> Void)?
+
     override init(frame _: CGRect) {
         super.init(frame: .zero)
         configureUI()
@@ -100,6 +102,11 @@ final class YourRideCell: UICollectionViewCell {
         config.baseForegroundColor = .triOSTertiaryBackground
         returnButton.configuration = config
 
+        let action = UIAction { [weak self] _ in
+            self?.tapped()
+        }
+        returnButton.addAction(action, for: .touchUpInside)
+
         [
             mapView,
             reservationView,
@@ -132,6 +139,31 @@ final class YourRideCell: UICollectionViewCell {
             batteryValue,
         ]
         .forEach { batteryVstackView.addArrangedSubview($0) }
+    }
+
+    private func tapped() {
+        onButtonTapped?(
+            ReservationUI(
+                date: Date(), //
+                status: false, //
+                startLon: 0,
+                startLat: 0,
+                endLon: 0, // from map
+                endLat: 0, // from map
+                startAddress: "",
+                endAddress: "",
+                totalTime: "",
+                totalPrice: "",
+                kickScooter: KickScooterUI(
+                    id: UUID(),
+                    battery: "",
+                    type: 0,
+                    lon: 0,
+                    lat: 0,
+                    isAvailable: true //
+                )
+            )
+        )
     }
 
     func configureProperty(_ reservation: ReservationUI) {

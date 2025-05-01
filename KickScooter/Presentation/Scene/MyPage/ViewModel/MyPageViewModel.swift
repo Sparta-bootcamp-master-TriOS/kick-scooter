@@ -3,6 +3,7 @@ import Foundation
 final class MyPageViewModel: MyPageViewModelDelegate {
     enum Action {
         case fetchUserProfile
+        case updateReservation(ReservationUI)
     }
 
     enum State {
@@ -18,9 +19,16 @@ final class MyPageViewModel: MyPageViewModelDelegate {
     private let clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase
     private let clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
 
-    private let mapper = UserUIMapper.shared
+    private let userMapper = UserUIMapper.shared
+    private let reservationMapper = ReservationUIMapper.shared
 
-    private(set) var userProfile: UserProfileUI?
+    private(set) var userProfile: UserProfileUI? {
+        didSet {
+            if let userProfile {
+                onStateChanged?(.userProfile(userProfile))
+            }
+        }
+    }
 
     init(
         myPageUseCase: MyPageUseCase,
@@ -39,11 +47,31 @@ final class MyPageViewModel: MyPageViewModelDelegate {
             guard let self else { return }
             switch action {
             case .fetchUserProfile:
-                let userProfile = fetchUserProfile()
-                self.userProfile = userProfile
-                self.onStateChanged?(.userProfile(userProfile))
+                self.userProfile = fetchUserProfile()
+            case let .updateReservation(reservation):
+                if updateReservation(reservation) {
+                    self.userProfile = fetchUserProfile()
+                }
             }
         }
+    }
+
+    private func updateReservation(_ reservation: ReservationUI) -> Bool {
+        guard var latestReservation = userProfile?.reservations.first else { return false }
+        latestReservation.status = reservation.status
+        latestReservation.endLat = reservation.endLat
+        latestReservation.endLon = reservation.endLon
+        latestReservation.totalTime = Formatter.getTotalTime(from: latestReservation.date, reservation.date)
+        latestReservation.kickScooter.lat = reservation.endLat
+        latestReservation.kickScooter.lon = reservation.endLon
+        latestReservation.kickScooter.isAvailable = reservation.kickScooter.isAvailable
+        let mappedReservation = reservationMapper.map(reservation: latestReservation)
+
+        guard let userId = userProfile?.id else { return false }
+        return myPageUseCase.updateReservation(
+            userId: userId,
+            reservation: mappedReservation
+        )
     }
 
     func fetchUserProfile() -> UserProfileUI {
@@ -51,7 +79,7 @@ final class MyPageViewModel: MyPageViewModelDelegate {
         let user = myPageUseCase.fetchUserProfile(id)
 
         // delete
-        var userui = mapper.map(user: user)
+        var userui = userMapper.map(user: user)
         for item in mockReservationsUI {
             userui.reservations.append(item)
         }

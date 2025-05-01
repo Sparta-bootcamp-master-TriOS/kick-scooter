@@ -7,7 +7,7 @@ extension MyPageViewController {
     func configureCompositionalLayout() {
         dataSource = makeDataSource()
         makeSupplementaryViewProvider()
-        applySnapShot()
+        applySnapShot(with: myPageViewModel.userProfile)
     }
 
     // Presentation - Diffable DataSource 생성
@@ -42,12 +42,12 @@ extension MyPageViewController {
             return cell
 
         case .yourRide:
-            guard case let .yourRide(reservation) = item else {
+            guard case let .yourRide(latestReservation) = item else {
                 print("[Error] Failed Fetch YourRide Item")
                 return UICollectionViewCell()
             }
 
-            guard reservation.status == true else {
+            guard latestReservation.status == true else {
                 print("[Warning] reservation.status == false → 셀 생성하지 않음")
                 return UICollectionViewCell()
             }
@@ -58,8 +58,13 @@ extension MyPageViewController {
                 fatalError("[Error] Failed Dequeue YourRide Cell")
             }
 
-            cell.configureProperty(reservation)
+            cell.configureProperty(latestReservation)
             cell.layer.cornerRadius = 10
+
+            // Return Button Tapped
+            cell.onButtonTapped = { [weak self] reservation in
+                self?.showConfirmAlert(reservation)
+            }
             return cell
 
         case .pastRides:
@@ -144,11 +149,11 @@ extension MyPageViewController {
     }
 
     // Data - Snapshot
-    private func applySnapShot() {
+    func applySnapShot(with userProfile: UserProfileUI?) {
         var snapshot = SnapShot<MyPageSection, MyPageItem>()
 
         // UserProfile Section
-        guard let userProfile = myPageViewModel.userProfile else {
+        guard let userProfile = userProfile else {
             return
         }
         snapshot.appendSections([.userProfile])
@@ -160,12 +165,12 @@ extension MyPageViewController {
         // YourRide Section
         let reservations = userProfile.reservations
         if !reservations.isEmpty,
-           let reservation = reservations.sorted(by: { $0.date > $1.date }).first,
-           reservation.status == true
+           let latestReservation = reservations.sorted(by: { $0.date > $1.date }).first,
+           latestReservation.status == true
         {
             snapshot.appendSections([.yourRide])
             snapshot.appendItems(
-                [.yourRide(reservation)],
+                [.yourRide(latestReservation)],
                 toSection: .yourRide
             )
         }
@@ -187,5 +192,40 @@ extension MyPageViewController {
         snapshot.appendItems([.signOutButton], toSection: .signOutButton)
 
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    // 반납 버튼 눌렀을 때 ViewModel 에서 처리 완료 후, ViewController 에서 호출
+    func removeCurrentReservationSectionIfNeeded(_ userProfile: UserProfileUI?) {
+        var snapshot = dataSource.snapshot()
+
+        // 1. .yourRide Section 제거
+        if snapshot.sectionIdentifiers.contains(.yourRide) {
+            snapshot.deleteSections([.yourRide])
+        }
+
+        // 2. .pastRides 데이터 갱신
+        if let userProfile = userProfile {
+            let updatedReservations = userProfile.reservations.sorted { $0.date > $1.date }
+            let updatedItem = updatedReservations.map { MyPageItem.pastRides($0) }
+
+            // 기존 pastRides 아이템 제거 후 새로 추가
+            snapshot.deleteItems(
+                snapshot.itemIdentifiers(inSection: .pastRides)
+            )
+            snapshot.appendItems(updatedItem, toSection: .pastRides)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    private func showConfirmAlert(_ reservation: ReservationUI) {
+        let alert = UIAlertController(title: "반납하기", message: "킥보드를 반납하시겠습니까?", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let confirm = UIAlertAction(title: "확인", style: .destructive) { [weak self] _ in
+            self?.myPageViewModel.action?(.updateReservation(reservation))
+        }
+        alert.addAction(cancel)
+        alert.addAction(confirm)
+        present(alert, animated: true)
     }
 }

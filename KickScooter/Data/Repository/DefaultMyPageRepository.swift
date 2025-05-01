@@ -3,15 +3,18 @@ import Foundation
 final class DefaultMyPageRepository: MyPageRepository {
     private let userProfileDataSource: UserProfileDataSource
     private let rideHistoryDataSource: RideHistoryDataSource
+    private let updateReservationDataSource: UpdateReservationDataSource
 
     private let mapper = UserResponseMapper.shared
 
     init(
         userProfileDataSource: UserProfileDataSource,
-        rideHistoryDataSource: RideHistoryDataSource
+        rideHistoryDataSource: RideHistoryDataSource,
+        updateReservationDataSource: UpdateReservationDataSource
     ) {
         self.userProfileDataSource = userProfileDataSource
         self.rideHistoryDataSource = rideHistoryDataSource
+        self.updateReservationDataSource = updateReservationDataSource
     }
 
     func fetchUserEntity(_ userId: String) -> UserEntity? {
@@ -33,5 +36,9 @@ final class DefaultMyPageRepository: MyPageRepository {
         rideHistory: [ReservationEntity]
     ) -> UserProfile? {
         mapper.map(from: user, with: rideHistory)
+    }
+
+    func updateReservation(userId: String, reservation: Reservation) -> Bool {
+        updateReservationDataSource.execute(userId: userId, reservation: reservation)
     }
 }

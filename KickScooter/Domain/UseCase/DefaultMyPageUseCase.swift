@@ -17,4 +17,11 @@ final class DefaultMyPageUseCase: MyPageUseCase {
             rideHistory: rideHistory
         )
     }
+
+    func updateReservation(userId: String, reservation: Reservation) -> Bool {
+        myPageRepository.updateReservation(
+            userId: userId,
+            reservation: reservation
+        )
+    }
 }
