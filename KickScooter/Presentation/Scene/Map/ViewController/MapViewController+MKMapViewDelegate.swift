@@ -6,13 +6,21 @@ extension MapViewController: MKMapViewDelegate {
             return nil
         }
 
-        guard annotation is KickScooterAnnotation else {
+        guard let scooterAnnotation = annotation as? KickScooterAnnotation else {
             return nil
         }
 
-        return mapView.dequeueReusableAnnotationView(
+        guard let annotationView = mapView.dequeueReusableAnnotationView(
             withIdentifier: KickScooterAnnotationView.identifier,
             for: annotation
-        )
+        ) as? KickScooterAnnotationView else {
+            return nil
+        }
+
+        annotationView.onReserveTapped = { [weak self] kickScooter in
+            self?.mapViewModel.saveReservation(kickScooter: kickScooter)
+        }
+
+        return annotationView
     }
 }

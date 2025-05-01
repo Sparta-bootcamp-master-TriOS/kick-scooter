@@ -3,6 +3,8 @@ import MapKit
 final class KickScooterAnnotationView: MKAnnotationView {
     static let identifier = "KickScooterAnnotationView"
 
+    var onReserveTapped: ((KickScooterUI) -> Void)?
+
     override var annotation: MKAnnotation? {
         willSet {
             guard let annotation = newValue as? KickScooterAnnotation else { return }
@@ -33,11 +35,10 @@ final class KickScooterAnnotationView: MKAnnotationView {
 
             let calloutView = KickScooterCalloutView()
             calloutView.updateUI(kickScooter: annotation.kickScooter)
-            calloutView.addTarget(self, action: #selector(reserveTapped), for: .touchUpInside)
+            calloutView.onReserveTapped = { [weak self] in
+                self?.onReserveTapped?(annotation.kickScooter)
+            }
             detailCalloutAccessoryView = calloutView
         }
     }
-
-    @objc
-    private func reserveTapped() {}
 }

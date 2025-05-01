@@ -2,6 +2,8 @@ import SnapKit
 import UIKit
 
 final class KickScooterCalloutView: UIView {
+    var onReserveTapped: (() -> Void)?
+
     private let imageView = UIImageView()
     private let modelLabel = UILabel()
     let batteryView = UIStackView()
@@ -29,6 +31,8 @@ final class KickScooterCalloutView: UIView {
     }
 
     private func configureUI() {
+        reserveButton.addTarget(self, action: #selector(didReserveTapped), for: .touchUpInside)
+
         imageView.contentMode = .scaleAspectFit
 
         modelLabel.font = .jalnan(ofSize: 18)
@@ -132,7 +136,8 @@ final class KickScooterCalloutView: UIView {
         priceLabel.text = "\(kickScooter.kickScooterType!.price) 원"
     }
 
-    func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
-        reserveButton.addTarget(target, action: action, for: controlEvents)
+    @objc
+    private func didReserveTapped() {
+        onReserveTapped?()
     }
 }
