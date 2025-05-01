@@ -38,7 +38,8 @@ extension DIContainer {
     func makeMapViewModel() -> MapViewModel {
         MapViewModel(
             mapUseCase: makeMapUseCase(),
-            fetchKickScooterUseCase: makeFetchKickScooterUseCase()
+            fetchKickScooterUseCase: makeFetchKickScooterUseCase(),
+            saveReservationUseCase: makeSaveReservationUseCase()
         )
     }
 }

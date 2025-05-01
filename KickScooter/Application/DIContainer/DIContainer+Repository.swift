@@ -56,4 +56,8 @@ extension DIContainer {
             clearAutoSignInStatusDataSource: makeClearAutoSignInStatusDataSource()
         )
     }
+
+    func makeReservationsRepository() -> ReservationsRepository {
+        DefaultReservationsRepository(saveReservationDataSource: makeSaveReservationDataSource())
+    }
 }

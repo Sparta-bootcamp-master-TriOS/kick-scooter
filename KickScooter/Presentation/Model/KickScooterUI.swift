@@ -7,4 +7,8 @@ struct KickScooterUI: Hashable, CoordinatesableUI {
     let lon: Double
     let lat: Double
     let isAvailable: Bool
+
+    var kickScooterType: KickScooterType? {
+        KickScooterType(rawValue: type)
+    }
 }
