@@ -19,5 +19,9 @@ final class Coordinator {
 
         navigationController.navigationBar.standardAppearance = appearance
         navigationController.navigationBar.scrollEdgeAppearance = appearance
+
+        let mainViewController = makeMainViewController()
+
+        navigationController.viewControllers = [mainViewController]
     }
 }
