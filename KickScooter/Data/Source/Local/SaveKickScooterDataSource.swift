@@ -17,5 +17,7 @@ struct SaveKickScooterDataSource {
         entity.lon = kickScooter.lon
         entity.lat = kickScooter.lat
         entity.isAvailable = kickScooter.isAvailable
+
+        persistenceController.save()
     }
 }

@@ -2,6 +2,8 @@ import SnapKit
 import UIKit
 
 final class MapActionButtonPanel: UIView {
+    var onLocationButtonTapped: (() -> Void)?
+
     let toggleButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "mappin.and.ellipse"), for: .normal)
@@ -53,9 +55,16 @@ final class MapActionButtonPanel: UIView {
         locationButton.snp.makeConstraints {
             $0.height.width.equalTo(44)
         }
+
+        locationButton.addTarget(self, action: #selector(didLocationButtonTapped), for: .touchUpInside)
     }
 
     func toggleState(isOn: Bool) {
         toggleButton.tintColor = isOn ? .triOSMain : .triOSSecondaryText
+    }
+
+    @objc
+    private func didLocationButtonTapped() {
+        onLocationButtonTapped?()
     }
 }

@@ -16,12 +16,23 @@ final class MapBaseView: UIView {
     }
 
     private func configureUI() {
-        addSubview(mapView)
-
         mapView.isZoomEnabled = true
         mapView.showsUserLocation = true
+        mapView.pointOfInterestFilter = MKPointOfInterestFilter.excludingAll
+
+        addSubview(mapView)
+
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    func locateCurrentCoordinate(_ coordinate: CLLocationCoordinate2D, zoomLevel: Double = 0.01) {
+        let region = MKCoordinateRegion(
+            center: coordinate,
+            span: MKCoordinateSpan(latitudeDelta: zoomLevel, longitudeDelta: zoomLevel)
+        )
+
+        mapView.setRegion(region, animated: true)
     }
 }

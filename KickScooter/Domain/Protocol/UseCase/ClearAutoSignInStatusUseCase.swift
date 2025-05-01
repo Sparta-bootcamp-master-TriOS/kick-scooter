@@ -1,0 +1,3 @@
+protocol ClearAutoSignInStatusUseCase {
+    func execute()
+}

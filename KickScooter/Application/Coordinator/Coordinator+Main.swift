@@ -14,12 +14,18 @@ extension Coordinator: MainViewControllerDelegate {
     }
 
     func successSignIn() {
+        navigationController.viewControllers = []
+
         guard let window = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
             .first?.windows
             .first else { return }
 
-        let tabBarController = diContainer.makeTabBarController()
+        let tabBarController = TabBarController(
+            addKickScooterViewController: diContainer.makeAddKickScooterViewController(),
+            mapViewController: diContainer.makeMapViewController(),
+            myPageViewController: makeMyPageViewController()
+        )
 
         UIView.transition(
             with: window,

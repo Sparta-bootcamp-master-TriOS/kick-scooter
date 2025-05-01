@@ -12,6 +12,13 @@ final class MapViewController: UIViewController {
 
     private var isScooterVisible = false
 
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        indicator.color = .gray
+        return indicator
+    }()
+
     init(mapViewModel: MapViewModel) {
         self.mapViewModel = mapViewModel
         super.init(nibName: nil, bundle: nil)
@@ -27,12 +34,19 @@ final class MapViewController: UIViewController {
         configureUI()
         bindViewModel()
         configureDelegates()
+        bindButton()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        locateCurrentCoordinate()
     }
 
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
 
-        [mapBaseView, mapActionButtonPanel, mapSearchBarView]
+        [mapBaseView, mapActionButtonPanel, mapSearchBarView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
@@ -52,6 +66,10 @@ final class MapViewController: UIViewController {
             $0.width.equalTo(44)
             $0.height.equalTo(92)
         }
+
+        loadingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
 
     private func bindViewModel() {
@@ -67,6 +85,32 @@ final class MapViewController: UIViewController {
         }
     }
 
+    private func bindButton() {
+        mapActionButtonPanel.onLocationButtonTapped = { [weak self] in
+            self?.locateCurrentCoordinate()
+        }
+    }
+
+    private func showPermissionAlert() {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let root = scene.windows.first?.rootViewController else { return }
+
+        let alert = UIAlertController(
+            title: "위치 권한 필요",
+            message: "킥보드 이용을 위해 위치 접근 권한이 필요합니다.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let locationSettingsURL = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
+                UIApplication.shared.open(locationSettingsURL)
+            }
+        })
+
+        root.present(alert, animated: true)
+    }
+
     private func configureDelegates() {
         mapSearchBarView.searchBar.delegate = self
         mapActionButtonPanel.toggleButton.addTarget(
@@ -76,14 +120,48 @@ final class MapViewController: UIViewController {
         )
     }
 
+    private func locateCurrentCoordinate() {
+        showLoadingIndicator()
+
+        mapViewModel.locationManager.requestCurrentLocation(
+            onAuthorized: { [weak self] coordinate in
+                self?.hideLoadingIndicator()
+                self?.mapBaseView.locateCurrentCoordinate(coordinate)
+            },
+            onDenied: { [weak self] in
+                guard let self else { return }
+
+                self.hideLoadingIndicator()
+
+                guard !self.mapViewModel.hasRequestedLocation else { return }
+                self.mapViewModel.hasRequestedLocation = true
+
+                self.showPermissionAlert()
+            }
+        )
+    }
+
+    private func showLoadingIndicator() {
+        loadingIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func hideLoadingIndicator() {
+        loadingIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
         mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         if isScooterVisible {
-            LocationManager.shared.requestCurrentLocation { [weak self] coordinate in
-                self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
-            }
+            mapViewModel.locationManager.requestCurrentLocation(
+                onAuthorized: { [weak self] coordinate in
+                    self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
+                },
+                onDenied: {}
+            )
         } else { // 유저 위치는 제거하지 않도록
             mapBaseView.mapView.removeAnnotations(
                 mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }

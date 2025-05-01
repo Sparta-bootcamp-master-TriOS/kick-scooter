@@ -11,6 +11,9 @@ final class MapViewModel {
     var didUpdateResults: (() -> Void)?
     var didUpdateKickScooter: (([KickScooterUI]) -> Void)?
 
+    let locationManager = LocationManager.shared
+    var hasRequestedLocation = false
+
     init(mapUseCase: MapUseCase, fetchKickScooterUseCase: FetchKickScooterUseCase) {
         self.mapUseCase = mapUseCase
         self.fetchKickScooterUseCase = fetchKickScooterUseCase
