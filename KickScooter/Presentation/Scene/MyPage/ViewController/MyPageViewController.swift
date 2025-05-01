@@ -29,6 +29,14 @@ final class MyPageViewController: UIViewController {
         configureCompositionalLayout()
     }
 
+    override func viewWillAppear(_: Bool) {
+        locateCurrentCoordinate()
+    }
+
+    private func fetchProfileUser() -> UserProfileUI {
+        myPageViewModel.fetchUserProfile()
+    }
+
     private func bindViewModelState() {
         myPageViewModel.onStateChanged = { [weak self] state in
             guard let self else { return }
@@ -58,5 +66,15 @@ final class MyPageViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
         }
+    }
+
+    private func locateCurrentCoordinate() {
+        myPageViewModel.locationManager.requestCurrentLocation(
+            onAuthorized: { [weak self] coordinate in
+                self?.myPageViewModel.updateCurrentLocation(coordinate)
+                self?.collectionView.collectionView.reloadData()
+            },
+            onDenied: {}
+        )
     }
 }

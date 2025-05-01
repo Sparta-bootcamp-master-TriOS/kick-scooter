@@ -61,10 +61,15 @@ extension MyPageViewController {
             cell.configureProperty(latestReservation)
             cell.layer.cornerRadius = 10
 
+            if let coordinate = myPageViewModel.currentLocation {
+                cell.mapView.locateCurrentCoordinate(coordinate)
+            }
+
             // Return Button Tapped
             cell.onButtonTapped = { [weak self] reservation in
                 self?.showConfirmAlert(reservation)
             }
+
             return cell
 
         case .pastRides:

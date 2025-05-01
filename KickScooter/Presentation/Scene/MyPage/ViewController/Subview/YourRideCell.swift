@@ -4,7 +4,7 @@ import UIKit
 final class YourRideCell: UICollectionViewCell {
     static let identifier = "YourRideCell"
 
-    private let mapView = MyPageMap()
+    let mapView = MyPageMap()
 
     private let reservationView = UIView()
 

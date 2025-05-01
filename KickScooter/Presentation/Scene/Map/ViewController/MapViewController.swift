@@ -6,17 +6,16 @@ import UIKit
 final class MapViewController: UIViewController {
     let mapViewModel: MapViewModel
 
-    var currentCalloutView: KickScooterCalloutView?
     private let mapBaseView = MapBaseView()
-    let mapSearchBarView = MapSearchBarView()
-    private let mapActionButtonPanel = MapActionButtonPanel()
+    let mapSearchBarWrapperView = MapSearchBarWrapperView()
+    private let mapActionButtonPanelWrapper = MapActionButtonPanelWrapper()
     let mapSearchResultView = MapSearchResultView()
 
     private var isScooterVisible: Bool {
         get { mapViewModel.isScooterVisible }
         set {
             mapViewModel.isScooterVisible = newValue
-            mapActionButtonPanel.toggleState(isOn: newValue)
+            mapActionButtonPanelWrapper.toggleState(isOn: newValue)
         }
     }
 
@@ -50,7 +49,7 @@ final class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        mapActionButtonPanel.toggleState(isOn: mapViewModel.isScooterVisible)
+        mapActionButtonPanelWrapper.toggleState(isOn: mapViewModel.isScooterVisible)
 
         if mapViewModel.isScooterVisible {
             fetchKickScooterData()
@@ -68,25 +67,25 @@ final class MapViewController: UIViewController {
     }
 
     private func configureUI() {
-        view.bringSubviewToFront(mapSearchBarView)
+        view.bringSubviewToFront(mapSearchBarWrapperView)
 
         mapBaseView.mapView.delegate = self
 
-        [mapBaseView, mapActionButtonPanel, mapSearchBarView, mapSearchResultView, loadingIndicator]
+        [mapBaseView, mapActionButtonPanelWrapper, mapSearchBarWrapperView, mapSearchResultView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        mapSearchBarView.snp.makeConstraints {
+        mapSearchBarWrapperView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(mapActionButtonPanel.snp.leading).offset(-10)
+            $0.trailing.equalTo(mapActionButtonPanelWrapper.snp.leading).offset(-10)
             $0.height.equalTo(44)
         }
 
-        mapActionButtonPanel.snp.makeConstraints {
+        mapActionButtonPanelWrapper.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.trailing.equalToSuperview().inset(20)
             $0.width.equalTo(44)
@@ -94,8 +93,8 @@ final class MapViewController: UIViewController {
         }
 
         mapSearchResultView.snp.makeConstraints {
-            $0.top.equalTo(mapSearchBarView.snp.bottom)
-            $0.leading.trailing.equalTo(mapSearchBarView)
+            $0.top.equalTo(mapSearchBarWrapperView.snp.bottom)
+            $0.leading.trailing.equalTo(mapSearchBarWrapperView)
         }
         mapSearchResultView.isHidden = true
 
@@ -125,14 +124,14 @@ final class MapViewController: UIViewController {
                   let lon = Double(result.lon) else { return }
 
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            self?.mapBaseView.locateCurrentCoordinate(coordinate, zoomLevel: 0.01)
+            self?.mapBaseView.locateCurrentCoordinate(coordinate)
             self?.mapSearchResultView.isHidden = true
-            self?.mapSearchBarView.searchBar.resignFirstResponder()
+            self?.mapSearchBarWrapperView.searchBar.resignFirstResponder()
         }
     }
 
     private func bindButton() {
-        mapActionButtonPanel.onLocationButtonTapped = { [weak self] in
+        mapActionButtonPanelWrapper.onLocationButtonTapped = { [weak self] in
             self?.locateCurrentCoordinate()
         }
     }
@@ -158,8 +157,8 @@ final class MapViewController: UIViewController {
     }
 
     private func configureDelegates() {
-        mapSearchBarView.searchBar.delegate = self
-        mapActionButtonPanel.toggleButton.addTarget(
+        mapSearchBarWrapperView.searchBar.delegate = self
+        mapActionButtonPanelWrapper.toggleButton.addTarget(
             self,
             action: #selector(toggleScooterVisibility),
             for: .touchUpInside
