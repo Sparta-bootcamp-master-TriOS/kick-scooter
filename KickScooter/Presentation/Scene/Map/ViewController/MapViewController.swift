@@ -83,6 +83,10 @@ final class MapViewController: UIViewController {
             }
             self?.mapBaseView.mapView.addAnnotations(annotations)
         }
+
+        mapViewModel.didUpdateSearchCoordinate = { [weak self] coordinate in
+            self?.mapBaseView.locateCurrentCoordinate(coordinate, zoomLevel: 0.01)
+        }
     }
 
     private func bindButton() {

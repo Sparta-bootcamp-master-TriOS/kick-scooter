@@ -9,6 +9,7 @@ final class MapViewModel {
     private(set) var searchResults: [MapResponse] = []
 
     var didUpdateResults: (() -> Void)?
+    var didUpdateSearchCoordinate: ((CLLocationCoordinate2D) -> Void)?
     var didUpdateKickScooter: (([KickScooterUI]) -> Void)?
 
     let locationManager = LocationManager.shared
@@ -25,8 +26,16 @@ final class MapViewModel {
             case let .success(address):
                 self?.searchResults = address
                 self?.didUpdateResults?()
+
+                if let first = address.first,
+                   let lat = Double(first.lat),
+                   let lon = Double(first.lon)
+                {
+                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                    self?.didUpdateSearchCoordinate?(coordinate)
+                }
             case let .failure(error):
-                print("Address search fail")
+                print("Address search fail", error.localizedDescription)
             }
         }
     }
