@@ -1,4 +1,4 @@
 protocol Coordinatesable {
-    var lon: String { get }
-    var lat: String { get }
+    var lon: Double { get }
+    var lat: Double { get }
 }
