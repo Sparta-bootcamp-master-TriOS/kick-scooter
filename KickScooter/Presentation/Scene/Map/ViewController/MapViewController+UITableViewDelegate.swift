@@ -4,6 +4,6 @@ extension MapViewController: UITableViewDelegate {
     func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selected = mapViewModel.searchResults[indexPath.row]
         mapSearchResultView.onItemSelected?(selected)
-        mapSearchBarView.searchBar.text = selected.addressName
+        mapSearchBarWrapperView.searchBar.text = selected.addressName
     }
 }

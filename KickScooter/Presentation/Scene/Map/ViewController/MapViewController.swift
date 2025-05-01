@@ -9,14 +9,14 @@ final class MapViewController: UIViewController {
     var currentCalloutView: KickScooterCalloutView?
     private let mapBaseView = MapBaseView()
     let mapSearchBarWrapperView = MapSearchBarWrapperView()
-    private let mapActionButtonPanel = MapActionButtonPanel()
+    private let mapActionButtonPanelWrapper = MapActionButtonPanelWrapper()
     let mapSearchResultView = MapSearchResultView()
 
     private var isScooterVisible: Bool {
         get { mapViewModel.isScooterVisible }
         set {
             mapViewModel.isScooterVisible = newValue
-            mapActionButtonPanel.toggleState(isOn: newValue)
+            mapActionButtonPanelWrapper.toggleState(isOn: newValue)
         }
     }
 
@@ -50,7 +50,7 @@ final class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        mapActionButtonPanel.toggleState(isOn: mapViewModel.isScooterVisible)
+        mapActionButtonPanelWrapper.toggleState(isOn: mapViewModel.isScooterVisible)
 
         if mapViewModel.isScooterVisible {
             fetchKickScooterData()
@@ -72,7 +72,7 @@ final class MapViewController: UIViewController {
 
         mapBaseView.mapView.delegate = self
 
-        [mapBaseView, mapActionButtonPanel, mapSearchBarWrapperView, mapSearchResultView, loadingIndicator]
+        [mapBaseView, mapActionButtonPanelWrapper, mapSearchBarWrapperView, mapSearchResultView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
@@ -82,11 +82,11 @@ final class MapViewController: UIViewController {
         mapSearchBarWrapperView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(mapActionButtonPanel.snp.leading).offset(-10)
+            $0.trailing.equalTo(mapActionButtonPanelWrapper.snp.leading).offset(-10)
             $0.height.equalTo(44)
         }
 
-        mapActionButtonPanel.snp.makeConstraints {
+        mapActionButtonPanelWrapper.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.trailing.equalToSuperview().inset(20)
             $0.width.equalTo(44)
@@ -132,7 +132,7 @@ final class MapViewController: UIViewController {
     }
 
     private func bindButton() {
-        mapActionButtonPanel.onLocationButtonTapped = { [weak self] in
+        mapActionButtonPanelWrapper.onLocationButtonTapped = { [weak self] in
             self?.locateCurrentCoordinate()
         }
     }
@@ -159,7 +159,7 @@ final class MapViewController: UIViewController {
 
     private func configureDelegates() {
         mapSearchBarWrapperView.searchBar.delegate = self
-        mapActionButtonPanel.toggleButton.addTarget(
+        mapActionButtonPanelWrapper.toggleButton.addTarget(
             self,
             action: #selector(toggleScooterVisibility),
             for: .touchUpInside
