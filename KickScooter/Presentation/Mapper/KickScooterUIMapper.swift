@@ -15,7 +15,7 @@ struct KickScooterUIMapper {
     func map(kickScooter: KickScooterUI) -> KickScooter {
         KickScooter(
             id: kickScooter.id,
-            battery: Double(kickScooter.battery) ?? -1,
+            battery: BatteryLevel(desc: kickScooter.battery)!.desc,
             type: kickScooter.type,
             lon: kickScooter.lon,
             lat: kickScooter.lat,

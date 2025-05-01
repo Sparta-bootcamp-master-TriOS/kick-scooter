@@ -6,11 +6,21 @@ import UIKit
 final class MapViewController: UIViewController {
     let mapViewModel: MapViewModel
 
+    var currentCalloutView: KickScooterCalloutView?
     private let mapBaseView = MapBaseView()
-    private let mapSearchBarView = MapSearchBarView()
+    let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()
+    let mapSearchResultView = MapSearchResultView()
 
-    private var isScooterVisible = false
+    private var isScooterVisible: Bool {
+        get { mapViewModel.isScooterVisible }
+        set {
+            mapViewModel.isScooterVisible = newValue
+            mapActionButtonPanel.toggleState(isOn: newValue)
+        }
+    }
+
+    var currentAnnotationCoordinate: CLLocationCoordinate2D?
 
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -37,6 +47,20 @@ final class MapViewController: UIViewController {
         bindButton()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        mapActionButtonPanel.toggleState(isOn: mapViewModel.isScooterVisible)
+
+        if mapViewModel.isScooterVisible {
+            fetchKickScooterData()
+        } else {
+            mapBaseView.mapView.removeAnnotations(
+                mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
+            )
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -46,7 +70,9 @@ final class MapViewController: UIViewController {
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
 
-        [mapBaseView, mapActionButtonPanel, mapSearchBarView, loadingIndicator]
+        mapBaseView.mapView.delegate = self
+
+        [mapBaseView, mapActionButtonPanel, mapSearchBarView, mapSearchResultView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
         mapBaseView.snp.makeConstraints {
@@ -67,21 +93,41 @@ final class MapViewController: UIViewController {
             $0.height.equalTo(92)
         }
 
+        mapSearchResultView.snp.makeConstraints {
+            $0.top.equalTo(mapSearchBarView.snp.bottom)
+            $0.leading.trailing.equalTo(mapSearchBarView)
+        }
+        mapSearchResultView.isHidden = true
+
         loadingIndicator.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
 
     private func bindViewModel() {
-        mapViewModel.didUpdateKickScooter = { [weak self] scooter in
-            let annotations = scooter.map {
-                let coordinate = CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lon)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "킥보드"
-                return annotation
+        mapViewModel.didUpdateKickScooter = { [weak self] scooters in
+            let annotations = scooters.map { scooter in
+                let coordinate = CLLocationCoordinate2D(latitude: scooter.lat, longitude: scooter.lon)
+                return KickScooterAnnotation(coordinate: coordinate, kickScooter: scooter)
             }
+
             self?.mapBaseView.mapView.addAnnotations(annotations)
+        }
+
+        mapViewModel.didUpdateResults = { [weak self] in
+            guard let self else { return }
+            self.mapSearchResultView.searchResults = self.mapViewModel.searchResults
+            self.mapSearchResultView.isHidden = self.mapViewModel.searchResults.isEmpty
+        }
+
+        mapSearchResultView.onItemSelected = { [weak self] result in
+            guard let lat = Double(result.lat),
+                  let lon = Double(result.lon) else { return }
+
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            self?.mapBaseView.locateCurrentCoordinate(coordinate, zoomLevel: 0.01)
+            self?.mapSearchResultView.isHidden = true
+            self?.mapSearchBarView.searchBar.resignFirstResponder()
         }
     }
 
@@ -118,6 +164,8 @@ final class MapViewController: UIViewController {
             action: #selector(toggleScooterVisibility),
             for: .touchUpInside
         )
+        mapSearchResultView.tableView.dataSource = self
+        mapSearchResultView.tableView.delegate = self
     }
 
     private func locateCurrentCoordinate() {
@@ -151,18 +199,21 @@ final class MapViewController: UIViewController {
         view.isUserInteractionEnabled = true
     }
 
+    private func fetchKickScooterData() {
+        mapViewModel.locationManager.requestCurrentLocation(
+            onAuthorized: { [weak self] coordinate in
+                self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
+            },
+            onDenied: {}
+        )
+    }
+
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
-        mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         if isScooterVisible {
-            mapViewModel.locationManager.requestCurrentLocation(
-                onAuthorized: { [weak self] coordinate in
-                    self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
-                },
-                onDenied: {}
-            )
-        } else { // 유저 위치는 제거하지 않도록
+            fetchKickScooterData()
+        } else {
             mapBaseView.mapView.removeAnnotations(
                 mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
             )

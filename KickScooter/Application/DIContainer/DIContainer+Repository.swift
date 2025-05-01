@@ -24,7 +24,10 @@ extension DIContainer {
     }
 
     func makeMapRepository() -> MapRepository {
-        DefaultMapRepository(mapDataSource: makeMapDataSource())
+        DefaultMapRepository(
+            mapDataSource: makeMapDataSource(),
+            fetchAddressDataSource: makeFetchAddressDataSource()
+        )
     }
 
     func makeKickScooterRepository() -> KickScooterRepository {
@@ -56,5 +59,9 @@ extension DIContainer {
             fetchAutoSignInStatusDataSource: makeFetchAutoSignInStatusDataSource(),
             clearAutoSignInStatusDataSource: makeClearAutoSignInStatusDataSource()
         )
+    }
+
+    func makeReservationsRepository() -> ReservationsRepository {
+        DefaultReservationsRepository(saveReservationDataSource: makeSaveReservationDataSource())
     }
 }

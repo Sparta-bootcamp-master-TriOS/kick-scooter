@@ -73,4 +73,15 @@ extension DIContainer {
     func makeFetchKickScooterUseCase() -> FetchKickScooterUseCase {
         DefaultFetchKickScooterUseCase(repository: makeKickScooterRepository())
     }
+
+    func makeSaveReservationUseCase() -> SaveReservationUseCase {
+        DefaultSaveReservationUseCase(
+            reservationsRepository: makeReservationsRepository(),
+            userSessionRepository: userSessionRepository ?? makeUserSessionRepository()
+        )
+    }
+
+    func makeFetchAddressUseCase() -> FetchAddressUseCase {
+        DefaultFetchAddressUseCase(mapRepository: makeMapRepository())
+    }
 }
