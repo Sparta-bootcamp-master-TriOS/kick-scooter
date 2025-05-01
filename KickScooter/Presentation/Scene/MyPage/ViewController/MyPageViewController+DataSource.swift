@@ -67,6 +67,7 @@ extension MyPageViewController {
             cell.layer.borderColor = UIColor.triOSSecondaryText.withAlphaComponent(0.3).cgColor
 
             return cell
+
         case .signOutButton:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: SignOutButtonCell.identifier,
