@@ -18,7 +18,7 @@ final class InvalidLabel: UILabel {
     private func configureUI() {
         text = " "
         textColor = .triOSLowBattery
-        font = .systemFont(ofSize: 16)
+        font = .jalnan(ofSize: 16)
         isHidden = true
     }
 

@@ -63,14 +63,14 @@ final class AddKickScooterViewController: UIViewController {
         contentView.backgroundColor = .triOSBackground
         contentView.layer.cornerRadius = 20
 
-        let fullText = "Selected Kick Scooter"
+        let fullText = "킥보드 추가하기"
         let attributedString = NSMutableAttributedString(string: fullText)
-        if let range = fullText.range(of: "Kick Scooter") {
+        if let range = fullText.range(of: "킥보드") {
             let nsRange = NSRange(range, in: fullText)
             attributedString.addAttribute(.foregroundColor, value: UIColor.triOSMain, range: nsRange)
         }
         selectedLabel.attributedText = attributedString
-        selectedLabel.font = .systemFont(ofSize: 18)
+        selectedLabel.font = .jalnan(ofSize: 18)
 
         addKickScooterView.backgroundColor = .triOSTertiaryBackground
         addKickScooterView.layer.cornerRadius = 20
@@ -118,7 +118,7 @@ final class AddKickScooterViewController: UIViewController {
 
         batterySelectedView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
-            $0.horizontalEdges.equalToSuperview().inset(6)
+            $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(48)
         }
 
@@ -162,9 +162,35 @@ final class AddKickScooterViewController: UIViewController {
         }
 
         addButton.onButtonTapped = { [weak self] in
-            self?.addKickScooterViewModel.saveKickScooter()
+            guard let self = self else { return }
+
+            self.animateKickScooter()
+
+            self.addKickScooterViewModel.saveKickScooter()
         }
 
         pageControl.numberOfPages = KickScooterType.allCases.count
+    }
+
+    private func animateKickScooter() {
+        guard let tabBar = tabBarController?.tabBar else { return }
+
+        let imageName = addKickScooterViewModel.selectedKickScooterType.image
+        guard let image = UIImage(named: imageName) else { return }
+
+        let animatedImageView = UIImageView(image: image)
+        animatedImageView.contentMode = .scaleAspectFit
+        animatedImageView.frame = collectionView.convert(collectionView.bounds, to: view).insetBy(dx: 50, dy: 50)
+        view.addSubview(animatedImageView)
+
+        let targetPoint = CGPoint(x: tabBar.frame.midX, y: tabBar.frame.origin.y)
+
+        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseInOut], animations: {
+            animatedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            animatedImageView.center = targetPoint
+            animatedImageView.alpha = 0
+        }, completion: { _ in
+            animatedImageView.removeFromSuperview()
+        })
     }
 }

@@ -30,4 +30,8 @@ extension DIContainer {
             myPageUseCase: makeMyPageUseCase()
         )
     }
+
+    func makeMapViewModel() -> MapViewModel {
+        MapViewModel(mapUseCase: makeMapUseCase())
+    }
 }

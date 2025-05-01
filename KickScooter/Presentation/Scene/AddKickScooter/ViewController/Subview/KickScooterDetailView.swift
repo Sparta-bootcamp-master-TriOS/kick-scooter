@@ -16,7 +16,7 @@ final class KickScooterDetailView: UIView {
 
     private func configureUI() {
         modelLabel.textColor = .triOSText
-        modelLabel.font = .boldSystemFont(ofSize: 24)
+        modelLabel.font = .jalnan(ofSize: 20)
 
         [modelLabel, priceLabel]
             .forEach { addSubview($0) }
@@ -42,7 +42,7 @@ final class KickScooterDetailView: UIView {
             let nsRange = NSRange(priceRange, in: fullText)
             attributedString.addAttributes([
                 .foregroundColor: UIColor.triOSRedButton,
-                .font: UIFont.systemFont(ofSize: 24),
+                .font: UIFont.jalnan(ofSize: 20),
             ], range: nsRange)
         }
 
@@ -50,7 +50,7 @@ final class KickScooterDetailView: UIView {
             let nsRange = NSRange(timeRange, in: fullText)
             attributedString.addAttributes([
                 .foregroundColor: UIColor.triOSSecondaryText,
-                .font: UIFont.systemFont(ofSize: 16),
+                .font: UIFont.jalnan(ofSize: 14),
             ], range: nsRange)
         }
 

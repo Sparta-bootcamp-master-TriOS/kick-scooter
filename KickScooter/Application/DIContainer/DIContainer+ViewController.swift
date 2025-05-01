@@ -14,4 +14,8 @@ extension DIContainer {
     func makeMyPageViewController() -> MyPageViewController {
         MyPageViewController(myPageViewModel: makeMyPageViewModel())
     }
+
+    func makeMapViewController() -> MapViewController {
+        MapViewController(mapViewModel: makeMapViewModel())
+    }
 }

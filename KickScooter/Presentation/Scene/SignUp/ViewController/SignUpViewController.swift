@@ -71,7 +71,7 @@ final class SignUpViewController: UIViewController {
         configureTextFields()
         configureInvalidLabels()
 
-        signUpButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "Sign Up")
+        signUpButton.updateUI(backgroundColor: .triOSMain, titleColor: .triOSTertiaryBackground, title: "회원가입")
 
         view.addSubview(scrollView)
 
@@ -174,7 +174,7 @@ final class SignUpViewController: UIViewController {
                 self.delegate?.pop()
             } else {
                 invalidIDLabel.showduplicatedIDMessage()
-                
+
                 _ = idTextField.becomeFirstResponder()
                 idTextField.shake()
             }
