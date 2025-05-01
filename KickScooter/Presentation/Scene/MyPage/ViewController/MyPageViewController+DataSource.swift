@@ -38,8 +38,18 @@ extension MyPageViewController {
 
             cell.configureProperty(userProfileUI)
             return cell
-//        case .yourRide:
-//            return UICollectionViewCell()
+
+        case .yourRide:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: YourRideCell.identifier, for: indexPath
+            ) as? YourRideCell else {
+                return UICollectionViewCell()
+            }
+
+            cell.layer.cornerRadius = 10
+
+            return cell
+
         case .pastRides:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: PastRidesCell.identifier, for: indexPath
@@ -53,15 +63,8 @@ extension MyPageViewController {
 
             cell.configurePropertyMock(pastRide)
             cell.layer.cornerRadius = 10
-            cell.layer.shadowColor = UIColor.gray.cgColor
-            cell.layer.shadowOpacity = 0.2
-            cell.layer.shadowOffset = CGSize(width: 0, height: 0)
-            cell.clipsToBounds = false
-            cell.layer.masksToBounds = false
-            cell.layer.shadowPath = UIBezierPath(
-                roundedRect: cell.bounds,
-                cornerRadius: cell.contentView.layer.cornerRadius
-            ).cgPath
+            cell.layer.borderWidth = 1.0
+            cell.layer.borderColor = UIColor.triOSSecondaryText.withAlphaComponent(0.3).cgColor
 
             return cell
         }
@@ -74,8 +77,7 @@ extension MyPageViewController {
             switch kind {
             case UICollectionView.elementKindSectionHeader:
                 let section = MyPageSection.allCases[indexPath.section]
-                //            if section == .yourRide || section == .pastRides {
-                if section == .pastRides {
+                if section == .yourRide || section == .pastRides {
                     let headerView = collectionView
                         .dequeueReusableSupplementaryView(
                             ofKind: UICollectionView.elementKindSectionHeader,
@@ -105,10 +107,10 @@ extension MyPageViewController {
             [.userProfile(myPageViewModel.fetchUserProfile())],
             toSection: .userProfile
         )
-//        snapshot.appendItems(
-//            [.yourRide],
-//            toSection: .yourRide
-//        )
+        snapshot.appendItems(
+            [.yourRide],
+            toSection: .yourRide
+        )
         snapshot.appendItems(
             PastRidesMock.pastRidesMock
                 .map {

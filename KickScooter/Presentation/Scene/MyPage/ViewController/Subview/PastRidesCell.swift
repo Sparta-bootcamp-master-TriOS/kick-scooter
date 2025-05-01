@@ -42,38 +42,38 @@ final class PastRidesCell: UICollectionViewCell {
         dateLabel.textColor = .triOSText
 
         totalTimeLabel.text = "총 시간"
-        totalTimeLabel.font = .systemFont(ofSize: 11, weight: .semibold)
+        totalTimeLabel.font = .jalnan(ofSize: 11)
         totalTimeLabel.textColor = .triOSText
 
         startLabel.text = "시작"
-        startLabel.font = .systemFont(ofSize: 11, weight: .semibold)
+        startLabel.font = .jalnan(ofSize: 11)
         startLabel.textColor = .triOSText
 
         endLabel.text = "도착"
-        endLabel.font = .systemFont(ofSize: 11, weight: .semibold)
+        endLabel.font = .jalnan(ofSize: 11)
         endLabel.textColor = .triOSText
 
         priceLabel.text = "금액"
-        priceLabel.font = .systemFont(ofSize: 11, weight: .semibold)
+        priceLabel.font = .jalnan(ofSize: 11)
         priceLabel.textColor = .triOSText
 
         labelStackView.axis = .vertical
         labelStackView.spacing = 5
         labelStackView.alignment = .trailing
 
-        totalTimeValue.font = .systemFont(ofSize: 11)
+        totalTimeValue.font = .jalnan(ofSize: 11)
         totalTimeValue.textColor = .triOSText.withAlphaComponent(0.7)
         totalTimeValue.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        startValue.font = .systemFont(ofSize: 11)
+        startValue.font = .jalnan(ofSize: 11)
         startValue.textColor = .triOSText.withAlphaComponent(0.7)
         startValue.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        endValue.font = .systemFont(ofSize: 11)
+        endValue.font = .jalnan(ofSize: 11)
         endValue.textColor = .triOSText.withAlphaComponent(0.7)
         endValue.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        priceValue.font = .systemFont(ofSize: 11)
+        priceValue.font = .jalnan(ofSize: 11)
         priceValue.textColor = .triOSText.withAlphaComponent(0.7)
         priceValue.setContentCompressionResistancePriority(.required, for: .horizontal)
 
@@ -91,7 +91,7 @@ final class PastRidesCell: UICollectionViewCell {
         scooterImageView.contentMode = .scaleAspectFit
         scooterImageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        scooterLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        scooterLabel.font = .jalnan(ofSize: 12)
         scooterLabel.textColor = .triOSSecondaryText
         scooterLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
@@ -153,6 +153,14 @@ final class PastRidesCell: UICollectionViewCell {
             $0.top.equalToSuperview().offset(16)
         }
 
+        labelStackView.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview()
+        }
+
+        valueStackView.snp.makeConstraints {
+            $0.top.trailing.bottom.equalToSuperview()
+        }
+
         hStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.top.equalTo(dateLabel.snp.bottom).offset(12)
@@ -167,7 +175,6 @@ final class PastRidesCell: UICollectionViewCell {
         scooterStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(18)
             $0.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(14)
         }
     }
 }

@@ -8,8 +8,8 @@ final class UserProfileCell: UICollectionViewCell {
     private var idLabel = UILabel()
     private var emailLabel = UILabel()
     private var vStackView = UIStackView()
+
     private var profileImageView = UIImageView()
-    private var hStackView = UIStackView()
 
     override init(frame _: CGRect) {
         super.init(frame: .zero)
@@ -41,7 +41,7 @@ final class UserProfileCell: UICollectionViewCell {
         emailLabel.textColor = .triOSText.withAlphaComponent(0.7)
 
         vStackView.axis = .vertical
-        vStackView.spacing = 5
+        vStackView.spacing = 2
         vStackView.alignment = .leading
 
         profileImageView.image = UIImage(named: "DefaultProfile")
@@ -49,12 +49,9 @@ final class UserProfileCell: UICollectionViewCell {
         profileImageView.layer.cornerRadius = 10
         profileImageView.backgroundColor = .triOSMidBattery
 
-        hStackView.axis = .horizontal
-        hStackView.distribution = .fill
-
         [
             vStackView,
-            hStackView,
+            profileImageView,
         ]
         .forEach { addSubview($0) }
 
@@ -64,22 +61,28 @@ final class UserProfileCell: UICollectionViewCell {
             emailLabel,
         ]
         .forEach { vStackView.addArrangedSubview($0) }
-
-        [
-            vStackView,
-            profileImageView,
-        ]
-        .forEach { hStackView.addArrangedSubview($0) }
     }
 
     private func configureAutoLayout() {
-        profileImageView.snp.makeConstraints {
-            $0.size.equalTo(64)
+        titleLabel.snp.makeConstraints {
+            $0.height.equalTo(27)
         }
 
-        hStackView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.directionalHorizontalEdges.equalToSuperview()
+        idLabel.snp.makeConstraints {
+            $0.height.equalTo(20)
+        }
+
+        emailLabel.snp.makeConstraints {
+            $0.height.equalTo(20)
+        }
+
+        profileImageView.snp.makeConstraints {
+            $0.size.equalTo(70)
+            $0.trailing.top.equalToSuperview()
+        }
+
+        vStackView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
         }
     }
 }
