@@ -13,6 +13,8 @@ final class MapViewModel {
     var didUpdateResults: (() -> Void)?
     var didUpdateKickScooter: (([KickScooterUI]) -> Void)?
 
+    var isScooterVisible = true
+
     let locationManager = LocationManager.shared
     var hasRequestedLocation = false
 

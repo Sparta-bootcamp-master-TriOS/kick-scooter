@@ -11,7 +11,14 @@ final class MapViewController: UIViewController {
     private let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()
 
-    private var isScooterVisible = true
+    private var isScooterVisible: Bool {
+        get { mapViewModel.isScooterVisible }
+        set {
+            mapViewModel.isScooterVisible = newValue
+            mapActionButtonPanel.toggleState(isOn: newValue)
+        }
+    }
+
     var currentAnnotationCoordinate: CLLocationCoordinate2D?
 
     private let loadingIndicator: UIActivityIndicatorView = {
@@ -39,8 +46,18 @@ final class MapViewController: UIViewController {
         bindButton()
     }
 
-    override func viewWillAppear(_: Bool) {
-        fetchKickScooterData()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        mapActionButtonPanel.toggleState(isOn: mapViewModel.isScooterVisible)
+
+        if mapViewModel.isScooterVisible {
+            fetchKickScooterData()
+        } else {
+            mapBaseView.mapView.removeAnnotations(
+                mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
+            )
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -51,8 +68,6 @@ final class MapViewController: UIViewController {
 
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
-
-        mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         mapBaseView.mapView.delegate = self
 
@@ -170,11 +185,10 @@ final class MapViewController: UIViewController {
 
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
-        mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         if isScooterVisible {
             fetchKickScooterData()
-        } else { // 유저 위치는 제거하지 않도록
+        } else {
             mapBaseView.mapView.removeAnnotations(
                 mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
             )
