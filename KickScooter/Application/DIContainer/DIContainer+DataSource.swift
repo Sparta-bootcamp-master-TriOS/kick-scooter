@@ -46,4 +46,8 @@ extension DIContainer {
     func makeFetchAutoSignInStatusDataSource() -> FetchAutoSignInStatusDataSource {
         FetchAutoSignInStatusDataSource()
     }
+
+    func makeFetchKickScooterDataSource() -> FetchKickScooterDataSource {
+        FetchKickScooterDataSource(persistenceController: persistenceController)
+    }
 }

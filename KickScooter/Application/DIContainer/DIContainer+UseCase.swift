@@ -53,4 +53,8 @@ extension DIContainer {
     func makeFetchAutoSignInStatusUseCase() -> FetchAutoSignInStatusUseCase {
         DefaultFetchAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
     }
+
+    func makeFetchKickScooterUseCase() -> FetchKickScooterUseCase {
+        DefaultFetchKickScooterUseCase(repository: makeKickScooterRepository())
+    }
 }

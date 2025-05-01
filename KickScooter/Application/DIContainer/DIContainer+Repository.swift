@@ -27,7 +27,10 @@ extension DIContainer {
     }
 
     func makeKickScooterRepository() -> KickScooterRepository {
-        DefaultKickScooterRepository(saveKickScooterDataSource: makeSaveKickScooterDataSource())
+        DefaultKickScooterRepository(
+            saveKickScooterDataSource: makeSaveKickScooterDataSource(),
+            fetchKickScooterDataSource: makeFetchKickScooterDataSource()
+        )
     }
 
     func makeCredentialsRepository() -> CredentialsRepository {
