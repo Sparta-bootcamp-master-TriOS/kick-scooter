@@ -29,7 +29,7 @@ final class SignOutButtonCell: UICollectionViewCell {
         contentView.addSubview(button)
 
         button.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.center.equalToSuperview()
         }
     }
 

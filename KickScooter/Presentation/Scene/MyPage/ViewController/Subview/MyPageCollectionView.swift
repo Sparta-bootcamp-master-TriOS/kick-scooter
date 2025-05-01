@@ -83,7 +83,6 @@ extension MyPageCollectionView {
 
             let sectionLayout = NSCollectionLayoutSection(group: group)
             sectionLayout.interGroupSpacing = 15
-            sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
 
             // 2. 섹션에 따라 Header 추가
 //            if section == .yourRide || section == .pastRides {
