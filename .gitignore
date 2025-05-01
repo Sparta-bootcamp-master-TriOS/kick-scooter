@@ -93,3 +93,6 @@ iOSInjectionProject/
 *.xcworkspace/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+
+# Kakao API Key
+KickScooter/Application/AppAPIKeys.swift
