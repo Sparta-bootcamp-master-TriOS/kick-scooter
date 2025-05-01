@@ -1,6 +1,6 @@
 enum MyPageItem: Hashable {
     case userProfile(UserProfileUI)
-    case yourRide
-    case pastRides(PastRidesMock)
+    case yourRide(ReservationUI)
+    case pastRides(ReservationUI)
     case signOutButton
 }

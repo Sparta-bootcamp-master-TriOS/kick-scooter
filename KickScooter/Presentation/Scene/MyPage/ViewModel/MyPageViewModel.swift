@@ -39,7 +39,7 @@ final class MyPageViewModel: MyPageViewModelDelegate {
             guard let self else { return }
             switch action {
             case .fetchUserProfile:
-                let userProfile = self.fetchUserProfile()
+                let userProfile = fetchUserProfile()
                 self.userProfile = userProfile
                 self.onStateChanged?(.userProfile(userProfile))
             }

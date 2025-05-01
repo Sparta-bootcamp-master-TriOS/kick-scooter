@@ -1,7 +1,7 @@
 import Foundation
 
 struct ReservationUI: Hashable {
-    let date: String
+    let date: Date
     let status: Bool
     let startLon: Double
     let startLat: Double

@@ -15,12 +15,22 @@ struct UserResponseMapper {
     }
 
     func map(from response: UserResponse) -> User {
-        User(
+        guard let reservations = response.reservations else {
+            return User(
+                id: response.id,
+                password: response.password,
+                name: response.name,
+                email: response.email,
+                reservations: []
+            )
+        }
+
+        return User(
             id: response.id,
             password: response.password,
             name: response.name,
             email: response.email,
-            reservations: response.reservations.map { reservationMapper.map(from: $0) }
+            reservations: reservations.map { reservationMapper.map(from: $0) }
         )
     }
 

@@ -6,7 +6,7 @@ struct ReservationUIMapper {
     func map(reservations: [Reservation]) -> [ReservationUI] {
         reservations.map {
             let reservation = ReservationUI(
-                date: "\($0.date)",
+                date: $0.date,
                 status: $0.status,
                 startLon: $0.startLon,
                 startLat: $0.startLat,

@@ -132,17 +132,11 @@ final class PastRidesCell: UICollectionViewCell {
     }
 
     func configureProperty(_ reservation: ReservationUI) {
-        dateLabel.text = reservation.date
-    }
-
-    func configurePropertyMock(_ pastRide: PastRidesMock) {
-        dateLabel.text = pastRide.date
-        totalTimeValue.text = pastRide.totalTime
-        startValue.text = pastRide.start
-        endValue.text = pastRide.end
-        scooterImageView.image = UIImage(named: pastRide.scooterImg)
-        scooterLabel.text = pastRide.scooterModel
-        priceValue.text = pastRide.priceValue
+        dateLabel.text = Formatter.getFormattedDate(from: reservation.date)
+        totalTimeValue.text = reservation.totalTime
+        startValue.text = reservation.startAddress
+        endValue.text = reservation.endAddress
+        priceValue.text = reservation.totalPrice
     }
 
     private func configureAutoLayout() {
