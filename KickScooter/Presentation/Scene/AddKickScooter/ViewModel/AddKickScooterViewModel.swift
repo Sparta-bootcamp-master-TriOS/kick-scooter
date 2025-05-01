@@ -8,7 +8,7 @@ final class AddKickScooterViewModel {
     private let mapper = KickScooterUIMapper.shared
 
     private var selectedBatteryLevel: BatteryLevel = .high
-    private var selectedKickScooterType: KickScooterType = .expensive
+    private(set) var selectedKickScooterType: KickScooterType = .expensive
 
     var onBatteryChanged: ((Int) -> Void)?
     var onKickScooterTypeChanged: ((Int) -> Void)?

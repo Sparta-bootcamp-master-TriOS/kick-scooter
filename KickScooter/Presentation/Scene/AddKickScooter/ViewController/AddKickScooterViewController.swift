@@ -162,9 +162,35 @@ final class AddKickScooterViewController: UIViewController {
         }
 
         addButton.onButtonTapped = { [weak self] in
-            self?.addKickScooterViewModel.saveKickScooter()
+            guard let self = self else { return }
+
+            self.animateKickScooter()
+
+            self.addKickScooterViewModel.saveKickScooter()
         }
 
         pageControl.numberOfPages = KickScooterType.allCases.count
+    }
+
+    private func animateKickScooter() {
+        guard let tabBar = tabBarController?.tabBar else { return }
+
+        let imageName = addKickScooterViewModel.selectedKickScooterType.image
+        guard let image = UIImage(named: imageName) else { return }
+
+        let animatedImageView = UIImageView(image: image)
+        animatedImageView.contentMode = .scaleAspectFit
+        animatedImageView.frame = collectionView.convert(collectionView.bounds, to: view).insetBy(dx: 50, dy: 50)
+        view.addSubview(animatedImageView)
+
+        let targetPoint = CGPoint(x: tabBar.frame.midX, y: tabBar.frame.origin.y)
+
+        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseInOut], animations: {
+            animatedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            animatedImageView.center = targetPoint
+            animatedImageView.alpha = 0
+        }, completion: { _ in
+            animatedImageView.removeFromSuperview()
+        })
     }
 }
