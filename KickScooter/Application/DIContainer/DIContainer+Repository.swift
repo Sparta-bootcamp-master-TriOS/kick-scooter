@@ -23,7 +23,10 @@ extension DIContainer {
     }
 
     func makeMapRepository() -> MapRepository {
-        DefaultMapRepository(mapDataSource: makeMapDataSource())
+        DefaultMapRepository(
+            mapDataSource: makeMapDataSource(),
+            fetchAddressDataSource: makeFetchAddressDataSource()
+        )
     }
 
     func makeKickScooterRepository() -> KickScooterRepository {

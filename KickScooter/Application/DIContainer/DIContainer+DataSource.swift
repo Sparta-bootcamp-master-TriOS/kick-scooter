@@ -66,4 +66,12 @@ extension DIContainer {
     func makeSaveReservationDataSource() -> SaveReservationDataSource {
         SaveReservationDataSource(persistenceController: persistenceController)
     }
+
+    func makeMapDataSource() -> MapDataSource {
+        MapDataSource(apiKey: AppAPIKeys.kakaoAPIKey)
+    }
+
+    func makeFetchAddressDataSource() -> FetchAddressDataSource {
+        FetchAddressDataSource(apiKey: AppAPIKeys.kakaoAPIKey)
+    }
 }

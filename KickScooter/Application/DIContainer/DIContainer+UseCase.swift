@@ -80,4 +80,8 @@ extension DIContainer {
             userSessionRepository: userSessionRepository ?? makeUserSessionRepository()
         )
     }
+
+    func makeFetchAddressUseCase() -> FetchAddressUseCase {
+        DefaultFetchAddressUseCase(mapRepository: makeMapRepository())
+    }
 }

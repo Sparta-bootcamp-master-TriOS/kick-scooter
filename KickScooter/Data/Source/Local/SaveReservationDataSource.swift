@@ -8,7 +8,7 @@ struct SaveReservationDataSource {
         self.persistenceController = persistenceController
     }
 
-    func execute(kickScooterID: UUID, userID: String) {
+    func execute(kickScooterID: UUID, userID: String, address: String) {
         let context = persistenceController.context
 
         guard let kickScooter = fetchKickScooter(by: kickScooterID, in: context),
@@ -26,7 +26,7 @@ struct SaveReservationDataSource {
         entity.startLat = kickScooter.lat
         entity.endLon = nil
         entity.endLat = nil
-        entity.startAddress = "임시 시작 주소"
+        entity.startAddress = address
         entity.endAddress = nil
         entity.totalTime = nil
         entity.totalPrice = nil

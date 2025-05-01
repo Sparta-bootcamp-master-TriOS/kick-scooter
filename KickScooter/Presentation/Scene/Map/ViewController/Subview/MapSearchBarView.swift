@@ -20,7 +20,14 @@ final class MapSearchBarView: UIView {
         layer.cornerRadius = 12
         clipsToBounds = true
 
-        searchBar.placeholder = "Search Maps"
+        searchBar.searchTextField.font = .jalnan(ofSize: 16)
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "주소를 입력하세요.",
+            attributes: [
+                .font: UIFont.jalnan(ofSize: 16),
+                .foregroundColor: UIColor.triOSSecondaryText,
+            ]
+        )
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .triOSBackground
 
