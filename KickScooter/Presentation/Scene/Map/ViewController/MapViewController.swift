@@ -11,7 +11,7 @@ final class MapViewController: UIViewController {
     private let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()
 
-    private var isScooterVisible = false
+    private var isScooterVisible = true
     var currentAnnotationCoordinate: CLLocationCoordinate2D?
 
     private let loadingIndicator: UIActivityIndicatorView = {
@@ -39,6 +39,10 @@ final class MapViewController: UIViewController {
         bindButton()
     }
 
+    override func viewWillAppear(_: Bool) {
+        fetchKickScooterData()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -47,6 +51,8 @@ final class MapViewController: UIViewController {
 
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
+
+        mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         mapBaseView.mapView.delegate = self
 
@@ -153,17 +159,21 @@ final class MapViewController: UIViewController {
         view.isUserInteractionEnabled = true
     }
 
+    private func fetchKickScooterData() {
+        mapViewModel.locationManager.requestCurrentLocation(
+            onAuthorized: { [weak self] coordinate in
+                self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
+            },
+            onDenied: {}
+        )
+    }
+
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
         mapActionButtonPanel.toggleState(isOn: isScooterVisible)
 
         if isScooterVisible {
-            mapViewModel.locationManager.requestCurrentLocation(
-                onAuthorized: { [weak self] coordinate in
-                    self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
-                },
-                onDenied: {}
-            )
+            fetchKickScooterData()
         } else { // 유저 위치는 제거하지 않도록
             mapBaseView.mapView.removeAnnotations(
                 mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
