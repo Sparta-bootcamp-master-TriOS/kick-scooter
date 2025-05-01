@@ -1,4 +1,4 @@
 struct MapUI: CoordinatesableUI {
-    let lon: String
-    let lat: String
+    let lon: Double
+    let lat: Double
 }

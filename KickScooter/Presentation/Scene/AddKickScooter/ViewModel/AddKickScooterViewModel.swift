@@ -56,8 +56,8 @@ final class AddKickScooterViewModel {
                 id: UUID(),
                 battery: self.selectedBatteryLevel.desc,
                 type: self.selectedKickScooterType.rawValue,
-                lon: "\(coordinate.longitude)",
-                lat: "\(coordinate.latitude)",
+                lon: coordinate.longitude,
+                lat: coordinate.latitude,
                 isAvailable: true
             )
 

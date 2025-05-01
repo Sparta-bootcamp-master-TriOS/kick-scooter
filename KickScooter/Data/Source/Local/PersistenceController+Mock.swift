@@ -105,32 +105,32 @@ extension PersistenceController {
                 id: UUID(),
                 battery: 95.0,
                 type: 0,
-                lon: "127.0276",
-                lat: "37.4979",
+                lon: 127.0276,
+                lat: 37.4979,
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
                 battery: 60.0,
                 type: 1,
-                lon: "126.9780",
-                lat: "37.5665",
+                lon: 126.9780,
+                lat: 37.5665,
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
                 battery: 25.0,
                 type: 1,
-                lon: "127.1025",
-                lat: "37.5130",
+                lon: 127.1025,
+                lat: 37.5130,
                 isAvailable: true
             ),
             KickScooterResponse(
                 id: UUID(),
                 battery: 75.0,
                 type: 2,
-                lon: "127.0276",
-                lat: "37.4979",
+                lon: 127.0276,
+                lat: 37.4979,
                 isAvailable: false
             ),
         ]
