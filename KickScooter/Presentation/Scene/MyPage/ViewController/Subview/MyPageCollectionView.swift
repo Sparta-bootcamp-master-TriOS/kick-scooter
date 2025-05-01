@@ -63,7 +63,8 @@ extension MyPageCollectionView {
     private func layout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             // sectionIndex : 현재 섹션의 번호
-            // _ (= environment : 화면 사이즈,  traits 등 정보 포함
+            // _ (= environment) : 화면 사이즈,  traits 등 정보 포함
+
             let section = MyPageSection.allCases[sectionIndex]
 
             // 1. 공통 Item, Group 정의

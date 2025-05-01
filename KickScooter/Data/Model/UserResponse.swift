@@ -3,5 +3,5 @@ struct UserResponse {
     let email: String
     let id: String
     let password: String
-    let reservations: [ReservationResponse]
+    let reservations: [ReservationResponse]?
 }

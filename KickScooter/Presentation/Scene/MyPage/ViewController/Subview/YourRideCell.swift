@@ -65,7 +65,6 @@ final class YourRideCell: UICollectionViewCell {
         naviImage.tintColor = .triOSMain
         naviImage.contentMode = .scaleAspectFill
 
-        totalTime.text = "1시간 10분 6초"
         totalTime.font = .jalnan(ofSize: 13)
         totalTime.textColor = .triOSText
 
@@ -77,14 +76,12 @@ final class YourRideCell: UICollectionViewCell {
         batteryIconView.backgroundColor = .triOSHighBatteryBackground
 
         batteryIcon.contentMode = .center
-        batteryIcon.image = UIImage(systemName: "battery.100")
         batteryIcon.tintColor = .triOSHighBattery
 
         batteryLabel.text = "배터리"
         batteryLabel.font = .jalnan(ofSize: 12)
         batteryLabel.textColor = .triOSSecondaryText
 
-        batteryValue.text = "100%"
         batteryValue.font = .jalnan(ofSize: 12)
         batteryValue.textColor = .triOSText
 
@@ -138,7 +135,33 @@ final class YourRideCell: UICollectionViewCell {
     }
 
     func configureProperty(_ reservation: ReservationUI) {
-        totalTime.text = reservation.date
+        totalTime.text = Formatter.getTotalTime(from: reservation.date)
+
+        if let image = KickScooterType(rawValue: reservation.kickScooter.type)?.image {
+            scooterImageView.image = UIImage(named: image)
+        }
+
+        if let battery = Double(reservation.kickScooter.battery),
+           let batteryLevel = BatteryLevel(desc: battery)
+        {
+            switch batteryLevel {
+            case .high:
+                batteryIconView.backgroundColor = .triOSHighBatteryBackground
+                batteryIcon.image = UIImage(systemName: "battery.100")
+                batteryIcon.tintColor = .triOSHighBattery
+                batteryValue.text = "\(Int(battery))%"
+            case .mid:
+                batteryIconView.backgroundColor = .triOSMidBatteryBackground
+                batteryIcon.image = UIImage(systemName: "battery.50")
+                batteryIcon.tintColor = .triOSMidBattery
+                batteryValue.text = "\(Int(battery))%"
+            case .low:
+                batteryIconView.backgroundColor = .triOSLowBatteryBackground
+                batteryIcon.image = UIImage(systemName: "battery.25")
+                batteryIcon.tintColor = .triOSLowBattery
+                batteryValue.text = "\(Int(battery))%"
+            }
+        }
     }
 
     private func configureAutoLayout() {

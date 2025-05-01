@@ -23,49 +23,60 @@ extension MyPageViewController {
         _ indexPath: IndexPath,
         _ item: MyPageItem
     ) -> UICollectionViewCell {
-        let section = MyPageSection.allCases[indexPath.section]
+        let sections = dataSource.snapshot().sectionIdentifiers
+        let section = sections[indexPath.section]
+
         switch section {
         case .userProfile:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: UserProfileCell.identifier, for: indexPath
             ) as? UserProfileCell else {
-                return UICollectionViewCell()
+                fatalError("[Error] Failed Dequeue UserProfile Cell")
             }
 
             guard case let .userProfile(userProfileUI) = item else {
-                return UICollectionViewCell()
+                fatalError("[Error] Failed Fetch UserProfile Item")
             }
 
             cell.configureProperty(userProfileUI)
             return cell
 
         case .yourRide:
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: YourRideCell.identifier, for: indexPath
-            ) as? YourRideCell else {
+            guard case let .yourRide(reservation) = item else {
+                print("[Error] Failed Fetch YourRide Item")
                 return UICollectionViewCell()
             }
 
-            cell.layer.cornerRadius = 10
+            guard reservation.status == true else {
+                print("[Warning] reservation.status == false → 셀 생성하지 않음")
+                return UICollectionViewCell()
+            }
 
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: YourRideCell.identifier, for: indexPath
+            ) as? YourRideCell else {
+                fatalError("[Error] Failed Dequeue YourRide Cell")
+            }
+
+            cell.configureProperty(reservation)
+            cell.layer.cornerRadius = 10
             return cell
 
         case .pastRides:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: PastRidesCell.identifier, for: indexPath
             ) as? PastRidesCell else {
-                return UICollectionViewCell()
+                fatalError("[Error] Failed Dequeue PastRides Cell")
             }
 
             guard case let .pastRides(pastRide) = item else {
-                return UICollectionViewCell()
+                fatalError("[Error] Failed Fetch PastRides Item")
             }
 
-            cell.configurePropertyMock(pastRide)
+            cell.configureProperty(pastRide)
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1.0
             cell.layer.borderColor = UIColor.triOSSecondaryText.withAlphaComponent(0.3).cgColor
-
             return cell
 
         case .signOutButton:
@@ -87,25 +98,44 @@ extension MyPageViewController {
 
     // Header
     private func makeSupplementaryViewProvider() {
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
-
+        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            guard let self else { return nil }
             switch kind {
             case UICollectionView.elementKindSectionHeader:
-                let section = MyPageSection.allCases[indexPath.section]
-                if section == .yourRide || section == .pastRides {
-                    let headerView = collectionView
-                        .dequeueReusableSupplementaryView(
-                            ofKind: UICollectionView.elementKindSectionHeader,
-                            withReuseIdentifier: MyPageHeaderView.identifier,
-                            for: indexPath
-                        ) as? MyPageHeaderView
-                    headerView?.configureHeader(section.title)
-                    return headerView
-                }
-                return nil
 
-            case UICollectionView.elementKindSectionFooter:
-                return nil
+                let section = MyPageSection.allCases[indexPath.section]
+
+                guard let headerView = collectionView
+                    .dequeueReusableSupplementaryView(
+                        ofKind: UICollectionView.elementKindSectionHeader,
+                        withReuseIdentifier: MyPageHeaderView.identifier,
+                        for: indexPath
+                    ) as? MyPageHeaderView
+                else {
+                    print("[Error] HeaderView casting failed")
+                    return UICollectionReusableView() // fallback: 최소한 뭔가 리턴
+                }
+
+                if section == .yourRide || section == .pastRides {
+                    if let userProfile = self.myPageViewModel.userProfile,
+                       !userProfile.reservations.isEmpty
+                    {
+                        let reservations = userProfile.reservations
+                        if section == .yourRide,
+                           let resetvation = reservations.sorted(by: { $0.date > $1.date }).first,
+                           resetvation.status == false
+                        {
+                            headerView.isHidden = true
+                            return headerView
+                        }
+
+                        headerView.isHidden = false
+                        headerView.configureHeader(section.title)
+                        return headerView
+                    }
+                }
+                headerView.isHidden = true
+                return headerView
 
             default:
                 return nil
@@ -116,23 +146,44 @@ extension MyPageViewController {
     // Data - Snapshot
     private func applySnapShot() {
         var snapshot = SnapShot<MyPageSection, MyPageItem>()
-        snapshot.appendSections(MyPageSection.allCases)
 
+        // UserProfile Section
+        guard let userProfile = myPageViewModel.userProfile else {
+            return
+        }
+        snapshot.appendSections([.userProfile])
         snapshot.appendItems(
-            [.userProfile(myPageViewModel.fetchUserProfile())],
+            [.userProfile(userProfile)],
             toSection: .userProfile
         )
-        snapshot.appendItems(
-            [.yourRide],
-            toSection: .yourRide
-        )
-        snapshot.appendItems(
-            PastRidesMock.pastRidesMock
-                .map {
+
+        // YourRide Section
+        let reservations = userProfile.reservations
+        if !reservations.isEmpty,
+           let reservation = reservations.sorted(by: { $0.date > $1.date }).first,
+           reservation.status == true
+        {
+            snapshot.appendSections([.yourRide])
+            snapshot.appendItems(
+                [.yourRide(reservation)],
+                toSection: .yourRide
+            )
+        }
+
+        // PastRides Section
+        if !reservations.isEmpty {
+            let sortedReservation = reservations.sorted(by: { $0.date > $1.date })
+            snapshot.appendSections([.pastRides])
+            snapshot.appendItems(
+                sortedReservation.map {
                     MyPageItem.pastRides($0)
                 },
-            toSection: .pastRides
-        )
+                toSection: .pastRides
+            )
+        }
+
+        // SignOut Section
+        snapshot.appendSections([.signOutButton])
         snapshot.appendItems([.signOutButton], toSection: .signOutButton)
 
         dataSource.apply(snapshot, animatingDifferences: true)

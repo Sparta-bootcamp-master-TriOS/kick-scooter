@@ -9,8 +9,6 @@ final class MyPageViewController: UIViewController {
 
     weak var delegate: MyPageViewControllerDelegate?
 
-    let pastRidesMock: [PastRidesMock] = PastRidesMock.pastRidesMock
-
     init(myPageViewModel: MyPageViewModel) {
         self.myPageViewModel = myPageViewModel
         super.init(nibName: nil, bundle: nil)
@@ -23,9 +21,10 @@ final class MyPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureCompositionalLayout()
+        myPageViewModel.action?(.fetchUserProfile)
         configureUI()
         configureAutoLayout()
+        configureCompositionalLayout()
     }
 
     private func fetchProfileUser() -> UserProfileUI {
@@ -43,7 +42,7 @@ final class MyPageViewController: UIViewController {
 
     private func configureAutoLayout() {
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
             $0.directionalHorizontalEdges.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
         }
