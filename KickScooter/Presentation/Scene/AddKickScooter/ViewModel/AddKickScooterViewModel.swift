@@ -49,19 +49,22 @@ final class AddKickScooterViewModel {
     }
 
     func saveKickScooter() {
-        locationManager.requestCurrentLocation { [weak self] coordinate in
-            guard let self else { return }
+        locationManager.requestCurrentLocation(
+            onAuthorized: { [weak self] coordinate in
+                guard let self else { return }
 
-            let kickScooter = KickScooter(
-                id: UUID(),
-                battery: self.selectedBatteryLevel.desc,
-                type: self.selectedKickScooterType.rawValue,
-                lon: coordinate.longitude,
-                lat: coordinate.latitude,
-                isAvailable: true
-            )
+                let kickScooter = KickScooter(
+                    id: UUID(),
+                    battery: self.selectedBatteryLevel.desc,
+                    type: self.selectedKickScooterType.rawValue,
+                    lon: coordinate.longitude,
+                    lat: coordinate.latitude,
+                    isAvailable: true
+                )
 
-            self.saveKickScooterUseCase.execute(kickScooter: kickScooter)
-        }
+                self.saveKickScooterUseCase.execute(kickScooter: kickScooter)
+            },
+            onDenied: {}
+        )
     }
 }

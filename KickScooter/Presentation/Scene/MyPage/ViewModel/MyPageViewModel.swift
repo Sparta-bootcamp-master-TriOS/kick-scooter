@@ -13,15 +13,27 @@ final class MyPageViewModel: MyPageViewModelDelegate {
     var onStateChanged: ((State) -> Void)?
 
     private let myPageUseCase: MyPageUseCase
+    private let fetchUserIDUseCase: FetchUserIDUseCase
+    private let clearCredentialsUseCase: ClearCredentialsUseCase
+    private let clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase
+    private let clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
 
     private let mapper = UserUIMapper.shared
 
     private(set) var userProfile: UserProfileUI?
 
     init(
-        myPageUseCase: MyPageUseCase
+        myPageUseCase: MyPageUseCase,
+        fetchUserIDUseCase: FetchUserIDUseCase,
+        clearCredentialsUseCase: ClearCredentialsUseCase,
+        clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase,
+        clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
     ) {
         self.myPageUseCase = myPageUseCase
+        self.fetchUserIDUseCase = fetchUserIDUseCase
+        self.clearCredentialsUseCase = clearCredentialsUseCase
+        self.clearRememberSignInStatusUseCase = clearRememberSignInStatusUseCase
+        self.clearAutoSignInStatusUseCase = clearAutoSignInStatusUseCase
 
         action = { [weak self] action in
             guard let self else { return }
@@ -35,8 +47,15 @@ final class MyPageViewModel: MyPageViewModelDelegate {
     }
 
     func fetchUserProfile() -> UserProfileUI {
-        mapper.map(
-            user: myPageUseCase.fetchUserProfile("joyalina25")
-        )
+        let id = fetchUserIDUseCase.execute()
+        let user = myPageUseCase.fetchUserProfile(id)
+
+        return mapper.map(user: user)
+    }
+
+    func signOut() {
+        clearCredentialsUseCase.execute()
+        clearRememberSignInStatusUseCase.execute()
+        clearAutoSignInStatusUseCase.execute()
     }
 }

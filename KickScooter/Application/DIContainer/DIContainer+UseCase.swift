@@ -2,7 +2,7 @@ extension DIContainer {
     func makeAuthorizeUserUseCase() -> AuthorizeUserUseCase {
         DefaultAuthorizeUserUseCase(
             authorizeUserRepository: makeAuthorizeUserRepository(),
-            userSessionRepository: userSessionRepository
+            userSessionRepository: userSessionRepository ?? makeUserSessionRepository()
         )
     }
 
@@ -15,7 +15,7 @@ extension DIContainer {
     }
 
     func makeUserNameUseCase() -> FetchUserNameUseCase {
-        DefaultFetchUserNameUseCase(userSessionRepository: userSessionRepository)
+        DefaultFetchUserNameUseCase(userSessionRepository: userSessionRepository ?? makeUserSessionRepository())
     }
 
     func makeMyPageUseCase() -> MyPageUseCase {
@@ -38,6 +38,10 @@ extension DIContainer {
         DefaultFetchCredentialsUseCase(credentialsRepository: makeCredentialsRepository())
     }
 
+    func makeClearCredentialsUseCase() -> ClearCredentialsUseCase {
+        DefaultClearCredentialsUseCase(credentialsRepository: makeCredentialsRepository())
+    }
+
     func makeSaveRememberSignInStatusUseCase() -> SaveRememberSignInStatusUseCase {
         DefaultSaveRememberSignInStatusUseCase(rememberSignInStatusRepository: makeRememberSignInStatusRepository())
     }
@@ -46,11 +50,23 @@ extension DIContainer {
         DefaultFetchRememberSignInStatusUseCase(rememberSignInStatusRepository: makeRememberSignInStatusRepository())
     }
 
+    func makeClearRememberSignInStatusUseCase() -> ClearRememberSignInStatusUseCase {
+        DefaultClearRememberSignInStatusUseCase(rememberSignInStatusRepository: makeRememberSignInStatusRepository())
+    }
+
     func makeSaveAutoSignInStatusUseCase() -> SaveAutoSignInStatusUseCase {
         DefaultSaveAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
     }
 
     func makeFetchAutoSignInStatusUseCase() -> FetchAutoSignInStatusUseCase {
         DefaultFetchAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
+    }
+
+    func makeClearAutoSignInStatusUseCase() -> ClearAutoSignInStatusUseCase {
+        DefaultClearAutoSignInStatusUseCase(autoSignInStatusRepository: makeAutoSignInStatusRepository())
+    }
+
+    func makeFetchUserIDUseCase() -> FetchUserIDUseCase {
+        DefaultFetchUserIDUseCase(userSessionRepository: userSessionRepository ?? makeUserSessionRepository())
     }
 }

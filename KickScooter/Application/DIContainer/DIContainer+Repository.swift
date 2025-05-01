@@ -33,21 +33,24 @@ extension DIContainer {
     func makeCredentialsRepository() -> CredentialsRepository {
         DefaultCredentialsRepository(
             saveCredentialsDataSource: makeSaveCredentialsDataSource(),
-            fetchCredentialsDataSource: makeFetchCredentialsDataSource()
+            fetchCredentialsDataSource: makeFetchCredentialsDataSource(),
+            clearCredentialsDataSource: makeClearCredentialsDataSource()
         )
     }
 
     func makeRememberSignInStatusRepository() -> RememberSignInStatusRepository {
         DefaultRememberSignInStatusRepository(
             saveRememberSignInStatusDataSource: makeSaveRememberSignInStatusDataSource(),
-            fetchRememberSignInStatusDataSource: makeFetchRememberSignInStatusDataSource()
+            fetchRememberSignInStatusDataSource: makeFetchRememberSignInStatusDataSource(),
+            clearRememberSignInStatusDataSource: makeClearRememberSignInStatusDataSource()
         )
     }
 
     func makeAutoSignInStatusRepository() -> AutoSignInStatusRepository {
         DefaultAutoSignInStatusRepository(
             saveAutoSignInStatusDataSource: makeSaveAutoSignInStatusDataSource(),
-            fetchAutoSignInStatusDataSource: makeFetchAutoSignInStatusDataSource()
+            fetchAutoSignInStatusDataSource: makeFetchAutoSignInStatusDataSource(),
+            clearAutoSignInStatusDataSource: makeClearAutoSignInStatusDataSource()
         )
     }
 }
