@@ -43,15 +43,17 @@ final class MapViewModel {
     func loadNearbyKickScooter(userCoordinate: CLLocationCoordinate2D) {
         let scooter = fetchKickScooterUseCase.execute()
 
-        let nearbyScooter = scooter.filter { scooter in
-            let lat = scooter.lat
-            let lon = scooter.lon
-            let scooterLocation = CLLocation(latitude: lat, longitude: lon)
-            let userLocation = CLLocation(latitude: userCoordinate.latitude, longitude: userCoordinate.longitude)
+        let nearbyScooter = scooter
+            .filter { $0.isAvailable }
+            .filter { scooter in
+                let lat = scooter.lat
+                let lon = scooter.lon
+                let scooterLocation = CLLocation(latitude: lat, longitude: lon)
+                let userLocation = CLLocation(latitude: userCoordinate.latitude, longitude: userCoordinate.longitude)
 
-            let distance = userLocation.distance(from: scooterLocation)
-            return distance <= 1000
-        }
+                let distance = userLocation.distance(from: scooterLocation)
+                return distance <= 1000
+            }
 
         let uiModel = nearbyScooter.map {
             kickScooterUIMapper.map(kickScooter: $0)

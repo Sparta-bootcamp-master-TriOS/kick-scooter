@@ -6,10 +6,6 @@ extension MapViewController: MKMapViewDelegate {
             return nil
         }
 
-        guard let scooterAnnotation = annotation as? KickScooterAnnotation else {
-            return nil
-        }
-
         guard let annotationView = mapView.dequeueReusableAnnotationView(
             withIdentifier: KickScooterAnnotationView.identifier,
             for: annotation
@@ -19,6 +15,12 @@ extension MapViewController: MKMapViewDelegate {
 
         annotationView.onReserveTapped = { [weak self] kickScooter in
             self?.mapViewModel.saveReservation(kickScooter: kickScooter)
+
+            if let selectedAnnotation = mapView.selectedAnnotations.first {
+                mapView.deselectAnnotation(selectedAnnotation, animated: true)
+
+                mapView.removeAnnotation(selectedAnnotation)
+            }
         }
 
         return annotationView

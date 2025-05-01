@@ -17,6 +17,8 @@ struct SaveReservationDataSource {
             return
         }
 
+        kickScooter.isAvailable = false
+
         let entity = ReservationEntity(context: context)
         entity.date = Date()
         entity.status = true
