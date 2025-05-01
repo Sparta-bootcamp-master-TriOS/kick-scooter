@@ -39,7 +39,8 @@ extension DIContainer {
         MapViewModel(
             mapUseCase: makeMapUseCase(),
             fetchKickScooterUseCase: makeFetchKickScooterUseCase(),
-            saveReservationUseCase: makeSaveReservationUseCase()
+            saveReservationUseCase: makeSaveReservationUseCase(),
+            fetchAddressUseCase: makeFetchAddressUseCase()
         )
     }
 }

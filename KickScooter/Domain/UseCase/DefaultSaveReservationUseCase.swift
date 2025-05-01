@@ -12,10 +12,11 @@ final class DefaultSaveReservationUseCase: SaveReservationUseCase {
         self.userSessionRepository = userSessionRepository
     }
 
-    func execute(kickScooterID: UUID) {
+    func execute(kickScooterID: UUID, address: String) {
         reservationsRepository.save(
             kickScooterID: kickScooterID,
-            userID: userSessionRepository.id()
+            userID: userSessionRepository.id(),
+            address: address
         )
     }
 }
