@@ -6,6 +6,10 @@ extension MapViewController: MKMapViewDelegate {
             return nil
         }
 
+        guard let annotation = annotation as? KickScooterAnnotation else {
+            return nil
+        }
+
         guard let annotationView = mapView.dequeueReusableAnnotationView(
             withIdentifier: KickScooterAnnotationView.identifier,
             for: annotation
@@ -24,5 +28,12 @@ extension MapViewController: MKMapViewDelegate {
         }
 
         return annotationView
+    }
+
+    func mapView(_: MKMapView, didSelect view: MKAnnotationView) {
+        if let calloutView = view.detailCalloutAccessoryView as? KickScooterCalloutView {
+            let hasActiveReservation = mapViewModel.hasActiveReservation()
+            calloutView.toggleEnabled(isEnabled: !hasActiveReservation)
+        }
     }
 }

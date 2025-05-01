@@ -6,7 +6,6 @@ import UIKit
 final class MapViewController: UIViewController {
     let mapViewModel: MapViewModel
 
-    var currentCalloutView: KickScooterCalloutView?
     private let mapBaseView = MapBaseView()
     let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()

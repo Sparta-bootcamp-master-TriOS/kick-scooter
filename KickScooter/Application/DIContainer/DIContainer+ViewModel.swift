@@ -40,7 +40,8 @@ extension DIContainer {
             mapUseCase: makeMapUseCase(),
             fetchKickScooterUseCase: makeFetchKickScooterUseCase(),
             saveReservationUseCase: makeSaveReservationUseCase(),
-            fetchAddressUseCase: makeFetchAddressUseCase()
+            fetchAddressUseCase: makeFetchAddressUseCase(),
+            hasActiveReservationUseCase: makeHasActiveReservationUseCase()
         )
     }
 }
