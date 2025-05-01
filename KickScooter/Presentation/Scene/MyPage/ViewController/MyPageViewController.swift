@@ -9,8 +9,6 @@ final class MyPageViewController: UIViewController {
 
     weak var delegate: MyPageViewControllerDelegate?
 
-    let pastRidesMock: [PastRidesMock] = PastRidesMock.pastRidesMock
-
     init(myPageViewModel: MyPageViewModel) {
         self.myPageViewModel = myPageViewModel
         super.init(nibName: nil, bundle: nil)

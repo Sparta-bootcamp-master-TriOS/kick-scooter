@@ -38,7 +38,7 @@ final class PastRidesCell: UICollectionViewCell {
     private func configureUI() {
         backgroundColor = .triOSTertiaryBackground
 
-        dateLabel.font = .boldSystemFont(ofSize: 16)
+        dateLabel.font = .jalnan(ofSize: 16)
         dateLabel.textColor = .triOSText
 
         totalTimeLabel.text = "총 시간"
@@ -137,6 +137,10 @@ final class PastRidesCell: UICollectionViewCell {
         startValue.text = reservation.startAddress
         endValue.text = reservation.endAddress
         priceValue.text = reservation.totalPrice
+
+        if let image = KickScooterType(rawValue: reservation.kickScooter.type)?.image {
+            scooterImageView.image = UIImage(named: image)
+        }
     }
 
     private func configureAutoLayout() {

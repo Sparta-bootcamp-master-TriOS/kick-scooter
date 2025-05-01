@@ -50,7 +50,14 @@ final class MyPageViewModel: MyPageViewModelDelegate {
         let id = fetchUserIDUseCase.execute()
         let user = myPageUseCase.fetchUserProfile(id)
 
-        return mapper.map(user: user)
+        // delete
+        var userui = mapper.map(user: user)
+        for item in mockReservationsUI {
+            userui.reservations.append(item)
+        }
+
+//        return mapper.map(user: user)
+        return userui
     }
 
     func signOut() {
