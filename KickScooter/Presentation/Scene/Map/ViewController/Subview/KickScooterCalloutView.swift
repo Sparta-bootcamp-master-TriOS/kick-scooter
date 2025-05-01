@@ -66,10 +66,7 @@ final class KickScooterCalloutView: UIView {
         topStackView.alignment = .center
         topStackView.distribution = .fill
 
-        reserveButton.setTitle("예약", for: .normal)
         reserveButton.titleLabel?.font = .jalnan(ofSize: 16)
-        reserveButton.backgroundColor = .triOSMain
-        reserveButton.setTitleColor(.triOSTertiaryBackground, for: .normal)
         reserveButton.layer.cornerRadius = 20
 
         [batteryLabel, batteryRateLabel]
@@ -134,6 +131,13 @@ final class KickScooterCalloutView: UIView {
         batteryRateLabel.text = "\(kickScooter.battery.replacingOccurrences(of: ".0", with: ""))%"
         batteryIcon.image = BatteryLevel(desc: kickScooter.battery)!.symbolImage
         priceLabel.text = "\(kickScooter.kickScooterType!.price) 원"
+    }
+
+    func toggleEnabled(isEnabled: Bool) {
+        reserveButton.isEnabled = isEnabled
+        reserveButton.setTitle(isEnabled ? "예약" : "예약 불가", for: .normal)
+        reserveButton.backgroundColor = isEnabled ? .triOSMain : .triOSBackground
+        reserveButton.setTitleColor(isEnabled ? .triOSTertiaryBackground : .lightGray, for: .normal)
     }
 
     @objc

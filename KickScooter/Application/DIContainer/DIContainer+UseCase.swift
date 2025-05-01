@@ -84,4 +84,11 @@ extension DIContainer {
     func makeFetchAddressUseCase() -> FetchAddressUseCase {
         DefaultFetchAddressUseCase(mapRepository: makeMapRepository())
     }
+
+    func makeHasActiveReservationUseCase() -> HasActiveReservationUseCase {
+        DefaultHasActiveReservationUseCase(
+            reservationsRepository: makeReservationsRepository(),
+            userSessionRepository: userSessionRepository ?? makeUserSessionRepository()
+        )
+    }
 }
