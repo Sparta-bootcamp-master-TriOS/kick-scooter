@@ -58,4 +58,8 @@ extension DIContainer {
     func makeClearAutoSignInStatusDataSource() -> ClearAutoSignInStatusDataSource {
         ClearAutoSignInStatusDataSource()
     }
+
+    func makeFetchKickScooterDataSource() -> FetchKickScooterDataSource {
+        FetchKickScooterDataSource(persistenceController: persistenceController)
+    }
 }

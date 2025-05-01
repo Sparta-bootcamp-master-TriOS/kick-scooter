@@ -16,13 +16,12 @@ final class MapBaseView: UIView {
     }
 
     private func configureUI() {
+        mapView.isZoomEnabled = true
         mapView.showsUserLocation = true
         mapView.pointOfInterestFilter = MKPointOfInterestFilter.excludingAll
 
         addSubview(mapView)
 
-        mapView.isZoomEnabled = true
-        mapView.showsUserLocation = true
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
