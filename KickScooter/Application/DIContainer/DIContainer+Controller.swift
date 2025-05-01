@@ -2,7 +2,7 @@ extension DIContainer {
     func makeTabBarController() -> TabBarController {
         TabBarController(
             addKickScooterViewController: makeAddKickScooterViewController(),
-            testMapVC: TestMapVC(),
+            mapViewController: makeMapViewController(),
             myPageViewController: makeMyPageViewController()
         )
     }
