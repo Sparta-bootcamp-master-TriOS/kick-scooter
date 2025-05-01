@@ -1,3 +1,5 @@
+import CoreLocation
+import MapKit
 import SnapKit
 import UIKit
 
@@ -70,7 +72,18 @@ final class MapViewController: UIViewController {
         }
     }
 
-    private func bindViewModel() {}
+    private func bindViewModel() {
+        mapViewModel.didUpdateKickScooter = { [weak self] scooter in
+            let annotations = scooter.map {
+                let coordinate = CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lon)
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = "킥보드"
+                return annotation
+            }
+            self?.mapBaseView.mapView.addAnnotations(annotations)
+        }
+    }
 
     private func bindButton() {
         mapActionButtonPanel.onLocationButtonTapped = { [weak self] in
@@ -141,5 +154,18 @@ final class MapViewController: UIViewController {
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
         mapActionButtonPanel.toggleState(isOn: isScooterVisible)
+
+        if isScooterVisible {
+            mapViewModel.locationManager.requestCurrentLocation(
+                onAuthorized: { [weak self] coordinate in
+                    self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
+                },
+                onDenied: {}
+            )
+        } else { // 유저 위치는 제거하지 않도록
+            mapBaseView.mapView.removeAnnotations(
+                mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
+            )
+        }
     }
 }

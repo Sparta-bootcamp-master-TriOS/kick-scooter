@@ -69,4 +69,8 @@ extension DIContainer {
     func makeFetchUserIDUseCase() -> FetchUserIDUseCase {
         DefaultFetchUserIDUseCase(userSessionRepository: userSessionRepository ?? makeUserSessionRepository())
     }
+
+    func makeFetchKickScooterUseCase() -> FetchKickScooterUseCase {
+        DefaultFetchKickScooterUseCase(repository: makeKickScooterRepository())
+    }
 }
