@@ -60,6 +60,11 @@ extension MyPageViewController {
 
             cell.configureProperty(reservation)
             cell.layer.cornerRadius = 10
+
+            if let coordinate = myPageViewModel.currentLocation {
+                cell.mapView.locateCurrentCoordinate(coordinate)
+            }
+
             return cell
 
         case .pastRides:

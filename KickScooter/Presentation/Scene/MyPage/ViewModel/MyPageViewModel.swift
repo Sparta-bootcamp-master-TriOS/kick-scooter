@@ -1,4 +1,5 @@
 import Foundation
+import MapKit
 
 final class MyPageViewModel: MyPageViewModelDelegate {
     enum Action {
@@ -18,9 +19,11 @@ final class MyPageViewModel: MyPageViewModelDelegate {
     private let clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase
     private let clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
 
+    let locationManager = LocationManager.shared
     private let mapper = UserUIMapper.shared
 
     private(set) var userProfile: UserProfileUI?
+    private(set) var currentLocation: CLLocationCoordinate2D?
 
     init(
         myPageUseCase: MyPageUseCase,
@@ -64,5 +67,9 @@ final class MyPageViewModel: MyPageViewModelDelegate {
         clearCredentialsUseCase.execute()
         clearRememberSignInStatusUseCase.execute()
         clearAutoSignInStatusUseCase.execute()
+    }
+
+    func updateCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+        currentLocation = coordinate
     }
 }

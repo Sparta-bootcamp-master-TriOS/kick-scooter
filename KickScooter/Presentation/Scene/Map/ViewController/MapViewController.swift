@@ -124,7 +124,7 @@ final class MapViewController: UIViewController {
                   let lon = Double(result.lon) else { return }
 
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            self?.mapBaseView.locateCurrentCoordinate(coordinate, zoomLevel: 0.01)
+            self?.mapBaseView.locateCurrentCoordinate(coordinate)
             self?.mapSearchResultView.isHidden = true
             self?.mapSearchBarWrapperView.searchBar.resignFirstResponder()
         }
