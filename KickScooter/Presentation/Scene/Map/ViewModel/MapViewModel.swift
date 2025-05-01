@@ -5,6 +5,9 @@ final class MapViewModel {
 
     var didUpdateResults: (() -> Void)?
 
+    let locationManager = LocationManager.shared
+    var hasRequestedLocation = false
+
     init(mapUseCase: MapUseCase) {
         self.mapUseCase = mapUseCase
     }
