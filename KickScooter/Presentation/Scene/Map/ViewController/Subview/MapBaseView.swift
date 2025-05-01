@@ -20,6 +20,11 @@ final class MapBaseView: UIView {
         mapView.showsUserLocation = true
         mapView.pointOfInterestFilter = MKPointOfInterestFilter.excludingAll
 
+        mapView.register(
+            KickScooterAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: KickScooterAnnotationView.identifier
+        )
+
         addSubview(mapView)
 
         mapView.snp.makeConstraints {

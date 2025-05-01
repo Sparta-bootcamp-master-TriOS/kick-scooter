@@ -6,11 +6,13 @@ import UIKit
 final class MapViewController: UIViewController {
     let mapViewModel: MapViewModel
 
+    var currentCalloutView: KickScooterCalloutView?
     private let mapBaseView = MapBaseView()
     private let mapSearchBarView = MapSearchBarView()
     private let mapActionButtonPanel = MapActionButtonPanel()
 
     private var isScooterVisible = false
+    var currentAnnotationCoordinate: CLLocationCoordinate2D?
 
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -46,6 +48,8 @@ final class MapViewController: UIViewController {
     private func configureUI() {
         view.bringSubviewToFront(mapSearchBarView)
 
+        mapBaseView.mapView.delegate = self
+
         [mapBaseView, mapActionButtonPanel, mapSearchBarView, loadingIndicator]
             .forEach { view.addSubview($0) }
 
@@ -73,14 +77,12 @@ final class MapViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        mapViewModel.didUpdateKickScooter = { [weak self] scooter in
-            let annotations = scooter.map {
-                let coordinate = CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lon)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "킥보드"
-                return annotation
+        mapViewModel.didUpdateKickScooter = { [weak self] scooters in
+            let annotations = scooters.map { scooter in
+                let coordinate = CLLocationCoordinate2D(latitude: scooter.lat, longitude: scooter.lon)
+                return KickScooterAnnotation(coordinate: coordinate, kickScooter: scooter)
             }
+
             self?.mapBaseView.mapView.addAnnotations(annotations)
         }
     }

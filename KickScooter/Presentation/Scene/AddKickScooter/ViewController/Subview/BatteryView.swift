@@ -25,7 +25,7 @@ final class BatteryView: UIView {
         batteryIcon.contentMode = .center
 
         let batteryLabel = UILabel()
-        batteryLabel.text = "Battery"
+        batteryLabel.text = "배터리"
         batteryLabel.font = .jalnan(ofSize: 12)
         batteryLabel.textColor = .triOSSecondaryText
 
