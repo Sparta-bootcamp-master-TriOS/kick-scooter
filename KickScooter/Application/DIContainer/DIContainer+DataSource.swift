@@ -63,6 +63,10 @@ extension DIContainer {
         FetchKickScooterDataSource(persistenceController: persistenceController)
     }
 
+    func makeUpdateReservationDataSource() -> UpdateReservationDataSource {
+        UpdateReservationDataSource(persisrenceController: persistenceController)
+    }
+
     func makeSaveReservationDataSource() -> SaveReservationDataSource {
         SaveReservationDataSource(persistenceController: persistenceController)
     }

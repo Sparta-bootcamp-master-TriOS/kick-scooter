@@ -6,6 +6,7 @@ final class MyPageViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<MyPageSection, MyPageItem>!
 
     let myPageViewModel: MyPageViewModel
+    var userProfile: UserProfileUI?
 
     weak var delegate: MyPageViewControllerDelegate?
 
@@ -22,6 +23,7 @@ final class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         myPageViewModel.action?(.fetchUserProfile)
+        bindViewModelState()
         configureUI()
         configureAutoLayout()
         configureCompositionalLayout()
@@ -33,6 +35,20 @@ final class MyPageViewController: UIViewController {
 
     private func fetchProfileUser() -> UserProfileUI {
         myPageViewModel.fetchUserProfile()
+    }
+
+    private func bindViewModelState() {
+        myPageViewModel.onStateChanged = { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case let .userProfile(userProfile):
+                if userProfile.reservations.first?.status == true {
+                    self.applySnapShot(with: userProfile)
+                } else {
+                    self.removeCurrentReservationSectionIfNeeded(userProfile)
+                }
+            }
+        }
     }
 
     private func configureUI() {

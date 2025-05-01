@@ -21,4 +21,20 @@ struct ReservationUIMapper {
             return reservation
         }
     }
+
+    func map(reservation: ReservationUI) -> Reservation {
+        Reservation(
+            date: reservation.date,
+            status: reservation.status,
+            startLon: reservation.startLon,
+            startLat: reservation.startLat,
+            endLon: reservation.endLon,
+            endLat: reservation.endLat,
+            startAddress: reservation.startAddress,
+            endAddress: reservation.endAddress,
+            totalTime: reservation.totalTime,
+            totalPrice: reservation.totalPrice,
+            kickScooter: kickScooterMapper.map(kickScooter: reservation.kickScooter)
+        )
+    }
 }

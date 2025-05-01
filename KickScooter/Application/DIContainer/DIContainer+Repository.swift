@@ -18,7 +18,8 @@ extension DIContainer {
     func makeMyPageRepository() -> MyPageRepository {
         DefaultMyPageRepository(
             userProfileDataSource: makeUserProfileDataSource(),
-            rideHistoryDataSource: makeRideHistoryDataSource()
+            rideHistoryDataSource: makeRideHistoryDataSource(),
+            updateReservationDataSource: makeUpdateReservationDataSource()
         )
     }
 
