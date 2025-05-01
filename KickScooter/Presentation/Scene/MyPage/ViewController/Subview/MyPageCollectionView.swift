@@ -10,6 +10,7 @@ final class MyPageCollectionView: UIView {
             collectionViewLayout: layout()
         )
         collectionView.register(UserProfileCell.self, forCellWithReuseIdentifier: UserProfileCell.identifier)
+        collectionView.register(YourRideCell.self, forCellWithReuseIdentifier: YourRideCell.identifier)
         collectionView.register(PastRidesCell.self, forCellWithReuseIdentifier: PastRidesCell.identifier)
         collectionView.register(SignOutButtonCell.self, forCellWithReuseIdentifier: SignOutButtonCell.identifier)
 
@@ -43,6 +44,7 @@ final class MyPageCollectionView: UIView {
 
     private func configureUI() {
         collectionView.backgroundColor = .triOSBackground
+        collectionView.clipsToBounds = false
 
         [
             collectionView,
@@ -65,28 +67,35 @@ extension MyPageCollectionView {
             let section = MyPageSection.allCases[sectionIndex]
 
             // 1. 공통 Item, Group 정의
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(90)
-            )
+            let itemSize: NSCollectionLayoutSize
+            if section == .yourRide {
+                itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(340)
+                )
+            } else {
+                itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(90)
+                )
+            }
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(50)
+                heightDimension: itemSize.heightDimension
             )
             let group = NSCollectionLayoutGroup.vertical(
                 layoutSize: groupSize,
                 subitems: [item]
             )
-            group.interItemSpacing = .fixed(15)
 
             let sectionLayout = NSCollectionLayoutSection(group: group)
             sectionLayout.interGroupSpacing = 15
+            sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
 
             // 2. 섹션에 따라 Header 추가
-//            if section == .yourRide || section == .pastRides {
-            if section == .pastRides {
+            if section == .yourRide || section == .pastRides {
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(50)
@@ -99,7 +108,6 @@ extension MyPageCollectionView {
                 )
                 sectionLayout.boundarySupplementaryItems = [header]
             }
-
             return sectionLayout
         }
     }

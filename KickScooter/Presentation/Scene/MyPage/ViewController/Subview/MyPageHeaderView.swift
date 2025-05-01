@@ -19,7 +19,7 @@ final class MyPageHeaderView: UICollectionReusableView {
     private func configureUI() {
         backgroundColor = .triOSBackground
 
-        titleLabel.font = .boldSystemFont(ofSize: 22)
+        titleLabel.font = .jalnan(ofSize: 22)
         titleLabel.textColor = .triOSText
 
         [

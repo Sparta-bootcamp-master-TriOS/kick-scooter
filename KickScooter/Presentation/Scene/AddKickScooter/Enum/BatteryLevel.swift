@@ -10,4 +10,13 @@ enum BatteryLevel: Int {
         case .low: 25.0
         }
     }
+
+    init?(desc: Double) {
+        switch desc {
+        case 100.0: self = .high
+        case 50.0: self = .mid
+        case 25.0: self = .low
+        default: return nil
+        }
+    }
 }
