@@ -1,13 +1,16 @@
 final class DefaultCredentialsRepository: CredentialsRepository {
     private let saveCredentialsDataSource: SaveCredentialsDataSource
     private let fetchCredentialsDataSource: FetchCredentialsDataSource
+    private let clearCredentialsDataSource: ClearCredentialsDataSource
 
     init(
         saveCredentialsDataSource: SaveCredentialsDataSource,
-        fetchCredentialsDataSource: FetchCredentialsDataSource
+        fetchCredentialsDataSource: FetchCredentialsDataSource,
+        clearCredentialsDataSource: ClearCredentialsDataSource
     ) {
         self.saveCredentialsDataSource = saveCredentialsDataSource
         self.fetchCredentialsDataSource = fetchCredentialsDataSource
+        self.clearCredentialsDataSource = clearCredentialsDataSource
     }
 
     func save(user: UserSignIn) {
@@ -16,5 +19,9 @@ final class DefaultCredentialsRepository: CredentialsRepository {
 
     func fetch() -> (String, String)? {
         fetchCredentialsDataSource.execute()
+    }
+
+    func clear() {
+        clearCredentialsDataSource.execute()
     }
 }

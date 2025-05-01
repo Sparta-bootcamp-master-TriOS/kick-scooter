@@ -1,4 +1,4 @@
-protocol MyPageViewModelDelegate {
+protocol MyPageViewModelDelegate: AnyObject {
     associatedtype Action
     associatedtype State
 

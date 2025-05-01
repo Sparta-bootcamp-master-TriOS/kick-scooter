@@ -11,6 +11,7 @@ final class MyPageCollectionView: UIView {
         )
         collectionView.register(UserProfileCell.self, forCellWithReuseIdentifier: UserProfileCell.identifier)
         collectionView.register(PastRidesCell.self, forCellWithReuseIdentifier: PastRidesCell.identifier)
+        collectionView.register(SignOutButtonCell.self, forCellWithReuseIdentifier: SignOutButtonCell.identifier)
 
         collectionView.register(
             MyPageHeaderView.self,

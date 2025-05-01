@@ -10,6 +10,8 @@ final class Coordinator {
     }
 
     func start() {
+        diContainer.reset()
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.shadowColor = .clear

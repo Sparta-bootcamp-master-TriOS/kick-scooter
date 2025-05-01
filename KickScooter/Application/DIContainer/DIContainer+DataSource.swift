@@ -31,6 +31,10 @@ extension DIContainer {
         FetchCredentialsDataSource()
     }
 
+    func makeClearCredentialsDataSource() -> ClearCredentialsDataSource {
+        ClearCredentialsDataSource()
+    }
+
     func makeSaveRememberSignInStatusDataSource() -> SaveRememberSignInStatusDataSource {
         SaveRememberSignInStatusDataSource()
     }
@@ -39,11 +43,19 @@ extension DIContainer {
         FetchRememberSignInStatusDataSource()
     }
 
+    func makeClearRememberSignInStatusDataSource() -> ClearRememberSignInStatusDataSource {
+        ClearRememberSignInStatusDataSource()
+    }
+
     func makeSaveAutoSignInStatusDataSource() -> SaveAutoSignInStatusDataSource {
         SaveAutoSignInStatusDataSource()
     }
 
     func makeFetchAutoSignInStatusDataSource() -> FetchAutoSignInStatusDataSource {
         FetchAutoSignInStatusDataSource()
+    }
+
+    func makeClearAutoSignInStatusDataSource() -> ClearAutoSignInStatusDataSource {
+        ClearAutoSignInStatusDataSource()
     }
 }

@@ -27,7 +27,10 @@ extension DIContainer {
 
     func makeMyPageViewModel() -> MyPageViewModel {
         MyPageViewModel(
-            myPageUseCase: makeMyPageUseCase()
+            myPageUseCase: makeMyPageUseCase(),
+            clearCredentialsUseCase: makeClearCredentialsUseCase(),
+            clearRememberSignInStatusUseCase: makeClearRememberSignInStatusUseCase(),
+            clearAutoSignInStatusUseCase: makeClearAutoSignInStatusUseCase()
         )
     }
 

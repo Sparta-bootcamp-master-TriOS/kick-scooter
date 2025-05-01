@@ -1,0 +1,3 @@
+protocol ClearRememberSignInStatusUseCase {
+    func execute()
+}
