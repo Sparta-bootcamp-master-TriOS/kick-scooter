@@ -11,6 +11,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
 
         locationManager.delegate = self
+        locationManager.distanceFilter = 10
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
     }
 
     func requestCurrentLocation(
@@ -32,6 +34,27 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         default:
             break
         }
+    }
+
+    func startTrackingLocation(onUpdate: @escaping (CLLocationCoordinate2D) -> Void) {
+        let status = locationManager.authorizationStatus
+
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            onLocationUpdate = onUpdate
+            locationManager.startUpdatingLocation()
+        case .notDetermined:
+            onLocationUpdate = onUpdate
+            locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            break
+        default:
+            break
+        }
+    }
+
+    func stopTrackingLocation() {
+        locationManager.stopUpdatingLocation()
     }
 
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

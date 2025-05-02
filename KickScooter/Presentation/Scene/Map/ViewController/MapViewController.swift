@@ -63,7 +63,10 @@ final class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        locateCurrentCoordinate()
+//        locateCurrentCoordinate()
+        if isScooterVisible {
+            startLiveScooterTracking()
+        }
     }
 
     private func configureUI() {
@@ -214,12 +217,25 @@ final class MapViewController: UIViewController {
         )
     }
 
+    private func startLiveScooterTracking() {
+        mapViewModel.locationManager.startTrackingLocation { [weak self] coordinate in
+            self?.mapViewModel.loadNearbyKickScooter(userCoordinate: coordinate)
+            self?.mapBaseView.locateCurrentCoordinate(coordinate)
+        }
+    }
+
+    private func stopLiveScooterTracking() {
+        mapViewModel.locationManager.stopTrackingLocation()
+    }
+
     @objc private func toggleScooterVisibility() {
         isScooterVisible.toggle()
 
         if isScooterVisible {
+            startLiveScooterTracking()
             fetchKickScooterData()
         } else {
+            stopLiveScooterTracking()
             mapBaseView.mapView.removeAnnotations(
                 mapBaseView.mapView.annotations.filter { !($0 is MKUserLocation) }
             )
