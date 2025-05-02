@@ -103,8 +103,6 @@ final class PastRidesCell: UICollectionViewCell {
         noItemLabel.font = .jalnan(ofSize: 20)
         noItemLabel.isHidden = true
 
-        addSubview(noItemLabel)
-
         [
             dateLabel,
             hStackView,
@@ -183,10 +181,6 @@ final class PastRidesCell: UICollectionViewCell {
         scooterStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(18)
             $0.trailing.equalToSuperview().inset(20)
-        }
-
-        noItemLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(20)
         }
     }
 

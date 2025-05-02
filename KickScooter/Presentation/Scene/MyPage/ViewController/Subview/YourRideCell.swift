@@ -4,6 +4,9 @@ import UIKit
 final class YourRideCell: UICollectionViewCell {
     static let identifier = "YourRideCell"
 
+    private var timer: Timer?
+    private var reservationDate: Date?
+
     let mapView = MyPageMap()
 
     private let reservationView = UIView()
@@ -98,9 +101,15 @@ final class YourRideCell: UICollectionViewCell {
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.titleAlignment = .center
-        config.title = "반납"
         config.baseBackgroundColor = .triOSRedButton
         config.baseForegroundColor = .triOSTertiaryBackground
+
+        let attributedTitle = AttributedString("반납", attributes: AttributeContainer([
+            .font: UIFont.jalnan(ofSize: 16),
+            .foregroundColor: UIColor.triOSTertiaryBackground,
+        ]))
+        config.attributedTitle = attributedTitle
+
         returnButton.configuration = config
 
         let action = UIAction { [weak self] _ in
@@ -113,9 +122,6 @@ final class YourRideCell: UICollectionViewCell {
         noItemLabel.textColor = .triOSSecondaryText
         noItemLabel.font = .jalnan(ofSize: 20)
         noItemLabel.isHidden = true
-
-        addSubview(noItemLabel)
-
         [
             mapView,
             reservationView,
@@ -152,10 +158,16 @@ final class YourRideCell: UICollectionViewCell {
 
     private func tapped() {
         onButtonTapped?()
+
+        timer?.invalidate()
+        timer = nil
     }
 
     func configureProperty(_ reservation: ReservationUI) {
-        totalTime.text = Formatter.getTotalTime(from: reservation.date)
+//        totalTime.text = Formatter.getTotalTime(from: reservation.date)
+        reservationDate = reservation.date
+        startTimer()
+        updateTotalTime()
 
         if let image = KickScooterType(rawValue: reservation.kickScooter.type)?.image {
             scooterImageView.image = UIImage(named: image)
@@ -237,9 +249,6 @@ final class YourRideCell: UICollectionViewCell {
             $0.height.equalTo(36)
             $0.bottom.equalToSuperview().inset(19)
         }
-        noItemLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(20)
-        }
     }
 
     func configureEmptyState() {
@@ -250,5 +259,20 @@ final class YourRideCell: UICollectionViewCell {
 
     func updateUI(model: String) {
         confirmLabel.text = model
+    }
+
+    private func startTimer() {
+        timer?.invalidate()
+
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateTotalTime()
+        }
+
+        RunLoop.main.add(timer!, forMode: .common)
+    }
+
+    private func updateTotalTime() {
+        guard let date = reservationDate else { return }
+        totalTime.text = Formatter.getTotalTime(from: date)
     }
 }

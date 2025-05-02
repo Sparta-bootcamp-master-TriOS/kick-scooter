@@ -149,7 +149,6 @@ extension MyPageViewController {
 
         snapshot.appendSections([.userProfile, .yourRide, .pastRides, .signOutButton])
 
-
         snapshot.appendItems([.userProfile(userProfile)], toSection: .userProfile)
 
         if let latestReservation = latestReservation {
