@@ -9,6 +9,7 @@ final class MyPageViewModel: MyPageViewModelDelegate {
 
     enum State {
         case userProfile(UserProfileUI)
+        case didUpdateReservation(UserProfileUI)
     }
 
     var action: ((Action) -> Void)?
@@ -19,6 +20,8 @@ final class MyPageViewModel: MyPageViewModelDelegate {
     private let clearCredentialsUseCase: ClearCredentialsUseCase
     private let clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase
     private let clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
+    private let fetchActiveReservationUseCase: FetchActiveReservationUseCase
+    private let fetchAddressUseCase: FetchAddressUseCase
 
     private let userMapper = UserUIMapper.shared
     private let reservationMapper = ReservationUIMapper.shared
@@ -40,13 +43,17 @@ final class MyPageViewModel: MyPageViewModelDelegate {
         fetchUserIDUseCase: FetchUserIDUseCase,
         clearCredentialsUseCase: ClearCredentialsUseCase,
         clearRememberSignInStatusUseCase: ClearRememberSignInStatusUseCase,
-        clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase
+        clearAutoSignInStatusUseCase: ClearAutoSignInStatusUseCase,
+        fetchActiveReservationUseCase: FetchActiveReservationUseCase,
+        fetchAddressUseCase: FetchAddressUseCase
     ) {
         self.myPageUseCase = myPageUseCase
         self.fetchUserIDUseCase = fetchUserIDUseCase
         self.clearCredentialsUseCase = clearCredentialsUseCase
         self.clearRememberSignInStatusUseCase = clearRememberSignInStatusUseCase
         self.clearAutoSignInStatusUseCase = clearAutoSignInStatusUseCase
+        self.fetchActiveReservationUseCase = fetchActiveReservationUseCase
+        self.fetchAddressUseCase = fetchAddressUseCase
 
         action = { [weak self] action in
             guard let self else { return }
@@ -54,42 +61,45 @@ final class MyPageViewModel: MyPageViewModelDelegate {
             case .fetchUserProfile:
                 self.userProfile = fetchUserProfile()
             case let .updateReservation(reservation):
-                if updateReservation(reservation) {
-                    self.userProfile = fetchUserProfile()
-                }
+                updateReservation(reservation)
+                self.userProfile = fetchUserProfile()
             }
         }
     }
 
-    private func updateReservation(_ reservation: ReservationUI) -> Bool {
-        guard var latestReservation = userProfile?.reservations.first else { return false }
-        latestReservation.status = reservation.status
-        latestReservation.endLat = reservation.endLat
-        latestReservation.endLon = reservation.endLon
-        latestReservation.totalTime = Formatter.getTotalTime(from: latestReservation.date, reservation.date)
-        latestReservation.kickScooter.lat = reservation.endLat
-        latestReservation.kickScooter.lon = reservation.endLon
-        latestReservation.kickScooter.isAvailable = reservation.kickScooter.isAvailable
-        let mappedReservation = reservationMapper.map(reservation: latestReservation)
+    private func updateReservation(_ reservation: ReservationUI) {
+        guard let lon = currentLocation?.longitude,
+              let lat = currentLocation?.latitude
+        else {
+            return
+        }
 
-        guard let userId = userProfile?.id else { return false }
-        return myPageUseCase.updateReservation(
-            userId: userId,
-            reservation: mappedReservation
-        )
+        fetchAddressUseCase.execute(lon: "\(lon)", lat: "\(lat)") { [weak self] result in
+            guard let self else { return }
+
+            if case let .success(address) = result {
+                let latestReservation = self.reservationMapper.map(
+                    reservation,
+                    self.currentLocation,
+                    address
+                )
+
+                myPageUseCase.updateReservation(reservation: latestReservation)
+
+                let updatedUserProfile = self.fetchUserProfile()
+                self.userProfile = updatedUserProfile
+                onStateChanged?(.didUpdateReservation(updatedUserProfile))
+            }
+        }
     }
 
     func fetchUserProfile() -> UserProfileUI {
         let id = fetchUserIDUseCase.execute()
+
         let user = myPageUseCase.fetchUserProfile(id)
 
-        // delete
-        var userui = userMapper.map(user: user)
-        for item in mockReservationsUI {
-            userui.reservations.append(item)
-        }
+        let userui = userMapper.map(user: user)
 
-//        return mapper.map(user: user)
         return userui
     }
 

@@ -26,4 +26,8 @@ enum KickScooterType: Int, CaseIterable {
         case .cheap: return "1,000"
         }
     }
+
+    var priceValue: Int {
+        return Int(price.replacingOccurrences(of: ",", with: "")) ?? 0
+    }
 }

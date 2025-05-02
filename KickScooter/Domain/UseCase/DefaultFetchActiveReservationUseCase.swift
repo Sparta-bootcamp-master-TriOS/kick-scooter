@@ -1,4 +1,4 @@
-final class DefaultHasActiveReservationUseCase: HasActiveReservationUseCase {
+final class DefaultFetchActiveReservationUseCase: FetchActiveReservationUseCase {
     private let reservationsRepository: ReservationsRepository
     private let userSessionRepository: UserSessionRepository
 
@@ -10,9 +10,9 @@ final class DefaultHasActiveReservationUseCase: HasActiveReservationUseCase {
         self.userSessionRepository = userSessionRepository
     }
 
-    func execute() -> Bool {
+    func execute() -> Reservation? {
         let userId = userSessionRepository.id()
 
-        return reservationsRepository.hasActive(userID: userId)
+        return reservationsRepository.active(userID: userId)
     }
 }

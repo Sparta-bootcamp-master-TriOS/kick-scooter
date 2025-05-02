@@ -105,12 +105,19 @@ final class MapViewController: UIViewController {
 
     private func bindViewModel() {
         mapViewModel.didUpdateKickScooter = { [weak self] scooters in
+            guard let self else { return }
+
+            let existingAnnotations = self.mapBaseView.mapView.annotations.filter {
+                $0 is KickScooterAnnotation
+            }
+            self.mapBaseView.mapView.removeAnnotations(existingAnnotations)
+
             let annotations = scooters.map { scooter in
                 let coordinate = CLLocationCoordinate2D(latitude: scooter.lat, longitude: scooter.lon)
                 return KickScooterAnnotation(coordinate: coordinate, kickScooter: scooter)
             }
 
-            self?.mapBaseView.mapView.addAnnotations(annotations)
+            self.mapBaseView.mapView.addAnnotations(annotations)
         }
 
         mapViewModel.didUpdateResults = { [weak self] in

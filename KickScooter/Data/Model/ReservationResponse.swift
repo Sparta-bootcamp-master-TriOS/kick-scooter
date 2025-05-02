@@ -1,6 +1,7 @@
 import Foundation
 
 struct ReservationResponse {
+    let id: UUID
     let date: Date
     let status: Bool
     let startLon: Double

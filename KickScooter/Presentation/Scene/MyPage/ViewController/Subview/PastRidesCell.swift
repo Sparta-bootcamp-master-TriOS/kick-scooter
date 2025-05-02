@@ -24,6 +24,8 @@ final class PastRidesCell: UICollectionViewCell {
     private let scooterImageView = UIImageView()
     private let scooterLabel = UILabel()
 
+    private let noItemLabel = UILabel()
+
     override init(frame _: CGRect) {
         super.init(frame: .zero)
         configureUI()
@@ -94,6 +96,14 @@ final class PastRidesCell: UICollectionViewCell {
         scooterLabel.font = .jalnan(ofSize: 12)
         scooterLabel.textColor = .triOSSecondaryText
         scooterLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        noItemLabel.text = "지난 이용 내역이 없습니다."
+        noItemLabel.textAlignment = .center
+        noItemLabel.textColor = .triOSSecondaryText
+        noItemLabel.font = .jalnan(ofSize: 20)
+        noItemLabel.isHidden = true
+
+        addSubview(noItemLabel)
 
         [
             dateLabel,
@@ -174,5 +184,16 @@ final class PastRidesCell: UICollectionViewCell {
             $0.top.equalToSuperview().offset(18)
             $0.trailing.equalToSuperview().inset(20)
         }
+
+        noItemLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(20)
+        }
+    }
+
+    func configureEmptyState() {
+        dateLabel.isHidden = true
+        hStackView.isHidden = true
+        scooterStackView.isHidden = true
+        noItemLabel.isHidden = false
     }
 }

@@ -64,7 +64,7 @@ extension DIContainer {
     func makeReservationsRepository() -> ReservationsRepository {
         DefaultReservationsRepository(
             saveReservationDataSource: makeSaveReservationDataSource(),
-            hasActiveReservation: makeHasActiveReservation()
+            fetchActiveReservation: makeFetchActiveReservation()
         )
     }
 }

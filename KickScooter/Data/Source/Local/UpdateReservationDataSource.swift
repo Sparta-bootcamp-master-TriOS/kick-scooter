@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 
 final class UpdateReservationDataSource {
@@ -7,40 +8,42 @@ final class UpdateReservationDataSource {
         self.persisrenceController = persisrenceController
     }
 
-    /// CoreData에서 UserEntity 데이터를 가져오는 메서드
-    ///
-    /// - Returns:userId 로 검색한 UserEntity 결과 데이터
-    func execute(userId: String, reservation: Reservation) -> Bool {
+    func execute(reservation: Reservation) {
         let context = persisrenceController.context
-        let cleanedID = userId.replacingOccurrences(of: "@", with: "")
 
-        // 1. Fetch User
-        guard let user = UserProfileDataSource(
-            persisrenceController: persisrenceController
-        ).execute(cleanedID) else {
-            print("User Not Found")
-            return false
+        guard let reservationEntity = fetchReservation(by: reservation.id, in: context),
+              let kickScooterEntity = fetchKickScooter(by: reservation.kickScooter.id, in: context)
+        else {
+            return
         }
 
-        // 2. User의 Reservations 중 status == true인 것만 필터
-        if let reservations = user.reservations as? Set<ReservationEntity> {
-            let filltered = reservations.filter { $0.status }
+        kickScooterEntity.isAvailable = true
+        kickScooterEntity.lon = reservation.endLon!
+        kickScooterEntity.lat = reservation.endLat!
 
-            // 3. 필요한 속성 업데이트
-            for attribute in filltered {
-                attribute.totalTime = reservation.totalTime
-                attribute.totalPrice = reservation.totalPrice
-                attribute.status = reservation.status
-                attribute.endLat = reservation.endLat
-                attribute.endLon = reservation.endLon
-                attribute.endAddress = reservation.endAddress
-            }
+        reservationEntity.status = false
+        reservationEntity.endLon = reservation.endLon as NSNumber?
+        reservationEntity.endLat = reservation.endLat as NSNumber?
+        reservationEntity.endAddress = reservation.endAddress
+        reservationEntity.totalTime = reservation.totalTime
+        reservationEntity.totalPrice = reservation.totalPrice
 
-            try? context.save()
-            return true
-        } else {
-            print("No reservations found")
-            return false
-        }
+        persisrenceController.save()
+    }
+
+    private func fetchReservation(by id: UUID, in context: NSManagedObjectContext) -> ReservationEntity? {
+        let request = ReservationEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+
+        return try? context.fetch(request).first
+    }
+
+    private func fetchKickScooter(by id: UUID, in context: NSManagedObjectContext) -> KickScooterEntity? {
+        let request = KickScooterEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+
+        return try? context.fetch(request).first
     }
 }

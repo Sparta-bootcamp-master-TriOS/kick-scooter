@@ -7,8 +7,8 @@ enum MyPageSection: CaseIterable {
     var title: String {
         switch self {
         case .userProfile: return ""
-        case .yourRide: return "Your Ride"
-        case .pastRides: return "Past Rides"
+        case .yourRide: return "이용중인 킥보드"
+        case .pastRides: return "지난 이용 내역"
         case .signOutButton: return ""
         }
     }

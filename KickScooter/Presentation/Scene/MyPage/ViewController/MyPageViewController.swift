@@ -31,22 +31,20 @@ final class MyPageViewController: UIViewController {
 
     override func viewWillAppear(_: Bool) {
         locateCurrentCoordinate()
-    }
-
-    private func fetchProfileUser() -> UserProfileUI {
-        myPageViewModel.fetchUserProfile()
+        myPageViewModel.action?(.fetchUserProfile)
     }
 
     private func bindViewModelState() {
         myPageViewModel.onStateChanged = { [weak self] state in
             guard let self else { return }
+
             switch state {
             case let .userProfile(userProfile):
-                if userProfile.reservations.first?.status == true {
-                    self.applySnapShot(with: userProfile)
-                } else {
-                    self.removeCurrentReservationSectionIfNeeded(userProfile)
-                }
+                self.applySnapShot(with: userProfile)
+                self.removeCurrentReservationSectionIfNeeded(userProfile)
+            case let .didUpdateReservation(userProfile):
+                self.applySnapShot(with: userProfile)
+                self.removeCurrentReservationSectionIfNeeded(userProfile)
             }
         }
     }

@@ -5,6 +5,7 @@ struct ReservationResponseMapper {
 
     func map(from entity: ReservationEntity) -> ReservationResponse {
         ReservationResponse(
+            id: entity.id,
             date: entity.date,
             status: entity.status,
             startLon: entity.startLon,
@@ -21,6 +22,7 @@ struct ReservationResponseMapper {
 
     func map(from response: ReservationResponse) -> Reservation {
         Reservation(
+            id: response.id,
             date: response.date,
             status: response.status,
             startLon: response.startLon,

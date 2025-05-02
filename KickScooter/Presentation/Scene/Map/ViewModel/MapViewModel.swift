@@ -6,7 +6,7 @@ final class MapViewModel {
     private let fetchKickScooterUseCase: FetchKickScooterUseCase
     private let saveReservationUseCase: SaveReservationUseCase
     private let fetchAddressUseCase: FetchAddressUseCase
-    private let hasActiveReservationUseCase: HasActiveReservationUseCase
+    private let fetchActiveReservationUseCase: FetchActiveReservationUseCase
 
     private let kickScooterUIMapper = KickScooterUIMapper.shared
 
@@ -25,13 +25,13 @@ final class MapViewModel {
         fetchKickScooterUseCase: FetchKickScooterUseCase,
         saveReservationUseCase: SaveReservationUseCase,
         fetchAddressUseCase: FetchAddressUseCase,
-        hasActiveReservationUseCase: HasActiveReservationUseCase
+        fetchActiveReservationUseCase: FetchActiveReservationUseCase
     ) {
         self.mapUseCase = mapUseCase
         self.fetchKickScooterUseCase = fetchKickScooterUseCase
         self.saveReservationUseCase = saveReservationUseCase
         self.fetchAddressUseCase = fetchAddressUseCase
-        self.hasActiveReservationUseCase = hasActiveReservationUseCase
+        self.fetchActiveReservationUseCase = fetchActiveReservationUseCase
     }
 
     func clearSearchResults() {
@@ -89,6 +89,10 @@ final class MapViewModel {
     }
 
     func hasActiveReservation() -> Bool {
-        hasActiveReservationUseCase.execute()
+        guard let hasActive = fetchActiveReservationUseCase.execute() else {
+            return false
+        }
+
+        return true
     }
 }

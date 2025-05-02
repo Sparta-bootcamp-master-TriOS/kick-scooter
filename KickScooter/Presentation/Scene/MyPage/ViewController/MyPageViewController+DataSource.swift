@@ -42,31 +42,25 @@ extension MyPageViewController {
             return cell
 
         case .yourRide:
-            guard case let .yourRide(latestReservation) = item else {
-                print("[Error] Failed Fetch YourRide Item")
-                return UICollectionViewCell()
-            }
-
-            guard latestReservation.status == true else {
-                print("[Warning] reservation.status == false → 셀 생성하지 않음")
-                return UICollectionViewCell()
-            }
-
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: YourRideCell.identifier, for: indexPath
             ) as? YourRideCell else {
                 fatalError("[Error] Failed Dequeue YourRide Cell")
             }
 
-            cell.configureProperty(latestReservation)
+            guard case let .yourRide(reservation) = item else {
+                fatalError("[Error] Invalid item type in yourRide section")
+            }
+
+            cell.updateUI(model: reservation.kickScooter.kickScooterType!.model)
+            cell.configureProperty(reservation)
             cell.layer.cornerRadius = 10
 
             if let coordinate = myPageViewModel.currentLocation {
                 cell.mapView.locateCurrentCoordinate(coordinate)
             }
 
-            // Return Button Tapped
-            cell.onButtonTapped = { [weak self] reservation in
+            cell.onButtonTapped = { [weak self] in
                 self?.showConfirmAlert(reservation)
             }
 
@@ -79,14 +73,15 @@ extension MyPageViewController {
                 fatalError("[Error] Failed Dequeue PastRides Cell")
             }
 
-            guard case let .pastRides(pastRide) = item else {
-                fatalError("[Error] Failed Fetch PastRides Item")
+            guard case let .pastRides(reservation) = item else {
+                fatalError("[Error] Invalid item type in pastRides section")
             }
 
-            cell.configureProperty(pastRide)
+            cell.configureProperty(reservation)
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1.0
             cell.layer.borderColor = UIColor.triOSSecondaryText.withAlphaComponent(0.3).cgColor
+
             return cell
 
         case .signOutButton:
@@ -112,39 +107,23 @@ extension MyPageViewController {
             guard let self else { return nil }
             switch kind {
             case UICollectionView.elementKindSectionHeader:
-
                 let section = MyPageSection.allCases[indexPath.section]
-
-                guard let headerView = collectionView
-                    .dequeueReusableSupplementaryView(
-                        ofKind: UICollectionView.elementKindSectionHeader,
-                        withReuseIdentifier: MyPageHeaderView.identifier,
-                        for: indexPath
-                    ) as? MyPageHeaderView
-                else {
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionHeader,
+                    withReuseIdentifier: MyPageHeaderView.identifier,
+                    for: indexPath
+                ) as? MyPageHeaderView else {
                     print("[Error] HeaderView casting failed")
-                    return UICollectionReusableView() // fallback: 최소한 뭔가 리턴
+                    return UICollectionReusableView()
                 }
 
                 if section == .yourRide || section == .pastRides {
-                    if let userProfile = self.myPageViewModel.userProfile,
-                       !userProfile.reservations.isEmpty
-                    {
-                        let reservations = userProfile.reservations
-                        if section == .yourRide,
-                           let resetvation = reservations.sorted(by: { $0.date > $1.date }).first,
-                           resetvation.status == false
-                        {
-                            headerView.isHidden = true
-                            return headerView
-                        }
-
-                        headerView.isHidden = false
-                        headerView.configureHeader(section.title)
-                        return headerView
-                    }
+                    headerView.isHidden = false
+                    headerView.configureHeader(section.title)
+                } else {
+                    headerView.isHidden = true
                 }
-                headerView.isHidden = true
+
                 return headerView
 
             default:
@@ -156,44 +135,31 @@ extension MyPageViewController {
     // Data - Snapshot
     func applySnapShot(with userProfile: UserProfileUI?) {
         var snapshot = SnapShot<MyPageSection, MyPageItem>()
+        guard let userProfile = userProfile else { return }
 
-        // UserProfile Section
-        guard let userProfile = userProfile else {
-            return
-        }
-        snapshot.appendSections([.userProfile])
-        snapshot.appendItems(
-            [.userProfile(userProfile)],
-            toSection: .userProfile
-        )
-
-        // YourRide Section
         let reservations = userProfile.reservations
-        if !reservations.isEmpty,
-           let latestReservation = reservations.sorted(by: { $0.date > $1.date }).first,
-           latestReservation.status == true
-        {
-            snapshot.appendSections([.yourRide])
-            snapshot.appendItems(
-                [.yourRide(latestReservation)],
-                toSection: .yourRide
-            )
+        let latestReservation = reservations
+            .filter { $0.status == true }
+            .sorted(by: { $0.date > $1.date })
+            .first
+
+        let pastReservations = reservations
+            .filter { $0.status == false }
+            .sorted(by: { $0.date > $1.date })
+
+        snapshot.appendSections([.userProfile, .yourRide, .pastRides, .signOutButton])
+
+
+        snapshot.appendItems([.userProfile(userProfile)], toSection: .userProfile)
+
+        if let latestReservation = latestReservation {
+            snapshot.appendItems([.yourRide(latestReservation)], toSection: .yourRide)
         }
 
-        // PastRides Section
-        if !reservations.isEmpty {
-            let sortedReservation = reservations.sorted(by: { $0.date > $1.date })
-            snapshot.appendSections([.pastRides])
-            snapshot.appendItems(
-                sortedReservation.map {
-                    MyPageItem.pastRides($0)
-                },
-                toSection: .pastRides
-            )
+        if !pastReservations.isEmpty {
+            snapshot.appendItems(pastReservations.map { .pastRides($0) }, toSection: .pastRides)
         }
 
-        // SignOut Section
-        snapshot.appendSections([.signOutButton])
         snapshot.appendItems([.signOutButton], toSection: .signOutButton)
 
         dataSource.apply(snapshot, animatingDifferences: true)
@@ -203,21 +169,25 @@ extension MyPageViewController {
     func removeCurrentReservationSectionIfNeeded(_ userProfile: UserProfileUI?) {
         var snapshot = dataSource.snapshot()
 
-        // 1. .yourRide Section 제거
         if snapshot.sectionIdentifiers.contains(.yourRide) {
-            snapshot.deleteSections([.yourRide])
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .yourRide))
+
+            if let currentReservation = userProfile?.reservations.first(where: { $0.status == true }) {
+                snapshot.appendItems([.yourRide(currentReservation)], toSection: .yourRide)
+            } else {
+                snapshot.appendItems([], toSection: .yourRide)
+            }
         }
 
-        // 2. .pastRides 데이터 갱신
         if let userProfile = userProfile {
-            let updatedReservations = userProfile.reservations.sorted { $0.date > $1.date }
-            let updatedItem = updatedReservations.map { MyPageItem.pastRides($0) }
+            let updatedReservations = userProfile.reservations
+                .filter { $0.status == false }
+                .sorted { $0.date > $1.date }
 
-            // 기존 pastRides 아이템 제거 후 새로 추가
-            snapshot.deleteItems(
-                snapshot.itemIdentifiers(inSection: .pastRides)
-            )
-            snapshot.appendItems(updatedItem, toSection: .pastRides)
+            let updatedItems = updatedReservations.map { MyPageItem.pastRides($0) }
+
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .pastRides))
+            snapshot.appendItems(updatedItems, toSection: .pastRides)
         }
 
         dataSource.apply(snapshot, animatingDifferences: true)

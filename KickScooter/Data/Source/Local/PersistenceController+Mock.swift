@@ -1,6 +1,6 @@
-import CoreData
+ import CoreData
 
-extension PersistenceController {
+ extension PersistenceController {
     /// Mock 객체 생성 메서드
     static func makeInMemory() -> PersistenceController {
         let controller = PersistenceController(inMemory: true)
@@ -135,4 +135,4 @@ extension PersistenceController {
             ),
         ]
     }
-}
+ }

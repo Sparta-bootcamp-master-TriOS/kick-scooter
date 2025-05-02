@@ -79,7 +79,7 @@ extension DIContainer {
         FetchAddressDataSource(apiKey: AppAPIKeys.kakaoAPIKey)
     }
 
-    func makeHasActiveReservation() -> HasActiveReservation {
-        HasActiveReservation(persistenceController: persistenceController)
+    func makeFetchActiveReservation() -> FetchActiveReservation {
+        FetchActiveReservation(persistenceController: persistenceController)
     }
 }

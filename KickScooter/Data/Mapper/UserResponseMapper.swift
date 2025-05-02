@@ -56,6 +56,7 @@ struct UserResponseMapper {
             )
 
             return Reservation(
+                id: $0.id,
                 date: $0.date,
                 status: $0.status,
                 startLon: $0.startLon,

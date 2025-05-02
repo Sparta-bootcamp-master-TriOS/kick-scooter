@@ -1,3 +1,5 @@
+import MapKit
+
 struct ReservationUIMapper {
     static let shared = ReservationUIMapper()
 
@@ -6,6 +8,7 @@ struct ReservationUIMapper {
     func map(reservations: [Reservation]) -> [ReservationUI] {
         reservations.map {
             let reservation = ReservationUI(
+                id: $0.id,
                 date: $0.date,
                 status: $0.status,
                 startLon: $0.startLon,
@@ -22,18 +25,22 @@ struct ReservationUIMapper {
         }
     }
 
-    func map(reservation: ReservationUI) -> Reservation {
+    func map(_ reservation: ReservationUI, _ location: CLLocationCoordinate2D?, _ address: String) -> Reservation {
         Reservation(
+            id: reservation.id,
             date: reservation.date,
-            status: reservation.status,
+            status: false,
             startLon: reservation.startLon,
             startLat: reservation.startLat,
-            endLon: reservation.endLon,
-            endLat: reservation.endLat,
+            endLon: location?.longitude,
+            endLat: location?.latitude,
             startAddress: reservation.startAddress,
-            endAddress: reservation.endAddress,
-            totalTime: reservation.totalTime,
-            totalPrice: reservation.totalPrice,
+            endAddress: address,
+            totalTime: Formatter.getTotalTime(from: reservation.date),
+            totalPrice: Formatter.totalPrice(
+                from: reservation.date,
+                price: reservation.kickScooter.kickScooterType!.priceValue
+            ),
             kickScooter: kickScooterMapper.map(kickScooter: reservation.kickScooter)
         )
     }

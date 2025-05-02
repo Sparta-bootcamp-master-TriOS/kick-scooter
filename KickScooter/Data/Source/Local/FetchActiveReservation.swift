@@ -1,13 +1,15 @@
 import CoreData
 
-struct HasActiveReservation {
+struct FetchActiveReservation {
     private let persistenceController: PersistenceController
+
+    private let mapper = ReservationResponseMapper.shared
 
     public init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
     }
 
-    func execute(userID: String) -> Bool {
+    func execute(userID: String) -> ReservationResponse? {
         let context = persistenceController.context
         let request = ReservationEntity.fetchRequest()
 
@@ -16,9 +18,16 @@ struct HasActiveReservation {
 
         do {
             let results = try context.fetch(request)
-            return !results.isEmpty
+
+            guard let entity = results.first else {
+                return nil
+            }
+
+            let response = mapper.map(from: entity)
+
+            return response
         } catch {
-            return false
+            return nil
         }
     }
 }

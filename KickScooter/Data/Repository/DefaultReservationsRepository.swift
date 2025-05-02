@@ -2,21 +2,27 @@ import Foundation
 
 final class DefaultReservationsRepository: ReservationsRepository {
     private let saveReservationDataSource: SaveReservationDataSource
-    private let hasActiveReservation: HasActiveReservation
+    private let fetchActiveReservation: FetchActiveReservation
+
+    private let mapper = ReservationResponseMapper.shared
 
     init(
         saveReservationDataSource: SaveReservationDataSource,
-        hasActiveReservation: HasActiveReservation
+        fetchActiveReservation: FetchActiveReservation
     ) {
         self.saveReservationDataSource = saveReservationDataSource
-        self.hasActiveReservation = hasActiveReservation
+        self.fetchActiveReservation = fetchActiveReservation
     }
 
     func save(kickScooterID: UUID, userID: String, address: String) {
         saveReservationDataSource.execute(kickScooterID: kickScooterID, userID: userID, address: address)
     }
 
-    func hasActive(userID: String) -> Bool {
-        hasActiveReservation.execute(userID: userID)
+    func active(userID: String) -> Reservation? {
+        guard let response = fetchActiveReservation.execute(userID: userID) else {
+            return nil
+        }
+
+        return mapper.map(from: response)
     }
 }

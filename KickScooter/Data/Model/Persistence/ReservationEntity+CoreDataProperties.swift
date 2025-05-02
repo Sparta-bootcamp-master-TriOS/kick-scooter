@@ -6,6 +6,7 @@ public extension ReservationEntity {
         NSFetchRequest<ReservationEntity>(entityName: "ReservationEntity")
     }
 
+    @NSManaged var id: UUID
     @NSManaged var date: Date
     @NSManaged var status: Bool
     @NSManaged var startLon: Double

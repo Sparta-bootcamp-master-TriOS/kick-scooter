@@ -18,10 +18,7 @@ final class DefaultMyPageUseCase: MyPageUseCase {
         )
     }
 
-    func updateReservation(userId: String, reservation: Reservation) -> Bool {
-        myPageRepository.updateReservation(
-            userId: userId,
-            reservation: reservation
-        )
+    func updateReservation(reservation: Reservation) {
+        myPageRepository.updateReservation(reservation: reservation)
     }
 }

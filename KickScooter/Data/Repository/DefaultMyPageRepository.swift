@@ -38,7 +38,7 @@ final class DefaultMyPageRepository: MyPageRepository {
         mapper.map(from: user, with: rideHistory)
     }
 
-    func updateReservation(userId: String, reservation: Reservation) -> Bool {
-        updateReservationDataSource.execute(userId: userId, reservation: reservation)
+    func updateReservation(reservation: Reservation) {
+        updateReservationDataSource.execute(reservation: reservation)
     }
 }

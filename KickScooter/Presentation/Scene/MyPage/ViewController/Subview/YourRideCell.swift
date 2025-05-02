@@ -25,7 +25,9 @@ final class YourRideCell: UICollectionViewCell {
 
     private let returnButton = UIButton()
 
-    var onButtonTapped: ((ReservationUI) -> Void)?
+    private let noItemLabel = UILabel()
+
+    var onButtonTapped: (() -> Void)?
 
     override init(frame _: CGRect) {
         super.init(frame: .zero)
@@ -59,7 +61,6 @@ final class YourRideCell: UICollectionViewCell {
         reservationView.layer.borderWidth = 1.0
         reservationView.layer.borderColor = UIColor.triOSSecondaryText.withAlphaComponent(0.3).cgColor
 
-        confirmLabel.text = "Ride Confirm"
         confirmLabel.font = .jalnan(ofSize: 18)
         confirmLabel.textColor = .triOSText
 
@@ -107,6 +108,14 @@ final class YourRideCell: UICollectionViewCell {
         }
         returnButton.addAction(action, for: .touchUpInside)
 
+        noItemLabel.text = "이용중인 킥보드가 없습니다."
+        noItemLabel.textAlignment = .center
+        noItemLabel.textColor = .triOSSecondaryText
+        noItemLabel.font = .jalnan(ofSize: 20)
+        noItemLabel.isHidden = true
+
+        addSubview(noItemLabel)
+
         [
             mapView,
             reservationView,
@@ -142,28 +151,7 @@ final class YourRideCell: UICollectionViewCell {
     }
 
     private func tapped() {
-        onButtonTapped?(
-            ReservationUI(
-                date: Date(), //
-                status: false, //
-                startLon: 0,
-                startLat: 0,
-                endLon: 0, // from map
-                endLat: 0, // from map
-                startAddress: "",
-                endAddress: "",
-                totalTime: "",
-                totalPrice: "",
-                kickScooter: KickScooterUI(
-                    id: UUID(),
-                    battery: "",
-                    type: 0,
-                    lon: 0,
-                    lat: 0,
-                    isAvailable: true //
-                )
-            )
-        )
+        onButtonTapped?()
     }
 
     func configureProperty(_ reservation: ReservationUI) {
@@ -249,5 +237,18 @@ final class YourRideCell: UICollectionViewCell {
             $0.height.equalTo(36)
             $0.bottom.equalToSuperview().inset(19)
         }
+        noItemLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(20)
+        }
+    }
+
+    func configureEmptyState() {
+        reservationView.isHidden = true
+        mapView.isHidden = true
+        noItemLabel.isHidden = false
+    }
+
+    func updateUI(model: String) {
+        confirmLabel.text = model
     }
 }

@@ -31,7 +31,9 @@ extension DIContainer {
             fetchUserIDUseCase: makeFetchUserIDUseCase(),
             clearCredentialsUseCase: makeClearCredentialsUseCase(),
             clearRememberSignInStatusUseCase: makeClearRememberSignInStatusUseCase(),
-            clearAutoSignInStatusUseCase: makeClearAutoSignInStatusUseCase()
+            clearAutoSignInStatusUseCase: makeClearAutoSignInStatusUseCase(),
+            fetchActiveReservationUseCase: makeFetchActiveReservationUseCase(),
+            fetchAddressUseCase: makeFetchAddressUseCase()
         )
     }
 
@@ -41,7 +43,7 @@ extension DIContainer {
             fetchKickScooterUseCase: makeFetchKickScooterUseCase(),
             saveReservationUseCase: makeSaveReservationUseCase(),
             fetchAddressUseCase: makeFetchAddressUseCase(),
-            hasActiveReservationUseCase: makeHasActiveReservationUseCase()
+            fetchActiveReservationUseCase: makeFetchActiveReservationUseCase()
         )
     }
 }

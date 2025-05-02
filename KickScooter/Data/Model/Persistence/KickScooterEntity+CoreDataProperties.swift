@@ -12,7 +12,7 @@ public extension KickScooterEntity {
     @NSManaged var lat: Double
     @NSManaged var lon: Double
     @NSManaged var type: Int64
-    @NSManaged var reservation: ReservationEntity?
+    @NSManaged var reservation: NSSet?
 }
 
 extension KickScooterEntity: Identifiable {}
