@@ -2,20 +2,27 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D81" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="KickScooterEntity" representedClassName="KickScooterEntity" syncable="YES">
         <attribute name="battery" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="image" attributeType="String"/>
-        <attribute name="isAvailable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="lat" attributeType="String"/>
-        <attribute name="lon" attributeType="String"/>
-        <attribute name="model" attributeType="String"/>
-        <attribute name="price" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="reservation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReservationEntity" inverseName="kickScooter" inverseEntity="ReservationEntity"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isAvailable" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="reservation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReservationEntity" inverseName="kickScooter" inverseEntity="ReservationEntity"/>
     </entity>
     <entity name="ReservationEntity" representedClassName="ReservationEntity" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endAddress" optional="YES" attributeType="String"/>
+        <attribute name="endLat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="endLon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="startAddress" attributeType="String"/>
+        <attribute name="startLat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startLon" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="status" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="kickScooter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KickScooterEntity" inverseName="reservation" inverseEntity="KickScooterEntity"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="reservations" inverseEntity="UserEntity"/>
+        <attribute name="totalPrice" optional="YES" attributeType="String"/>
+        <attribute name="totalTime" optional="YES" attributeType="String"/>
+        <relationship name="kickScooter" maxCount="1" deletionRule="Nullify" destinationEntity="KickScooterEntity" inverseName="reservation" inverseEntity="KickScooterEntity"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="reservations" inverseEntity="UserEntity"/>
     </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
         <attribute name="email" attributeType="String"/>

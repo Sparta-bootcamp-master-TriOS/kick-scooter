@@ -1,10 +1,10 @@
+import Foundation
+
 struct KickScooterResponse {
-    let id: Int
-    let model: String
+    let id: UUID
     let battery: Double
-    let price: Int
-    let lon: String
-    let lat: String
-    let image: String
+    let type: Int
+    let lon: Double
+    let lat: Double
     let isAvailable: Bool
 }

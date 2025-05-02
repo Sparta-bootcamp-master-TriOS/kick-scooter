@@ -1,10 +1,14 @@
-struct KickScooterUI: CoordinatesableUI {
-    let id: Int
-    let model: String
+import Foundation
+
+struct KickScooterUI: Hashable, CoordinatesableUI {
+    let id: UUID
     let battery: String
-    let price: String
-    let lon: String
-    let lat: String
-    let image: String
-    let isAvailable: Bool
+    let type: Int
+    var lon: Double
+    var lat: Double
+    var isAvailable: Bool
+
+    var kickScooterType: KickScooterType? {
+        KickScooterType(rawValue: type)
+    }
 }

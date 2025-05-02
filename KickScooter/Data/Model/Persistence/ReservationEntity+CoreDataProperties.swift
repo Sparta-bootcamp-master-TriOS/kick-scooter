@@ -6,10 +6,19 @@ public extension ReservationEntity {
         NSFetchRequest<ReservationEntity>(entityName: "ReservationEntity")
     }
 
+    @NSManaged var id: UUID
     @NSManaged var date: Date
     @NSManaged var status: Bool
-    @NSManaged var user: UserEntity
+    @NSManaged var startLon: Double
+    @NSManaged var startLat: Double
+    @NSManaged var endLon: NSNumber?
+    @NSManaged var endLat: NSNumber?
+    @NSManaged var startAddress: String
+    @NSManaged var endAddress: String?
+    @NSManaged var totalTime: String?
+    @NSManaged var totalPrice: String?
     @NSManaged var kickScooter: KickScooterEntity
+    @NSManaged var user: UserEntity
 }
 
 extension ReservationEntity: Identifiable {}

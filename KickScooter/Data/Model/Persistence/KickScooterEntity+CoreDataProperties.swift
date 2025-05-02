@@ -6,15 +6,13 @@ public extension KickScooterEntity {
         NSFetchRequest<KickScooterEntity>(entityName: "KickScooterEntity")
     }
 
-    @NSManaged var id: Int
-    @NSManaged var model: String
     @NSManaged var battery: Double
-    @NSManaged var price: Int64
-    @NSManaged var lon: String
-    @NSManaged var lat: String
-    @NSManaged var image: String
+    @NSManaged var id: UUID
     @NSManaged var isAvailable: Bool
-    @NSManaged var reservation: ReservationEntity?
+    @NSManaged var lat: Double
+    @NSManaged var lon: Double
+    @NSManaged var type: Int64
+    @NSManaged var reservation: NSSet?
 }
 
 extension KickScooterEntity: Identifiable {}

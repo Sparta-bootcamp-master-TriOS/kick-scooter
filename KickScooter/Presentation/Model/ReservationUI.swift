@@ -1,7 +1,16 @@
 import Foundation
 
-struct ReservationUI {
-    let date: String
-    let status: Bool
-    let kickScooter: KickScooterUI
+struct ReservationUI: Hashable {
+    let id: UUID
+    let date: Date
+    var status: Bool
+    let startLon: Double
+    let startLat: Double
+    var endLon: Double?
+    var endLat: Double?
+    let startAddress: String
+    var endAddress: String?
+    var totalTime: String?
+    var totalPrice: String?
+    var kickScooter: KickScooterUI
 }
