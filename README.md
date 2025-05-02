@@ -42,7 +42,7 @@
     <td><a href="https://github.com/Sn8Ch0"><img width="100" src="https://github.com/Sn8Ch0.png" alt="Sn8Ch0"/><br/>Sn8Ch0</a></td>
   </tr>
   <tr>
-    <td>- 마이 페이지<br>- mok 데이터<br>- 발표</td>
+    <td>- 마이 페이지<br>- mock 데이터<br>- 발표</td>
     <td>- 회원가입/로그인 페이지<br>- 킥보드 추가 페이지<br>- 킥보드 예약/사용자 위치<br>- 전체적인 리팩토링</td>
     <td>- 지도 페이지<br>- api 연동</td>
   </tr>
